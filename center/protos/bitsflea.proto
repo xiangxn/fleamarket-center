@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+package bitsflea;
+service BitsFlea {
+
+    rpc Register (RegisterRequest) returns (RegisterReply) {
+        option (google.api.http) = {
+            post: "/v1/common/register"
+            body: "*"
+        };
+    }
+
+    rpc SendSmsCode (SmsRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/sendSmsCode"
+            body: "*"
+        };
+    }
+
+    rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenReply) {
+        option (google.api.http) = {
+            post: "/v1/common/refreshtoken"
+            body: "*"
+        };
+    }
+
+    rpc Referral (EosidRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/Referral"
+            body: "*"
+        };
+    }
+
+}
+
+message BaseReply {
+    int32 code = 1;
+    string msg = 2;
+}
+
+message EosidRequest {
+    string eosid = 1;
+}
+
+message User {
+    int32 userid = 1;
+    string eosid = 2;
+    string phone = 3;
+    int32 status = 4;
+    string nickname = 5;
+    string head = 6;
+    int32 creditValue = 7;
+    string referrer = 8;
+    string lastActiveTime = 9;
+    int32 postsTotal = 10;
+    int32 sellTotal = 11;
+    int32 buyTotal = 12;
+    int32 referralTotal = 13;
+    string point = 14;
+    int32 isReviewer = 15;
+    int32 favoriteTotal = 16;
+    int32 collectionTotal = 17;
+    int32 fansTotal = 18;
+}
+
+message RegisterRequest {
+    string phone = 1;
+    string passwd = 2;
+    string ownerpubkey = 3;
+    string actpubkey = 4;
+    string smscode = 5;
+    string referral = 6;
+}
+
+message RegisterReply {
+    int32 code = 1;
+    string msg = 2;
+    User data = 3;
+}
+
+message SmsRequest {
+    string phone = 1;
+    int32 codeType = 2;
+}
+
+message RefreshTokenRequest {
+    int32 userid = 1;
+    string token = 2;
+}
+
+message RefreshTokenReply {
+    string token = 1;
+}
+

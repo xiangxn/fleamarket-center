@@ -1,0 +1,20 @@
+{
+    "server_port": "50000",
+    "use_sms": 0,
+    "referrer": [1,"reviewer1112"],
+    "encrypt_key": "5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja",
+    "sms": {
+        "svr_url": "https://sms.tencentcloudapi.com/?Action=SendSms",
+        "appid": "1400340984",
+        "appkey": "b87aef3d96d8306fec260caf94806a32"
+    },
+    "mongo": {
+		"host": "localhost",
+		"port": 3001,
+		"db": "bf_center"
+    },
+    "gateway": {
+        "url": "http://23.92.210.138:9000",
+        "token": "8f4c64e62064619a3ce94c93ad7fe580"
+    }
+}

@@ -1,0 +1,32 @@
+import sys
+sys.path.append('../center')
+import pytest
+from center.graphene.keys import PrivateKey, PublicKey
+from center.graphene.memo import encode_memo, decode_memo
+import random
+
+parametrize = pytest.mark.parametrize
+
+class TestKey(object):
+    
+    def test_keys(self):
+        priKey = PrivateKey("5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja")
+        assert str(priKey.pubkey) == "EOS5BiYrPwXwFmrjLQ3ZUa3BX9crdomJNfYdu6uC863XAXrHNyWbo"
+        
+        pubKey = PublicKey("EOS5BiYrPwXwFmrjLQ3ZUa3BX9crdomJNfYdu6uC863XAXrHNyWbo")
+        assert str(pubKey)== "EOS5BiYrPwXwFmrjLQ3ZUa3BX9crdomJNfYdu6uC863XAXrHNyWbo"
+        
+    def test_memo(self):
+        nonce = "".join(random.sample('0123456789',8))
+        print("nonce={}".format(nonce))
+        priKey = PrivateKey("5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja")
+        pubKey = PublicKey("EOS6RbTLtFQ49MKa8epucQT7FvTjcCHgLc58FzY9mcPVcN94omxtT")
+        msg = "18580555555"
+        en_msg = encode_memo(priKey, pubKey, nonce, msg)
+        print("en_msg={}".format(en_msg))
+        priKey = PrivateKey("5JEqeNHksYz3Q47rKjPfMvP1D64X2JA61Qp9kMdLmaT7vKGiXZL")
+        pubKey = PublicKey("EOS5BiYrPwXwFmrjLQ3ZUa3BX9crdomJNfYdu6uC863XAXrHNyWbo")
+        de_msg = decode_memo(priKey, pubKey, nonce, en_msg)
+        assert de_msg == msg
+        
+        

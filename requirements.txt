@@ -1,0 +1,8 @@
+grpcio
+protobuf
+grpcio_tools
+googleapis-common-protos
+pymongo
+requests
+ecdsa
+pycryptodome>=3.9.7
