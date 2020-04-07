@@ -4,6 +4,7 @@ import getpass
 import json
 from center import metadata
 from center.server import bits_flea_run
+from center.syncsvr import SyncSvr
 
 
 def main(argv):
@@ -43,13 +44,17 @@ URL: <{url}>
         '-V', '--version',
         action='version',
         version='{0} {1}'.format(metadata.project, metadata.version))
+    arg_parser.add_argument(
+        '-I', '--init', action='store_true',
+        help='Whether to sync initial data?')
 
     args = arg_parser.parse_args(args=argv[1:])
     config_info = procConfig(args.config)
     if args.command == "grpc":
         bits_flea_run(config_info)
     elif args.command == "sync":
-        pass
+        ss = SyncSvr(config_info, args.init)
+        ss.Run()
     else:
         print(epilog)
     return 0

@@ -7,14 +7,22 @@ import re
 import random
 import asyncio
 import time
+import json
 
 from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
 from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply
+from bitsflea_pb2 import SearchRequest, SearchReply
 
 from center.gateway import Gateway
 from center.utils import Utils
-from center.graphene.keys import PrivateKey, PublicKey
-from center.graphene.memo import encode_memo, decode_memo
+from center.eoslib.keys import PrivateKey, PublicKey
+from center.eoslib.memo import encode_memo, decode_memo
+
+import mongoengine
+from center.database.schema import schema
+
+from center.database.model import Sms as SmsModel
+from center.database.model import User as UserModel
 
 
 class Server(BitsFleaServicer):
@@ -26,19 +34,37 @@ class Server(BitsFleaServicer):
         self.gateway = Gateway(self.config['gateway'], self.logger)
 
     def _connectDB(self, config):
-        _client = pymongo.MongoClient(config['host'], config['port'])
-        _db = _client[config['db']]
-        self.db_users = _db['users']
-        self.db_sms = _db['sms']
+        #连接mongoengine
+        mongoengine.connect(db=config['db'], host=config['host'], port=config['port'])
         
     def SendSmsCode(self, request, context):
         is_phone = re.match(r"^1[3456789]\d{9}$", request.phone)
         if is_phone:
-            code = int("".join(random.sample('0123456789',6)))
-            self.db_sms.update({"phone":request.phone}, {"phone":request.phone,"code":code,"time":int(time.time())}, upsert=True)
+            code = "".join(random.sample('0123456789',6))
+            sms = SmsModel.objects(phone=request.phone).first()
+            if sms:
+                sms.code = code
+                sms.time = int(time.time())
+                sms.save()
+            else:
+                SmsModel(phone=request.phone, code=code, time=int(time.time())).save()
             # TODO: 处理发送模板类型与发送短信
             return BaseReply(code=0,msg="success")
         return BaseReply(code=1,msg="Phone numbers not currently supported")
+    
+    def Search(self, request, context):
+        if request.query:
+            result = schema.execute(request.query)
+            if result.data:
+                sur = SearchReply()
+                sur.data = json.dumps(result.data)
+                return sur
+            else:
+                return SearchReply(code=1, msg="no data")
+        else:
+            return SearchReply(code=300, msg="Invalid query")
+        
+        
     
     def _encrypt_phone(self, phone, active):
         nonce = "".join(random.sample('0123456789',8))
@@ -110,9 +136,10 @@ class Server(BitsFleaServicer):
     def Register(self, request, context):
         flag = False
         if self.config['use_sms']:
-            sms_info = self.db_sms.find_one({"phone":request.phone})
-            if sms_info and sms_info['code'] == request.smscode and (int(time.time())-sms_info['time'] <= 300):
+            sms_info = SmsModel.objects(phone=request.phone).first()
+            if sms_info and sms_info.code == request.smscode and (int(time.time())-sms_info.time <= 300):
                 flag = True
+                sms_info.delete()
         else:
             flag = True
         if flag and len(request.phone) > 0 and len(request.ownerpubkey) == 53 and len(request.actpubkey) == 53:
@@ -146,7 +173,7 @@ class Server(BitsFleaServicer):
                 m.msg = "An error occurred while requesting the gateway"
             return m
         else:
-            return BaseReply(code=2,msg="Invalid verification code") 
+            return RegisterReply(code=2,msg="Invalid verification code") 
 
 
 def bits_flea_run(config):

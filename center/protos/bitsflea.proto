@@ -33,6 +33,13 @@ service BitsFlea {
         };
     }
 
+    rpc Search (SearchRequest) returns (SearchReply) {
+        option (google.api.http) = {
+            post: "/v1/common/search"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -92,5 +99,15 @@ message RefreshTokenRequest {
 
 message RefreshTokenReply {
     string token = 1;
+}
+
+message SearchRequest {
+    string query = 1;
+}
+
+message SearchReply {
+    int32 code = 1;
+    string msg = 2;
+    string data = 3;
 }
 
