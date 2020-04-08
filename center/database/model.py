@@ -36,6 +36,7 @@ class User(me.Document):
     favoriteTotal = me.IntField(default=0)
     collectionTotal = me.IntField(default=0)
     fansTotal = me.IntField(default=0)
+    authKey = me.StringField()
     
     def __str__(self):
         return self.to_json()
@@ -60,14 +61,14 @@ class Product(me.Document):
     transMethod = me.IntField(default=1)
     postage = me.StringField()
     position = me.StringField()
-    releaseTime = me.DateTimeField(required=True)
+    releaseTime = me.StringField(required=True)
     desc = me.StringField()
     imgs = me.ListField()
     collections = me.IntField(default=0)
     price = me.StringField(required=True)
     saleMethod = me.IntField(default=0)
     seller = me.ReferenceField(User)
-    reviewer = me.ReferenceField(User)
+    #reviewer = me.ReferenceField(User)
     stockCount = me.IntField(default=0)
     isRetail = me.BooleanField(default=False)
     
@@ -79,8 +80,8 @@ class Auction(me.Document):
     markup = me.StringField(required=True)
     currentPrice = me.StringField()
     auctionTimes = me.IntField(default=0)
-    startTime = me.DateTimeField(required=True)
-    endTime = me.DateTimeField(required=True)
+    startTime = me.StringField(required=True)
+    endTime = me.StringField(required=True)
     lastPriceUser = me.ReferenceField(User)
     product = me.ReferenceField(Product)
     
@@ -89,11 +90,11 @@ class Reviewer(me.Document):
     
     rid = me.IntField(required=True, primary_key=True)
     user = me.ReferenceField(User)
-    userid = me.IntField(required=True)
+    #userid = me.IntField(required=True)
     eosid = me.StringField(required=True)
     votedCount = me.IntField(default=0)
-    createTime = me.DateTimeField()
-    lastActiveTime = me.DateTimeField()
+    createTime = me.StringField()
+    lastActiveTime = me.StringField()
     voterApprove = me.ListField()
     voterAgainst = me.ListField()
     
@@ -103,48 +104,83 @@ class ProductAudit(me.Document):
     
     paid = me.IntField(required=True, primary_key=True)
     product = me.ReferenceField(Product)
-    productId = me.IntField(required=True)
+    #productId = me.IntField(required=True)
     reviewer = me.ReferenceField(Reviewer)
     isDelisted = me.IntField(default=0)
     reviewDetails = me.StringField()
-    reviewTime = me.DateTimeField()
+    reviewTime = me.StringField()
     
 class Order(me.Document):
     meta = {"collection": "order"}
     
     orderid = me.StringField(required=True, primary_key=True)
-    prodcutInfo = me.ReferenceField(Product, required=True)
+    productInfo = me.ReferenceField(Product, required=True)
     seller = me.ReferenceField(User, required=True)
     buyer = me.ReferenceField(User)
     status = me.IntField(default=0)
     price = me.StringField(required=True)
+    postage = me.StringField()
+    payAddr = me.StringField()
     shipNum = me.StringField()
-    createTime = me.DateTimeField(required=True)
-    payTime = me.DateTimeField()
-    payOutTime = me.DateTimeField()
-    shipTime = me.DateTimeField()
-    shipOutTime = me.DateTimeField()
-    receiptTime = me.DateTimeField()
-    receiptOutTime = me.DateTimeField()
+    createTime = me.StringField(required=True)
+    payTime = me.StringField()
+    payOutTime = me.StringField()
+    shipTime = me.StringField()
+    shipOutTime = me.StringField()
+    receiptTime = me.StringField()
+    receiptOutTime = me.StringField()
+    endTime = me.StringField()
+    delayedCount = me.IntField()
     
 class ProReturn(me.Document):
     meta = {"collection": "proreturn"}
     
-    rpid = me.IntField(required=True, primary_key=True)
+    prid = me.IntField(required=True, primary_key=True)
+    #orderId = me.StringField(required=True)
     order = me.ReferenceField(Order)
-    orderId = me.StringField(required=True)
-    prodcutId = me.IntField()
+    #prodcutId = me.IntField()
+    product = me.ReferenceField(Product)
     orderPrice = me.StringField()
     status = me.IntField(default=0)
     reasons = me.StringField()
-    createTime = me.DateTimeField(required=True)
+    createTime = me.StringField(required=True)
     shipNum = me.StringField()
-    shipTime = me.DateTimeField()
-    shipOutTime = me.DateTimeField()
-    receiptTime = me.DateTimeField()
-    receiptOutTime = me.DateTimeField()
-    endTime = me.DateTimeField()
+    shipTime = me.StringField()
+    shipOutTime = me.StringField()
+    receiptTime = me.StringField()
+    receiptOutTime = me.StringField()
+    endTime = me.StringField()
     delayedCount = me.IntField(default=0)
+    
+class Arbitration(me.Document):
+    meta = {"collection": "arbitrations"}
+    
+    aid = me.IntField(required=True, primary_key=True)
+    plaintiff = me.ReferenceField(User, required=True)
+    product = me.ReferenceField(Product)
+    order = me.ReferenceField(Order)
+    type = me.IntField(default=0)
+    status = me.IntField(default=0)
+    title = me.StringField()
+    resume = me.StringField()
+    detailed = me.StringField()
+    createTime = me.StringField()
+    defendant = me.ReferenceField(User, required=True)
+    proofContent = me.StringField()
+    arbitrationResults = me.StringField()
+    winner = me.ReferenceField(User)
+    startTime = me.StringField()
+    endTime = me.StringField()
+    reviewers = me.ListField()
+    
+class OtherAddr(me.Document):
+    meta = {"collection": "otheraddr"}
+    
+    oaid = me.IntField(required=True, primary_key=True)
+    user = me.ReferenceField(User, required=True)
+    coinType = me.StringField(required=True)
+    addr = me.StringField(required=True)
+    
     
     
     

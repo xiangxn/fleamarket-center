@@ -15,8 +15,6 @@ from bitsflea_pb2 import SearchRequest, SearchReply
 
 from center.gateway import Gateway
 from center.utils import Utils
-from center.eoslib.keys import PrivateKey, PublicKey
-from center.eoslib.memo import encode_memo, decode_memo
 
 import mongoengine
 from center.database.schema import schema
@@ -64,23 +62,21 @@ class Server(BitsFleaServicer):
         else:
             return SearchReply(code=300, msg="Invalid query")
         
-        
+    def Transaction(self, request, context):
+        if request.trx:
+            sign = True if request.sign else False
+            if sign:
+                tmp_trx = json.loads(request.trx)['transaction']
+                if len(tmp_trx['actions']) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
+                    return BaseReply(code=401,msg="This action has no permissions") 
+            result = self.gateway.broadcast(request.trx, sign=sign)
+            if result['status'] == "success":
+                return BaseReply(code=0,msg="success")
+            else:
+                return BaseReply(code=500,msg=result['message'])
+        return BaseReply(code=3,msg="Invalid paras") 
     
-    def _encrypt_phone(self, phone, active):
-        nonce = "".join(random.sample('0123456789',8))
-        priKey = PrivateKey(self.config['encrypt_key'])
-        pubKey = PublicKey(active)
-        en_msg = encode_memo(priKey, pubKey, nonce, phone)
-        return nonce+en_msg
-    
-    def _decrypt_phone(self, phone_encrypt, active):
-        nonce = phone_encrypt[0:8]
-        en_msg = phone_encrypt[8:]
-        priKey = PrivateKey(self.config['encrypt_key'])
-        pubKey = PublicKey(active)
-        return decode_memo(priKey, pubKey, nonce, en_msg)
-    
-    def _register(self, phone, en_phone, owner, active, referral):
+    def _register(self, phone, en_phone, owner, active, referral, authkey):
         user = None
         name = None
         referral_name = ""
@@ -96,11 +92,14 @@ class Server(BitsFleaServicer):
             else:
                 referral = int(self.config['referrer'][0])
                 referral_name = self.config['referrer'][1]
+            #authkey
+            if not authkey or len(authkey) != len(active):
+                authkey = active
             #处理手机号
             phone_hash = Utils.sha256(bytes(phone, "utf8"))
             #print("phone_hash: ", phone_hash)
             if not en_phone:
-                en_phone = self._encrypt_phone(phone, active)
+                en_phone = Utils.encrypt_phone(phone, authkey, self.config['encrypt_key'])
                 #print("en_phone: ", en_phone)
             name = result['name']
             #注册到平台
@@ -116,7 +115,8 @@ class Server(BitsFleaServicer):
                     "nickname": name,
                     "phone_hash": phone_hash,
                     "phone_encrypt": en_phone,
-                    "referrer": referral
+                    "referrer": referral,
+                    "auth_key": authkey
                 }
             }
             trx = {"transaction":{"actions": [payload]}}
@@ -147,7 +147,7 @@ class Server(BitsFleaServicer):
             en_phone = None
             if hasattr(request, "phoneEncrypt"):
                 en_phone = request.phoneEncrypt
-            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral)
+            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral, request.authkey)
             if user_info and "status" in user_info:
                 if user_info['status'] != "failed":
                     m.msg = "registration successful"

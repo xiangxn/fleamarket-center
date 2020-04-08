@@ -40,6 +40,13 @@ service BitsFlea {
         };
     }
 
+    rpc Transaction (TransactionRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/transaction"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -79,6 +86,7 @@ message RegisterRequest {
     string actpubkey = 4;
     string smscode = 5;
     string referral = 6;
+    string authkey = 7;
 }
 
 message RegisterReply {
@@ -109,5 +117,10 @@ message SearchReply {
     int32 code = 1;
     string msg = 2;
     string data = 3;
+}
+
+message TransactionRequest {
+    string trx = 1;
+    int32 sign = 2;
 }
 

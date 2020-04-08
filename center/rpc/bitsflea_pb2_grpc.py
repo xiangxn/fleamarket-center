@@ -38,6 +38,11 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.SearchRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.SearchReply.FromString,
                 )
+        self.Transaction = channel.unary_unary(
+                '/bitsflea.BitsFlea/Transaction',
+                request_serializer=bitsflea__pb2.TransactionRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
 
 
 class BitsFleaServicer(object):
@@ -73,6 +78,12 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Transaction(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BitsFleaServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -100,6 +111,11 @@ def add_BitsFleaServicer_to_server(servicer, server):
                     servicer.Search,
                     request_deserializer=bitsflea__pb2.SearchRequest.FromString,
                     response_serializer=bitsflea__pb2.SearchReply.SerializeToString,
+            ),
+            'Transaction': grpc.unary_unary_rpc_method_handler(
+                    servicer.Transaction,
+                    request_deserializer=bitsflea__pb2.TransactionRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -188,5 +204,21 @@ class BitsFlea(object):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Search',
             bitsflea__pb2.SearchRequest.SerializeToString,
             bitsflea__pb2.SearchReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Transaction(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Transaction',
+            bitsflea__pb2.TransactionRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
