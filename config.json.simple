@@ -3,6 +3,11 @@
     "use_sms": 0,
     "referrer": [1,"reviewer1112"],
     "encrypt_key": "5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja",
+    "sync_cfg": {
+        "contract": "bitsfleamain",
+        "api_url": "https://api-bostest.blockzone.net/v1/chain/",
+        "sync_log_interval": 60
+    },
     "sms": {
         "svr_url": "https://sms.tencentcloudapi.com/?Action=SendSms",
         "appid": "1400340984",

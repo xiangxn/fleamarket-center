@@ -136,6 +136,10 @@ def clean(options):
     destdir.rmtree()
     path('paver-minilib.zip').remove()
     path('setup.py').remove()
+    path('sync_error.log').remove()
+    path('sync_warning.log').remove()
+    path('center_error.log').remove()
+    path('center_warning.log').remove()
 # [[[endsection]]]
 
 # [[[section run]]]
