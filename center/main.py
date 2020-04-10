@@ -1,10 +1,14 @@
-import argparse
+import os
 import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "rpc"))
+
+import argparse
 import getpass
 import json
 from center import metadata
 from center.server import bits_flea_run
 from center.syncsvr import SyncSvr
+
 
 
 def main(argv):
