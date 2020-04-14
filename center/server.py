@@ -84,12 +84,9 @@ class Server(BitsFleaServicer):
         result = self.gateway.createAccount(owner, active)
         if result:
             #获取引荐人
-            ref = self.gateway.getUser(eosid=referral)
+            (referral, referral_name) = self.gateway.getReferral(eosid=referral)
             #print("ref: ", ref)
-            if ref and len(ref['rows']) > 0:
-                referral = int(ref['rows'][0]['uid'])
-                referral_name = ref['rows'][0]['eosid']
-            else:
+            if not referral or not referral_name:
                 referral = int(self.config['referrer'][0])
                 referral_name = self.config['referrer'][1]
             #authkey
@@ -129,7 +126,7 @@ class Server(BitsFleaServicer):
                 if len(res['rows']) > 0:
                     user = res['rows'][0]
             else:
-                return result
+                return result, referral_name
         return user, referral_name
         
         
@@ -145,9 +142,12 @@ class Server(BitsFleaServicer):
         if flag and len(request.phone) > 0 and len(request.ownerpubkey) == 53 and len(request.actpubkey) == 53:
             m = RegisterReply()
             en_phone = None
+            authkey = None
             if hasattr(request, "phoneEncrypt"):
                 en_phone = request.phoneEncrypt
-            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral, request.authkey)
+            if hasattr(request, "authkey"):
+                authkey = request.authkey
+            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral, authkey)
             if user_info and "status" in user_info:
                 if user_info['status'] != "failed":
                     m.msg = "registration successful"

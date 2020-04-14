@@ -1,5 +1,6 @@
 import requests
 import json
+from center.database.model import User as UserModel
 
 class Gateway:
     
@@ -58,4 +59,14 @@ class Gateway:
             query['uid'] = uid
         res = self.post(uri="get_user", data=query)
         return res
+    
+    def getReferral(self, eosid):
+        user = UserModel.objects(eosid=eosid).first()
+        if not user:
+            user = self.getUser(eosid=eosid)
+            if user and len(ref['rows']) > 0:
+                return (int(ref['rows'][0]['uid']), user['rows'][0]['eosid'])
+            else:
+                return (0, "")
+        return (user.userid, user.eosid)
         
