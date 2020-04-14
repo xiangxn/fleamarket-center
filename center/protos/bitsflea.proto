@@ -81,7 +81,7 @@ message User {
 
 message RegisterRequest {
     string phone = 1;
-    string passwd = 2;
+    string nickname = 2;
     string ownerpubkey = 3;
     string actpubkey = 4;
     string smscode = 5;

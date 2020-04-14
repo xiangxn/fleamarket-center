@@ -76,57 +76,36 @@ class Server(BitsFleaServicer):
                 return BaseReply(code=500,msg=result['message'])
         return BaseReply(code=3,msg="Invalid paras") 
     
-    def _register(self, phone, en_phone, owner, active, referral, authkey):
+    def _register(self, phone, en_phone, owner, active, authkey, referral, nickname):
         user = None
-        name = None
-        referral_name = ""
+        #获取引荐人
+        (referral, referral_name) = self.gateway.getReferral(eosid=referral)
+        #print("ref: ", ref)
+        if not referral or not referral_name:
+            referral = int(self.config['referrer'][0])
+            referral_name = self.config['referrer'][1]
+        #authkey
+        if not authkey or len(authkey) != len(active):
+            authkey = active
+        #处理手机号
+        phone_hash = Utils.sha256(bytes(phone, "utf8"))
+        #print("phone_hash: ", phone_hash)
+        if not en_phone:
+            en_phone = Utils.encrypt_phone(phone, authkey, self.config['encrypt_key'])
         #创建eos id
-        result = self.gateway.createAccount(owner, active)
+        result = self.gateway.createAccount(nickname, owner, active, authkey, referral, phone_hash, en_phone)
+        #print(result)
         if result:
-            #获取引荐人
-            (referral, referral_name) = self.gateway.getReferral(eosid=referral)
-            #print("ref: ", ref)
-            if not referral or not referral_name:
-                referral = int(self.config['referrer'][0])
-                referral_name = self.config['referrer'][1]
-            #authkey
-            if not authkey or len(authkey) != len(active):
-                authkey = active
-            #处理手机号
-            phone_hash = Utils.sha256(bytes(phone, "utf8"))
-            #print("phone_hash: ", phone_hash)
-            if not en_phone:
-                en_phone = Utils.encrypt_phone(phone, authkey, self.config['encrypt_key'])
-                #print("en_phone: ", en_phone)
-            name = result['name']
-            #注册到平台
-            payload = {
-                "account": "bitsfleamain",
-                "name": "reguser",
-                "authorization": [{
-                    "actor": "bitsfleamain",
-                    "permission": "active",
-                }],
-                "data": {
-                    "eosid": name,
-                    "nickname": name,
-                    "phone_hash": phone_hash,
-                    "phone_encrypt": en_phone,
-                    "referrer": referral,
-                    "auth_key": authkey
-                }
-            }
-            trx = {"transaction":{"actions": [payload]}}
-            #print("trx", trx)
-            result = self.gateway.broadcast(trx, sign=True)
-            #print("result", result)
             if result['status'] == "success":
                 #获取注册信息
-                res = self.gateway.getUser(eosid=name)
+                res = self.gateway.getUser(eosid=result['name'])
                 if len(res['rows']) > 0:
                     user = res['rows'][0]
+                else:
+                    user = result
+                    user['message'] = "Has been successfully registered, waiting for data sync"
             else:
-                return result, referral_name
+                user = result
         return user, referral_name
         
         
@@ -143,13 +122,17 @@ class Server(BitsFleaServicer):
             m = RegisterReply()
             en_phone = None
             authkey = None
+            nickname = ""
             if hasattr(request, "phoneEncrypt"):
                 en_phone = request.phoneEncrypt
             if hasattr(request, "authkey"):
                 authkey = request.authkey
-            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral, authkey)
+            if hasattr(request, "nickname"):
+                nickname = request.nickname
+            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral, authkey, nickname)
+            #print(user_info)
             if user_info and "status" in user_info:
-                if user_info['status'] != "failed":
+                if "uid" in user_info:
                     m.msg = "registration successful"
                     m.data.userid = user_info['uid']
                     m.data.eosid = user_info['eosid']

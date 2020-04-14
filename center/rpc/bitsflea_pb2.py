@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='bitsflea',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0e\x62itsflea.proto\x12\x08\x62itsflea\x1a\x1cgoogle/api/annotations.proto\"&\n\tBaseReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\x1d\n\x0c\x45osidRequest\x12\r\n\x05\x65osid\x18\x01 \x01(\t\"\xd9\x02\n\x04User\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05\x65osid\x18\x02 \x01(\t\x12\r\n\x05phone\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x05\x12\x10\n\x08nickname\x18\x05 \x01(\t\x12\x0c\n\x04head\x18\x06 \x01(\t\x12\x13\n\x0b\x63reditValue\x18\x07 \x01(\x05\x12\x10\n\x08referrer\x18\x08 \x01(\t\x12\x16\n\x0elastActiveTime\x18\t \x01(\t\x12\x12\n\npostsTotal\x18\n \x01(\x05\x12\x11\n\tsellTotal\x18\x0b \x01(\x05\x12\x10\n\x08\x62uyTotal\x18\x0c \x01(\x05\x12\x15\n\rreferralTotal\x18\r \x01(\x05\x12\r\n\x05point\x18\x0e \x01(\t\x12\x12\n\nisReviewer\x18\x0f \x01(\x05\x12\x15\n\rfavoriteTotal\x18\x10 \x01(\x05\x12\x17\n\x0f\x63ollectionTotal\x18\x11 \x01(\x05\x12\x11\n\tfansTotal\x18\x12 \x01(\x05\"{\n\x0fRegisterRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x0e\n\x06passwd\x18\x02 \x01(\t\x12\x13\n\x0bownerpubkey\x18\x03 \x01(\t\x12\x11\n\tactpubkey\x18\x04 \x01(\t\x12\x0f\n\x07smscode\x18\x05 \x01(\t\x12\x10\n\x08referral\x18\x06 \x01(\t\"H\n\rRegisterReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\x1c\n\x04\x64\x61ta\x18\x03 \x01(\x0b\x32\x0e.bitsflea.User\"-\n\nSmsRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08\x63odeType\x18\x02 \x01(\x05\"4\n\x13RefreshTokenRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\t\"\"\n\x11RefreshTokenReply\x12\r\n\x05token\x18\x01 \x01(\t\"\x1e\n\rSearchRequest\x12\r\n\x05query\x18\x01 \x01(\t\"6\n\x0bSearchReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"/\n\x12TransactionRequest\x12\x0b\n\x03trx\x18\x01 \x01(\t\x12\x0c\n\x04sign\x18\x02 \x01(\x05\x32\xcd\x04\n\x08\x42itsFlea\x12^\n\x08Register\x12\x19.bitsflea.RegisterRequest\x1a\x17.bitsflea.RegisterReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/register:\x01*\x12[\n\x0bSendSmsCode\x12\x14.bitsflea.SmsRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/sendSmsCode:\x01*\x12n\n\x0cRefreshToken\x12\x1d.bitsflea.RefreshTokenRequest\x1a\x1b.bitsflea.RefreshTokenReply\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/common/refreshtoken:\x01*\x12W\n\x08Referral\x12\x16.bitsflea.EosidRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/Referral:\x01*\x12V\n\x06Search\x12\x17.bitsflea.SearchRequest\x1a\x15.bitsflea.SearchReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/search:\x01*\x12\x63\n\x0bTransaction\x12\x1c.bitsflea.TransactionRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/transaction:\x01*b\x06proto3'
+  serialized_pb=b'\n\x0e\x62itsflea.proto\x12\x08\x62itsflea\x1a\x1cgoogle/api/annotations.proto\"&\n\tBaseReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"\x1d\n\x0c\x45osidRequest\x12\r\n\x05\x65osid\x18\x01 \x01(\t\"\xd9\x02\n\x04User\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05\x65osid\x18\x02 \x01(\t\x12\r\n\x05phone\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x05\x12\x10\n\x08nickname\x18\x05 \x01(\t\x12\x0c\n\x04head\x18\x06 \x01(\t\x12\x13\n\x0b\x63reditValue\x18\x07 \x01(\x05\x12\x10\n\x08referrer\x18\x08 \x01(\t\x12\x16\n\x0elastActiveTime\x18\t \x01(\t\x12\x12\n\npostsTotal\x18\n \x01(\x05\x12\x11\n\tsellTotal\x18\x0b \x01(\x05\x12\x10\n\x08\x62uyTotal\x18\x0c \x01(\x05\x12\x15\n\rreferralTotal\x18\r \x01(\x05\x12\r\n\x05point\x18\x0e \x01(\t\x12\x12\n\nisReviewer\x18\x0f \x01(\x05\x12\x15\n\rfavoriteTotal\x18\x10 \x01(\x05\x12\x17\n\x0f\x63ollectionTotal\x18\x11 \x01(\x05\x12\x11\n\tfansTotal\x18\x12 \x01(\x05\"\x8e\x01\n\x0fRegisterRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\x13\n\x0bownerpubkey\x18\x03 \x01(\t\x12\x11\n\tactpubkey\x18\x04 \x01(\t\x12\x0f\n\x07smscode\x18\x05 \x01(\t\x12\x10\n\x08referral\x18\x06 \x01(\t\x12\x0f\n\x07\x61uthkey\x18\x07 \x01(\t\"H\n\rRegisterReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\x1c\n\x04\x64\x61ta\x18\x03 \x01(\x0b\x32\x0e.bitsflea.User\"-\n\nSmsRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08\x63odeType\x18\x02 \x01(\x05\"4\n\x13RefreshTokenRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\t\"\"\n\x11RefreshTokenReply\x12\r\n\x05token\x18\x01 \x01(\t\"\x1e\n\rSearchRequest\x12\r\n\x05query\x18\x01 \x01(\t\"6\n\x0bSearchReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"/\n\x12TransactionRequest\x12\x0b\n\x03trx\x18\x01 \x01(\t\x12\x0c\n\x04sign\x18\x02 \x01(\x05\x32\xcd\x04\n\x08\x42itsFlea\x12^\n\x08Register\x12\x19.bitsflea.RegisterRequest\x1a\x17.bitsflea.RegisterReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/register:\x01*\x12[\n\x0bSendSmsCode\x12\x14.bitsflea.SmsRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/sendSmsCode:\x01*\x12n\n\x0cRefreshToken\x12\x1d.bitsflea.RefreshTokenRequest\x1a\x1b.bitsflea.RefreshTokenReply\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/common/refreshtoken:\x01*\x12W\n\x08Referral\x12\x16.bitsflea.EosidRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/Referral:\x01*\x12V\n\x06Search\x12\x17.bitsflea.SearchRequest\x1a\x15.bitsflea.SearchReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/search:\x01*\x12\x63\n\x0bTransaction\x12\x1c.bitsflea.TransactionRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/transaction:\x01*b\x06proto3'
   ,
   dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,])
 
@@ -260,7 +260,7 @@ _REGISTERREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='passwd', full_name='bitsflea.RegisterRequest.passwd', index=1,
+      name='nickname', full_name='bitsflea.RegisterRequest.nickname', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -294,6 +294,13 @@ _REGISTERREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='authkey', full_name='bitsflea.RegisterRequest.authkey', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -306,8 +313,8 @@ _REGISTERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=477,
-  serialized_end=600,
+  serialized_start=478,
+  serialized_end=620,
 )
 
 
@@ -351,8 +358,8 @@ _REGISTERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=602,
-  serialized_end=674,
+  serialized_start=622,
+  serialized_end=694,
 )
 
 
@@ -389,8 +396,8 @@ _SMSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=676,
-  serialized_end=721,
+  serialized_start=696,
+  serialized_end=741,
 )
 
 
@@ -427,8 +434,8 @@ _REFRESHTOKENREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=723,
-  serialized_end=775,
+  serialized_start=743,
+  serialized_end=795,
 )
 
 
@@ -458,8 +465,8 @@ _REFRESHTOKENREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=777,
-  serialized_end=811,
+  serialized_start=797,
+  serialized_end=831,
 )
 
 
@@ -489,8 +496,8 @@ _SEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=813,
-  serialized_end=843,
+  serialized_start=833,
+  serialized_end=863,
 )
 
 
@@ -534,8 +541,8 @@ _SEARCHREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=845,
-  serialized_end=899,
+  serialized_start=865,
+  serialized_end=919,
 )
 
 
@@ -572,8 +579,8 @@ _TRANSACTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=901,
-  serialized_end=948,
+  serialized_start=921,
+  serialized_end=968,
 )
 
 _REGISTERREPLY.fields_by_name['data'].message_type = _USER
@@ -675,8 +682,8 @@ _BITSFLEA = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=951,
-  serialized_end=1540,
+  serialized_start=971,
+  serialized_end=1560,
   methods=[
   _descriptor.MethodDescriptor(
     name='Register',

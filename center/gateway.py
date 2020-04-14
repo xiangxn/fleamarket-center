@@ -25,10 +25,15 @@ class Gateway:
             self.logger.Error("!!! An error occurred while requesting the gateway", e, screen=True)
         return res
     
-    def createAccount(self, owner, active):
+    def createAccount(self, nickname, owner, active, authkey, referrer, phone_hash, en_phone):
         data = {
             "owner_pubkey": owner,
-            "active_pubkey": active
+            "active_pubkey": active,
+            "nickname": nickname,
+            "en_phone": en_phone,
+            "phone_hash": phone_hash,
+            "referrer": referrer,
+            "auth_key": authkey
         }
         res = self.post(uri="create_account", data=data)
         return res
