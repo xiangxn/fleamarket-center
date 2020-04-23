@@ -47,6 +47,13 @@ service BitsFlea {
         };
     }
 
+    rpc Follow (FollowRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/follow"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -122,5 +129,10 @@ message SearchReply {
 message TransactionRequest {
     string trx = 1;
     int32 sign = 2;
+}
+
+message FollowRequest {
+    int32 user = 1;
+    int32 follower = 2;
 }
 

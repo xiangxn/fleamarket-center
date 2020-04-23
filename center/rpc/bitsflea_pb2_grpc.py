@@ -43,6 +43,11 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.TransactionRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
+        self.Follow = channel.unary_unary(
+                '/bitsflea.BitsFlea/Follow',
+                request_serializer=bitsflea__pb2.FollowRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
 
 
 class BitsFleaServicer(object):
@@ -84,6 +89,12 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Follow(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BitsFleaServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -115,6 +126,11 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'Transaction': grpc.unary_unary_rpc_method_handler(
                     servicer.Transaction,
                     request_deserializer=bitsflea__pb2.TransactionRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'Follow': grpc.unary_unary_rpc_method_handler(
+                    servicer.Follow,
+                    request_deserializer=bitsflea__pb2.FollowRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
     }
@@ -219,6 +235,22 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Transaction',
             bitsflea__pb2.TransactionRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Follow(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Follow',
+            bitsflea__pb2.FollowRequest.SerializeToString,
             bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

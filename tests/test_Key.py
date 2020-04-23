@@ -1,8 +1,8 @@
 import sys
 sys.path.append('../center')
 import pytest
-from center.graphene.keys import PrivateKey, PublicKey
-from center.graphene.memo import encode_memo, decode_memo
+from center.eoslib.keys import PrivateKey, PublicKey
+from center.eoslib.memo import encode_memo, decode_memo
 import random
 
 parametrize = pytest.mark.parametrize

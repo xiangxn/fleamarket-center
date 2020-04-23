@@ -12,6 +12,10 @@ import json
 from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
 from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply
 from bitsflea_pb2 import SearchRequest, SearchReply
+from bitsflea_pb2 import FollowRequest
+
+from center.database.model import Follow as FollowModel
+from center.database.model import User as UserModel
 
 from center.gateway import Gateway
 from center.utils import Utils
@@ -157,6 +161,19 @@ class Server(BitsFleaServicer):
             return m
         else:
             return RegisterReply(code=2,msg="Invalid verification code") 
+        
+    def Follow(self, request, context):
+        if request.user and request.follower:
+            f = FollowModel()
+            u = UserModel.objects(userid=request.user).first()
+            fu = UserModel.objects(userid=request.follower).first()
+            if u and fu:
+                f.user = u
+                f.follower = fu
+                f.save()
+                return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras") 
+            
 
 
 def bits_flea_run(config):

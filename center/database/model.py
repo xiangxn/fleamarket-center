@@ -181,6 +181,13 @@ class OtherAddr(me.Document):
     coinType = me.StringField(required=True)
     addr = me.StringField(required=True)
     
+class Follow(me.Document):
+    meta = {"collection": "follows"}
+    
+    fid = me.SequenceField(primary_key=True)
+    user = me.ReferenceField(User)
+    follower = me.ReferenceField(User)
+    
     
     
     

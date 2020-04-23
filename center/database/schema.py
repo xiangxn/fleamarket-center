@@ -9,6 +9,7 @@ from .model import Product as ProductModel
 from .model import Order as OrderModel
 from .model import ProductAudit as ProductAuditModel
 from .model import OtherAddr as OtherAddrModel
+from .model import Follow as FollowModel
 #import json
 
 #mongoengine.connect(db="bf_center", host="localhost", port=3001)
@@ -47,6 +48,11 @@ class Order(MongoengineObjectType):
         model = OrderModel
         interfaces = (graphene.relay.Node,)
         
+class Follow(MongoengineObjectType):
+    class Meta:
+        model = FollowModel
+        interfaces = (graphene.relay.Node,)
+        
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     # User
@@ -77,6 +83,9 @@ class Query(graphene.ObjectType):
     order_by_seller = graphene.List(Order, userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     order_by_id = graphene.List(Order, orderid=graphene.String())
+    
+    #Follow
+    follows = MongoengineConnectionField(Follow)
     
     
     def resolve_user(self, info, userid):
