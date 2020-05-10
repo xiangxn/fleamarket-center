@@ -11,6 +11,7 @@ from .model import ProductAudit as ProductAuditModel
 from .model import OtherAddr as OtherAddrModel
 from .model import Follow as FollowModel
 from .model import Collect as CollectModel
+from .model import ReceiptAddress as ReceiptAddressModel
 #import json
 
 #mongoengine.connect(db="bf_center", host="localhost", port=3001)
@@ -59,6 +60,11 @@ class Collect(MongoengineObjectType):
         model = CollectModel
         interfaces = (graphene.relay.Node,)
         
+class ReceiptAddress(MongoengineObjectType):
+    class Meta:
+        model = ReceiptAddressModel
+        interfaces = (graphene.relay.Node,)
+        
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     # User
@@ -102,6 +108,11 @@ class Query(graphene.ObjectType):
     collect_by_user = graphene.List(Collect, userid=graphene.Int(default_value=0),
                                     pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
+    #ReceiptAddress
+    receiptaddresses = MongoengineConnectionField(ReceiptAddress)
+    rec_addr_by_user = graphene.List(ReceiptAddress, userid=graphene.Int(default_value=0))
+    
+    
     
     def resolve_user(self, info, userid):
         return UserModel.objects.get(userid=userid)
@@ -134,6 +145,9 @@ class Query(graphene.ObjectType):
     
     def resolve_withdraw_addr(self, info, userid):
         return list(OtherAddrModel.objects(user__userid=userid))
+    
+    def resolve_rec_addr_by_user(self, info, userid):
+        return list(ReceiptAddressModel.objects(userid=userid))
         
     
     

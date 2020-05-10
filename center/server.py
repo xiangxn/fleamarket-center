@@ -27,6 +27,7 @@ from center.database.model import Sms as SmsModel
 from center.database.model import User as UserModel
 from center.database.model import Product as ProductModel
 from center.database.model import Collect as CollectModel
+from center.database.model import ReceiptAddress as ReceiptAddressModel
 
 
 class Server(BitsFleaServicer):
@@ -203,6 +204,51 @@ class Server(BitsFleaServicer):
                  c.delete()
                  return BaseReply(msg="success")
         return BaseReply(code=3,msg="Invalid paras") 
+    
+    def Address(self, request, context):
+        if request.userid:
+            u = UserModel.objects(userid=request.userid).first()
+            if u:
+                r = ReceiptAddressModel()
+                r.userid = request.userid
+                r.province = request.province
+                r.city = request.city
+                r.district = request.district
+                r.phone = request.phone
+                r.name = request.name
+                r.address = request.address
+                r.postcode = request.postcode
+                r.default = request.default
+                r.save()
+                return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras")
+    
+    def UpdateAddress(self, request, context):
+        if request.rid and request.userid:
+            r = ReceiptAddressModel.objects(rid=request.rid).first()
+            u = UserModel.objects(userid=request.userid).first()
+            if r and u:
+                r.province = request.province
+                r.city = request.city
+                r.district = request.district
+                r.phone = request.phone
+                r.name = request.name
+                r.address = request.address
+                r.postcode = request.postcode
+                r.default = request.default
+                r.save()
+                return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras")
+    
+    def SetDefaultAddr(self, request, context):
+        if request.rid and request.userid:
+            r = ReceiptAddressModel.objects(rid=request.rid).first()
+            if r and r.userid == request.userid:
+                ReceiptAddressModel.objects(userid=request.userid).update(default=0)
+                r.default = 1
+                r.save()
+                return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras")
             
 
 

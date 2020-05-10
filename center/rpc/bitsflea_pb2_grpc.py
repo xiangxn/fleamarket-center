@@ -63,6 +63,21 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.CollectRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
+        self.Address = channel.unary_unary(
+                '/bitsflea.BitsFlea/Address',
+                request_serializer=bitsflea__pb2.AddressRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
+        self.UpdateAddress = channel.unary_unary(
+                '/bitsflea.BitsFlea/UpdateAddress',
+                request_serializer=bitsflea__pb2.AddressRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
+        self.SetDefaultAddr = channel.unary_unary(
+                '/bitsflea.BitsFlea/SetDefaultAddr',
+                request_serializer=bitsflea__pb2.SetDefaultAddrRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
 
 
 class BitsFleaServicer(object):
@@ -128,6 +143,24 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Address(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdateAddress(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetDefaultAddr(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BitsFleaServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -179,6 +212,21 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'UnCollect': grpc.unary_unary_rpc_method_handler(
                     servicer.UnCollect,
                     request_deserializer=bitsflea__pb2.CollectRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'Address': grpc.unary_unary_rpc_method_handler(
+                    servicer.Address,
+                    request_deserializer=bitsflea__pb2.AddressRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'UpdateAddress': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateAddress,
+                    request_deserializer=bitsflea__pb2.AddressRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'SetDefaultAddr': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetDefaultAddr,
+                    request_deserializer=bitsflea__pb2.SetDefaultAddrRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
     }
@@ -347,6 +395,54 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/UnCollect',
             bitsflea__pb2.CollectRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Address(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Address',
+            bitsflea__pb2.AddressRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdateAddress(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/UpdateAddress',
+            bitsflea__pb2.AddressRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetDefaultAddr(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/SetDefaultAddr',
+            bitsflea__pb2.SetDefaultAddrRequest.SerializeToString,
             bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

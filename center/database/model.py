@@ -195,6 +195,20 @@ class Collect(me.Document):
     user = me.ReferenceField(User)
     product = me.ReferenceField(Product)
     
+class ReceiptAddress(me.Document):
+    meta = {"collection": "receiptaddrs"}
+    
+    rid = me.SequenceField(primary_key=True)
+    userid = me.IntField(required=True)
+    province = me.StringField(required=True)
+    city = me.StringField(required=True)
+    district = me.StringField(required=True)
+    phone = me.StringField(required=True)
+    name = me.StringField(required=True)
+    address = me.StringField(required=True)
+    postcode = me.StringField(required=True)
+    default = me.IntField(default=0)
+    
     
     
     

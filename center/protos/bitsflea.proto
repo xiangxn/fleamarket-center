@@ -75,6 +75,27 @@ service BitsFlea {
         };
     }
 
+    rpc Address (AddressRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/address"
+            body: "*"
+        };
+    }
+
+    rpc UpdateAddress (AddressRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/updateaddress"
+            body: "*"
+        };
+    }
+
+    rpc SetDefaultAddr (SetDefaultAddrRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/setdefault"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -160,5 +181,23 @@ message FollowRequest {
 message CollectRequest {
     int32 user = 1;
     int32 product = 2;
+}
+
+message AddressRequest {
+    int32 rid = 1;
+    int32 userid = 2;
+    string province = 3;
+    string city = 4;
+    string district = 5;
+    string phone = 6;
+    string name = 7;
+    string address = 8;
+    string postcode = 9;
+    int32 default = 10;
+}
+
+message SetDefaultAddrRequest {
+    int32 userid = 1;
+    int32 rid = 2;
 }
 
