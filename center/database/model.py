@@ -188,6 +188,13 @@ class Follow(me.Document):
     user = me.ReferenceField(User)
     follower = me.ReferenceField(User)
     
+class Collect(me.Document):
+    meta = {"collection": "collects"}
+    
+    cid = me.SequenceField(primary_key=True)
+    user = me.ReferenceField(User)
+    product = me.ReferenceField(Product)
+    
     
     
     

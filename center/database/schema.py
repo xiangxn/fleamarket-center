@@ -10,6 +10,7 @@ from .model import Order as OrderModel
 from .model import ProductAudit as ProductAuditModel
 from .model import OtherAddr as OtherAddrModel
 from .model import Follow as FollowModel
+from .model import Collect as CollectModel
 #import json
 
 #mongoengine.connect(db="bf_center", host="localhost", port=3001)
@@ -53,6 +54,11 @@ class Follow(MongoengineObjectType):
         model = FollowModel
         interfaces = (graphene.relay.Node,)
         
+class Collect(MongoengineObjectType):
+    class Meta:
+        model = CollectModel
+        interfaces = (graphene.relay.Node,)
+        
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     # User
@@ -86,6 +92,15 @@ class Query(graphene.ObjectType):
     
     #Follow
     follows = MongoengineConnectionField(Follow)
+    follow_by_user = graphene.List(Follow, userid=graphene.Int(default_value=0),
+                                   pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    follow_by_follower = graphene.List(Follow, userid=graphene.Int(default_value=0),
+                                   pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    
+    #Collect
+    collects = MongoengineConnectionField(Collect)
+    collect_by_user = graphene.List(Collect, userid=graphene.Int(default_value=0),
+                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     
     def resolve_user(self, info, userid):

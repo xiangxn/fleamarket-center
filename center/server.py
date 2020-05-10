@@ -25,6 +25,8 @@ from center.database.schema import schema
 
 from center.database.model import Sms as SmsModel
 from center.database.model import User as UserModel
+from center.database.model import Product as ProductModel
+from center.database.model import Collect as CollectModel
 
 
 class Server(BitsFleaServicer):
@@ -172,6 +174,34 @@ class Server(BitsFleaServicer):
                 f.follower = fu
                 f.save()
                 return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras") 
+    
+    def UnFollow(self, request, context):
+        if request.user and request.follower:
+            f = FollowModel.objects(user=request.user, follower=request.follower).first()
+            if f:
+                f.delete()
+                return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras") 
+    
+    def Collect(self, request, context):
+        if request.user and request.product:
+            u = UserModel.objects(userid=request.user).first()
+            p = ProductModel.objects(productId=request.product).first()
+            if u and p:
+                c = CollectModel()
+                c.user = u
+                c.product = p
+                c.save()
+                return BaseReply(msg="success")
+        return BaseReply(code=3,msg="Invalid paras") 
+    
+    def UnCollect(self, request, context):
+        if request.user and request.product:
+             c = CollectModel.objects(user=request.user, product=request.product).first()
+             if c:
+                 c.delete()
+                 return BaseReply(msg="success")
         return BaseReply(code=3,msg="Invalid paras") 
             
 

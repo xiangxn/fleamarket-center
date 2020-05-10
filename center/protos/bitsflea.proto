@@ -54,6 +54,27 @@ service BitsFlea {
         };
     }
 
+    rpc UnFollow (FollowRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/unfollow"
+            body: "*"
+        };
+    }
+
+    rpc Collect (CollectRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/collect"
+            body: "*"
+        };
+    }
+
+    rpc UnCollect (CollectRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/uncollect"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -134,5 +155,10 @@ message TransactionRequest {
 message FollowRequest {
     int32 user = 1;
     int32 follower = 2;
+}
+
+message CollectRequest {
+    int32 user = 1;
+    int32 product = 2;
 }
 
