@@ -118,12 +118,15 @@ class Server(BitsFleaServicer):
             if sign:
                 tmp_trx = json.loads(request.trx)['transaction']
                 if len(tmp_trx['actions']) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
-                    return BaseReply(code=401,msg="This action has no permissions") 
-            result = self.gateway.broadcast(request.trx, sign=sign)
-            if result['status'] == "success":
+                    return BaseReply(code=401,msg="This action has no permissions")
+            result = None
+            try:
+                result = self.gateway.broadcast(request.trx, sign=sign)
+            except Exception as e:
+                self.logger.Error("gateway error: ", e=e, screen=True)
+            if result and result['status'] == "success":
                 return BaseReply(code=0, msg="success")
             else:
-                self.logger.Error(result['message'], screen=True)
                 return BaseReply(code=500, msg=result['message'])
         return BaseReply(code=1, msg="Invalid parameter") 
     
