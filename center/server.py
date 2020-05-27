@@ -123,6 +123,7 @@ class Server(BitsFleaServicer):
             if result['status'] == "success":
                 return BaseReply(code=0, msg="success")
             else:
+                self.logger.Error(result['message'], screen=True)
                 return BaseReply(code=500, msg=result['message'])
         return BaseReply(code=1, msg="Invalid parameter") 
     
@@ -143,7 +144,11 @@ class Server(BitsFleaServicer):
         if not en_phone:
             en_phone = Utils.encrypt_phone(phone, authkey, self.config['encrypt_key'])
         #创建eos id
-        result = self.gateway.createAccount(nickname, owner, active, authkey, referral, phone_hash, en_phone)
+        result = None
+        try:
+            result = self.gateway.createAccount(nickname, owner, active, authkey, referral, phone_hash, en_phone)
+        except Exception as e:
+            self.logger.Error("gateway error: ", e=e, screen=True)
         #print(result)
         if result:
             if result['status'] == "success":
