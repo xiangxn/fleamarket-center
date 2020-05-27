@@ -33,7 +33,7 @@ class TestKey(object):
         
     def test_sign(self):
         priKey = PrivateKey("5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja")
-        source_msg = "10"
+        source_msg = "100"
         sign_msg = sign_message(source_msg, priKey)
         shex = hexlify(sign_msg).decode("ascii")
         print("sign_msg: ", shex)
