@@ -19,7 +19,7 @@ service BitsFlea {
         };
     }
 
-    rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenReply) {
+    rpc RefreshToken (RefreshTokenRequest) returns (TokenReplay) {
         option (google.api.http) = {
             post: "/v1/common/refreshtoken"
             body: "*"
@@ -33,7 +33,7 @@ service BitsFlea {
         };
     }
 
-    rpc Search (SearchRequest) returns (SearchReply) {
+    rpc Search (SearchRequest) returns (SearchReplay) {
         option (google.api.http) = {
             post: "/v1/common/search"
             body: "*"
@@ -103,6 +103,16 @@ message BaseReply {
     string msg = 2;
 }
 
+message SearchReplay {
+    BaseReply status = 1;
+    string data = 2;
+}
+
+message TokenReplay {
+    BaseReply status = 1;
+    string token = 2;
+}
+
 message EosidRequest {
     string eosid = 1;
 }
@@ -139,9 +149,8 @@ message RegisterRequest {
 }
 
 message RegisterReply {
-    int32 code = 1;
-    string msg = 2;
-    User data = 3;
+    BaseReply status = 1;
+    User data = 2;
 }
 
 message SmsRequest {
@@ -152,20 +161,12 @@ message SmsRequest {
 message RefreshTokenRequest {
     int32 userid = 1;
     string token = 2;
-}
-
-message RefreshTokenReply {
-    string token = 1;
+    int32 time = 3;
+    string sign = 4;
 }
 
 message SearchRequest {
     string query = 1;
-}
-
-message SearchReply {
-    int32 code = 1;
-    string msg = 2;
-    string data = 3;
 }
 
 message TransactionRequest {

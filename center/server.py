@@ -10,15 +10,21 @@ import time
 import json
 
 from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply
-from bitsflea_pb2 import SearchRequest, SearchReply
+from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply, SearchReplay, TokenReplay
+from bitsflea_pb2 import SearchRequest
 from bitsflea_pb2 import FollowRequest
+from bitsflea_pb2 import RefreshTokenRequest
+
 
 from center.database.model import Follow as FollowModel
 from center.database.model import User as UserModel
 
 from center.gateway import Gateway
 from center.utils import Utils
+from center.eoslib.signature import verify_message
+from center.eoslib.keys import PublicKey
+
+from binascii import unhexlify, hexlify
 
 import mongoengine
 from center.database.schema import schema
@@ -28,6 +34,7 @@ from center.database.model import User as UserModel
 from center.database.model import Product as ProductModel
 from center.database.model import Collect as CollectModel
 from center.database.model import ReceiptAddress as ReceiptAddressModel
+from center.database.model import Tokens as TokensModel
 
 
 class Server(BitsFleaServicer):
@@ -54,20 +61,56 @@ class Server(BitsFleaServicer):
             else:
                 SmsModel(phone=request.phone, code=code, time=int(time.time())).save()
             # TODO: 处理发送模板类型与发送短信
-            return BaseReply(code=0,msg="success")
-        return BaseReply(code=1,msg="Phone numbers not currently supported")
+            return BaseReply(code=0, msg="success")
+        return BaseReply(code=3001, msg="Phone numbers not currently supported")
+    
+    def RefreshToken(self, request, context):
+        token = "0"
+        if request.token and request.token != "0":
+            token = request.token
+        user = UserModel.objects(userid = request.userid).first()
+        if user:
+            # 验证
+            msg = "{}{}{}".format(request.userid, token, request.time)
+            phex = verify_message(msg, unhexlify(request.sign))
+            if user.authKey == str(PublicKey(hexlify(phex).decode("ascii"))):
+                code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
+                tm = TokensModel.objects(userid = request.userid).first()
+                if tm:
+                    exp = int(time.time()) - tm.expiration
+                    if exp >= 3600 or exp >= 86400:
+                        tm.token = Utils.sha256(bytes(code,"utf8"))
+                        tm.expiration = int(time.time()+86400)
+                        tm.save()
+                    else:
+                        return TokenReplay(status=BaseReply(code=0, msg="success"), token=tm.token)
+                else:
+                    tm = TokensModel()
+                    tm.userid = request.userid
+                    tm.token = Utils.sha256(bytes(code,"utf8"))
+                    tm.expiration = int(time.time()+86400)
+                    tm.save()
+                return TokenReplay(status=BaseReply(code=0, msg="success"), token=tm.token)
+            else:
+                return TokenReplay(status=BaseReply(code=3002, msg="Invalid signature"))
+        return TokenReplay(status=BaseReply(code=1, msg="Invalid parameter"))
+        
     
     def Search(self, request, context):
+        #print( context.invocation_metadata())
+        sur = SearchReplay()
         if request.query:
             result = schema.execute(request.query)
             if result.data:
-                sur = SearchReply()
+                sur.status.msg = "success"
                 sur.data = json.dumps(result.data)
-                return sur
             else:
-                return SearchReply(code=1, msg="no data")
+                sur.status.code = 400
+                sur.status.msg = "no data"
         else:
-            return SearchReply(code=300, msg="Invalid query")
+            sur.status.code = 1
+            sur.status.msg = "Invalid parameter"
+        return sur
         
     def Transaction(self, request, context):
         if request.trx:
@@ -78,10 +121,10 @@ class Server(BitsFleaServicer):
                     return BaseReply(code=401,msg="This action has no permissions") 
             result = self.gateway.broadcast(request.trx, sign=sign)
             if result['status'] == "success":
-                return BaseReply(code=0,msg="success")
+                return BaseReply(code=0, msg="success")
             else:
-                return BaseReply(code=500,msg=result['message'])
-        return BaseReply(code=3,msg="Invalid paras") 
+                return BaseReply(code=500, msg=result['message'])
+        return BaseReply(code=1, msg="Invalid parameter") 
     
     def _register(self, phone, en_phone, owner, active, authkey, referral, nickname):
         user = None
@@ -125,8 +168,8 @@ class Server(BitsFleaServicer):
                 sms_info.delete()
         else:
             flag = True
+        m = RegisterReply()
         if flag and len(request.phone) > 0 and len(request.ownerpubkey) == 53 and len(request.actpubkey) == 53:
-            m = RegisterReply()
             en_phone = None
             authkey = None
             nickname = ""
@@ -156,16 +199,27 @@ class Server(BitsFleaServicer):
                     m.data.point = user_info['point']
                     m.data.isReviewer = user_info['is_reviewer']
                 else:
-                    m.code = 101
-                    m.msg = user_info['message']
+                    m.status.code = 101
+                    m.status.msg = user_info['message']
             else:
                 m.code = 500
                 m.msg = "An error occurred while requesting the gateway"
             return m
         else:
-            return RegisterReply(code=2,msg="Invalid verification code") 
+            m.status.code = 1
+            m.status.msg = "Invalid parameter"
+            return m
+        
+    def _check_auth(self, userid, metadata):
+        token = dict(metadata)['token']
+        tm = TokensModel.objects(token=token).first()
+        if tm and tm.userid == userid:
+            return True
+        return False
         
     def Follow(self, request, context):
+        if self._check_auth(request.follower, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.user and request.follower:
             f = FollowModel()
             u = UserModel.objects(userid=request.user).first()
@@ -175,17 +229,21 @@ class Server(BitsFleaServicer):
                 f.follower = fu
                 f.save()
                 return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras") 
+        return BaseReply(code=1, msg="Invalid parameter") 
     
     def UnFollow(self, request, context):
+        if self._check_auth(request.follower, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.user and request.follower:
             f = FollowModel.objects(user=request.user, follower=request.follower).first()
             if f:
                 f.delete()
                 return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras") 
+        return BaseReply(code=1,msg="Invalid parameter") 
     
     def Collect(self, request, context):
+        if self._check_auth(request.user, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.user and request.product:
             u = UserModel.objects(userid=request.user).first()
             p = ProductModel.objects(productId=request.product).first()
@@ -195,17 +253,21 @@ class Server(BitsFleaServicer):
                 c.product = p
                 c.save()
                 return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras") 
+        return BaseReply(code=1,msg="Invalid parameter") 
     
     def UnCollect(self, request, context):
+        if self._check_auth(request.user, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.user and request.product:
              c = CollectModel.objects(user=request.user, product=request.product).first()
              if c:
                  c.delete()
                  return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras") 
+        return BaseReply(code=1, msg="Invalid parameter") 
     
     def Address(self, request, context):
+        if self._check_auth(request.userid, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.userid:
             u = UserModel.objects(userid=request.userid).first()
             if u:
@@ -221,9 +283,11 @@ class Server(BitsFleaServicer):
                 r.default = request.default
                 r.save()
                 return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras")
+        return BaseReply(code=1,msg="Invalid parameter")
     
     def UpdateAddress(self, request, context):
+        if self._check_auth(request.userid, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.rid and request.userid:
             r = ReceiptAddressModel.objects(rid=request.rid).first()
             u = UserModel.objects(userid=request.userid).first()
@@ -238,9 +302,11 @@ class Server(BitsFleaServicer):
                 r.default = request.default
                 r.save()
                 return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras")
+        return BaseReply(code=1,msg="Invalid parameter")
     
     def SetDefaultAddr(self, request, context):
+        if self._check_auth(request.userid, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
         if request.rid and request.userid:
             r = ReceiptAddressModel.objects(rid=request.rid).first()
             if r and r.userid == request.userid:
@@ -248,13 +314,35 @@ class Server(BitsFleaServicer):
                 r.default = 1
                 r.save()
                 return BaseReply(msg="success")
-        return BaseReply(code=3,msg="Invalid paras")
+        return BaseReply(code=1,msg="Invalid parameter")
             
 
+class TestInterceptor(grpc.ServerInterceptor):
+    def __init__(self):
+
+        def abort(ignored_request, context):
+            context.abort(grpc.StatusCode.UNAUTHENTICATED, 'Invalid signature')
+
+        self._abortion = grpc.unary_unary_rpc_method_handler(abort)
+    
+    def intercept_service(self, continuation, handler_call_details):
+        method_name = handler_call_details.method.split('/')
+        meta = dict(handler_call_details.invocation_metadata)
+        token = ""
+        if "token" in meta:
+            token = meta['token']
+        flag = False
+        tm = TokensModel.objects(token=token).first()
+        if method_name[-1] == "RefreshToken" or (tm and (int(time.time())-tm.expiration) <= 86400):
+            flag = True
+        if flag:
+            return continuation(handler_call_details)
+        else:
+            return self._abortion 
 
 def bits_flea_run(config):
     # 这里通过thread pool来并发处理server的任务
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=(TestInterceptor(),))
 
     # 将对应的任务处理函数添加到rpc server中
     add_BitsFleaServicer_to_server(Server(config), server)

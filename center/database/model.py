@@ -14,6 +14,13 @@ class Sms(me.Document):
     phone = me.StringField(required=True, primary_key=True)
     code = me.StringField(required=True)
     time = me.IntField(required=True)
+    
+class Tokens(me.Document):
+    meta = {"collection": "tokens"}
+    
+    userid = me.IntField(required=True, primary_key=True)
+    token = me.StringField(required=True)
+    expiration = me.IntField(required=True)
 
 class User(me.Document):
     meta = {"collection": "user"}

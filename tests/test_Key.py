@@ -3,6 +3,8 @@ sys.path.append('../center')
 import pytest
 from center.eoslib.keys import PrivateKey, PublicKey
 from center.eoslib.memo import encode_memo, decode_memo
+from center.eoslib.signature import sign_message, verify_message
+from binascii import hexlify, unhexlify
 import random
 
 parametrize = pytest.mark.parametrize
@@ -28,5 +30,17 @@ class TestKey(object):
         pubKey = PublicKey("EOS5BiYrPwXwFmrjLQ3ZUa3BX9crdomJNfYdu6uC863XAXrHNyWbo")
         de_msg = decode_memo(priKey, pubKey, nonce, en_msg)
         assert de_msg == msg
+        
+    def test_sign(self):
+        priKey = PrivateKey("5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja")
+        source_msg = "10"
+        sign_msg = sign_message(source_msg, priKey)
+        shex = hexlify(sign_msg).decode("ascii")
+        print("sign_msg: ", shex)
+        p = verify_message(source_msg, unhexlify(shex))
+        phex = hexlify(p).decode("ascii")
+        pubKey = PublicKey(phex)
+        print("pubkey: ", pubKey, priKey.pubkey)
+        assert str(priKey.pubkey) == str(pubKey)
         
         

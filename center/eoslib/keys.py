@@ -155,7 +155,7 @@ class PublicKey(Prefix):
 
     def add(self, digest256):
         """ Derive new public key from this key and a sha256 "digest" """
-        from .ecdsa import tweakaddPubkey
+        from .signature import tweakaddPubkey
 
         return tweakaddPubkey(self, digest256)
 
