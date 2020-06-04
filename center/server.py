@@ -194,7 +194,7 @@ class Server(BitsFleaServicer):
             #print(user_info)
             if user_info and "status" in user_info:
                 if "uid" in user_info:
-                    m.msg = "registration successful"
+                    m.status.msg = "registration successful"
                     m.data.userid = user_info['uid']
                     m.data.eosid = user_info['eosid']
                     m.data.phone = request.phone    #user_info['phone_encrypt']
@@ -213,8 +213,8 @@ class Server(BitsFleaServicer):
                     m.status.code = 101
                     m.status.msg = user_info['message']
             else:
-                m.code = 500
-                m.msg = "An error occurred while requesting the gateway"
+                m.status.code = 500
+                m.status.msg = "An error occurred while requesting the gateway"
             return m
         else:
             m.status.code = 1
