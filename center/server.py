@@ -46,7 +46,7 @@ class Server(BitsFleaServicer):
         self.config = config
         self._connectDB(self.config['mongo'])
         self.gateway = Gateway(self.config['gateway'], self.logger)
-        self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
+        #self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
 
     def _connectDB(self, config):
         #连接mongoengine
@@ -75,7 +75,8 @@ class Server(BitsFleaServicer):
         if user:
             # 验证
             msg = "{}{}{}".format(request.userid, token, request.time)
-            phex = verify_message(msg, unhexlify(request.sign))
+            #phex = verify_message(msg, unhexlify(request.sign))
+            phex = verify_message(msg, request.sign)
             if user.authKey == str(PublicKey(hexlify(phex).decode("ascii"))):
                 code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
                 tm = TokensModel.objects(userid = request.userid).first()

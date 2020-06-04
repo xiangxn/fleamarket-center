@@ -3,10 +3,11 @@ import ecdsa
 import hashlib
 import struct
 import logging
-from binascii import hexlify
+from binascii import hexlify, unhexlify
+import base58
 
 from center.eoslib.keys import PrivateKey, PublicKey
-from center.eoslib.utils import _bytes
+from center.eoslib.utils import _bytes, sha256, ripemd160
 
 log = logging.getLogger(__name__)
 
@@ -56,6 +57,39 @@ def _is_canonical(sig):
         and not (int(sig[32]) & 0x80)
         and not (sig[32] == 0 and not (int(sig[33]) & 0x80))
     )
+
+def _check_encode(key_buffer, key_type=None) :
+    '''    '''
+    if isinstance(key_buffer, bytes) :
+        key_buffer = key_buffer.decode()
+    check = key_buffer
+    if key_type == 'sha256x2' :
+        first_sha = sha256(unhexlify(check))
+        chksum = sha256(unhexlify(first_sha))[:8]
+    else :
+        if key_type :
+            check += hexlify(bytearray(key_type,'utf-8')).decode()
+        chksum = ripemd160(unhexlify(check))[:8]
+    return base58.b58encode(unhexlify(key_buffer+chksum))
+
+def _check_decode(key_string, key_type=None) :
+    '''    '''
+    buffer = hexlify(base58.b58decode(key_string)).decode()
+    chksum = buffer[-8:]
+    key = buffer[:-8]
+    if key_type == 'sha256x2' :
+        # legacy
+        first_sha = sha256(unhexlify(key))
+        newChk = sha256(unhexlify(first_sha))[:8]
+    else :
+        check = key
+        if key_type :
+            check += hexlify(bytearray(key_type, 'utf-8')).decode()
+        newChk = ripemd160(unhexlify(check))[:8]
+    #print('newChk: '+newChk)
+    if chksum != newChk :
+        raise ValueError('checksums do not match: {0} != {1}'.format(chksum, newChk))
+    return key
 
 
 def compressedPubkey(pk):
@@ -264,15 +298,21 @@ def sign_message(message, wif, hashfn=hashlib.sha256):
     #
     sigstr = struct.pack("<B", i)
     sigstr += signature
-
-    return sigstr
+    #print("sigstr: ", type(sigstr), sigstr, hexlify(sigstr).decode("ascii"))
+    return 'SIG_K1_' + _check_encode(hexlify(sigstr), 'K1').decode()
+    #return sigstr
 
 
 def verify_message(message, signature, hashfn=hashlib.sha256):
     if not isinstance(message, bytes):
         message = bytes(message, "utf-8")
     if not isinstance(signature, bytes):  # pragma: no cover
-        signature = bytes(signature, "utf-8")
+        ss = signature.split("_")
+        if len(ss) == 3:
+            signature = unhexlify(_check_decode(ss[2], key_type=ss[1]))
+        else:
+            #print("signature: ", type(signature), signature)
+            signature = bytes(signature, "utf-8")
     if not isinstance(message, bytes):
         raise AssertionError()
     if not isinstance(signature, bytes):
