@@ -3,6 +3,7 @@
     "use_sms": 0,
     "referrer": [1,"reviewer1112"],
     "encrypt_key": "5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja",
+    "ipfs_api": "/ip4/127.0.0.1/tcp/5001",
     "sync_cfg": {
         "contract": "bitsfleamain",
         "api_url": "https://api-bostest.blockzone.net/v1/chain/",
