@@ -96,6 +96,8 @@ service BitsFlea {
         };
     }
 
+    rpc Upload (FileRequest) returns (BaseReply){}
+
 }
 
 message BaseReply {
@@ -111,6 +113,11 @@ message SearchReplay {
 message TokenReplay {
     BaseReply status = 1;
     string token = 2;
+}
+
+message FileRequest {
+    bytes file = 1;
+    string name = 2;
 }
 
 message EosidRequest {

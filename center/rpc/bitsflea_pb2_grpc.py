@@ -78,6 +78,11 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.SetDefaultAddrRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
+        self.Upload = channel.unary_unary(
+                '/bitsflea.BitsFlea/Upload',
+                request_serializer=bitsflea__pb2.FileRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
 
 
 class BitsFleaServicer(object):
@@ -161,6 +166,12 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Upload(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BitsFleaServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -227,6 +238,11 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'SetDefaultAddr': grpc.unary_unary_rpc_method_handler(
                     servicer.SetDefaultAddr,
                     request_deserializer=bitsflea__pb2.SetDefaultAddrRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'Upload': grpc.unary_unary_rpc_method_handler(
+                    servicer.Upload,
+                    request_deserializer=bitsflea__pb2.FileRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
     }
@@ -443,6 +459,22 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/SetDefaultAddr',
             bitsflea__pb2.SetDefaultAddrRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Upload(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Upload',
+            bitsflea__pb2.FileRequest.SerializeToString,
             bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

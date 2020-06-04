@@ -36,6 +36,8 @@ from center.database.model import Collect as CollectModel
 from center.database.model import ReceiptAddress as ReceiptAddressModel
 from center.database.model import Tokens as TokensModel
 
+import ipfshttpclient as IPFS
+
 
 class Server(BitsFleaServicer):
     
@@ -44,6 +46,7 @@ class Server(BitsFleaServicer):
         self.config = config
         self._connectDB(self.config['mongo'])
         self.gateway = Gateway(self.config['gateway'], self.logger)
+        self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
 
     def _connectDB(self, config):
         #连接mongoengine
@@ -323,6 +326,19 @@ class Server(BitsFleaServicer):
                 r.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1,msg="Invalid parameter")
+    
+    def Upload(self, request, context):
+        #file = bytes(request.file)
+        #client = IPFS.connect(self.config['ipfs_api'])
+        if request.file:
+            res = self.ipfs_client.add_bytes(request.file)   
+            return BaseReply(msg=res)
+        else:
+            return BaseReply(code=1,msg="Invalid parameter")
+        
+    def closeIPFS(self):
+        self.ipfs_client.stop()
+        
             
 
 class TestInterceptor(grpc.ServerInterceptor):
@@ -336,6 +352,7 @@ class TestInterceptor(grpc.ServerInterceptor):
     def intercept_service(self, continuation, handler_call_details):
         method_name = handler_call_details.method.split('/')
         meta = dict(handler_call_details.invocation_metadata)
+        #print(meta)
         token = ""
         if "token" in meta:
             token = meta['token']
@@ -353,7 +370,8 @@ def bits_flea_run(config):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=(TestInterceptor(),))
 
     # 将对应的任务处理函数添加到rpc server中
-    add_BitsFleaServicer_to_server(Server(config), server)
+    fleaSvr = Server(config)
+    add_BitsFleaServicer_to_server(fleaSvr, server)
 
     # 这里使用的非安全接口，世界gRPC支持TLS/SSL安全连接，以及各种鉴权机制
     server.add_insecure_port("[::]:{}".format(config['server_port']))
@@ -362,4 +380,5 @@ def bits_flea_run(config):
         while True:
             time.sleep(60 * 60 * 24)
     except KeyboardInterrupt:
+        fleaSvr.closeIPFS()
         server.stop(0)

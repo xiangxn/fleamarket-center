@@ -1,0 +1,32 @@
+import sys
+sys.path.append('../center')
+import pytest
+
+import grpc
+from center.rpc.bitsflea_pb2 import FileRequest
+from center.rpc.bitsflea_pb2_grpc import BitsFleaStub
+
+
+parametrize = pytest.mark.parametrize
+
+class AuthGateway(grpc.AuthMetadataPlugin):
+    
+    def __call__(self, context, callback):
+        callback((("token", "2d1fa81d93c7201ed171a67738de27182abb6e6e0eb3b621f7af0c82d2882d0c"),), None)
+        
+class TestFile(object):
+    
+    def test_file(self):
+        file = "/Users/necklace/work/FM/fleamarket-center/logo.png"
+        fp = open(file, "rb")
+        content = fp.read()
+        fp.close()
+        call_cred = grpc.metadata_call_credentials(AuthGateway(), name="auth gateway")
+        creds = grpc.composite_call_credentials(call_cred)
+        grpc.ClientCallDetails
+        with grpc.insecure_channel("127.0.0.1:50000") as channel:
+            client = BitsFleaStub(channel)
+            data = (('token','2d1fa81d93c7201ed171a67738de27182abb6e6e0eb3b621f7af0c82d2882d0c'),)
+            res = client.Upload(FileRequest(file=content,name="logo.jpg"), metadata=data)
+            print(res)
+        
