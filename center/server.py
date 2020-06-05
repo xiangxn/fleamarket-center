@@ -10,7 +10,7 @@ import time
 import json
 
 from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply, SearchReplay, TokenReplay
+from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply, SearchReply, TokenReplay
 from bitsflea_pb2 import SearchRequest
 from bitsflea_pb2 import FollowRequest
 from bitsflea_pb2 import RefreshTokenRequest
@@ -102,7 +102,7 @@ class Server(BitsFleaServicer):
     
     def Search(self, request, context):
         #print( context.invocation_metadata())
-        sur = SearchReplay()
+        sur = SearchReply()
         if request.query:
             result = schema.execute(request.query)
             if result.data:
