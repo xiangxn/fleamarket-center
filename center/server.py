@@ -338,7 +338,8 @@ class Server(BitsFleaServicer):
             return BaseReply(code=1,msg="Invalid parameter")
         
     def closeIPFS(self):
-        self.ipfs_client.stop()
+        if self.ipfs_client:
+            self.ipfs_client.stop()
         
             
 
