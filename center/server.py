@@ -10,7 +10,7 @@ import time
 import json
 
 from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply, SearchReply, TokenReplay
+from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply, SearchReply, TokenReply
 from bitsflea_pb2 import SearchRequest
 from bitsflea_pb2 import FollowRequest
 from bitsflea_pb2 import RefreshTokenRequest
@@ -87,17 +87,17 @@ class Server(BitsFleaServicer):
                         tm.expiration = int(time.time()+86400)
                         tm.save()
                     else:
-                        return TokenReplay(status=BaseReply(code=0, msg="success"), token=tm.token)
+                        return TokenReply(status=BaseReply(code=0, msg="success"), token=tm.token)
                 else:
                     tm = TokensModel()
                     tm.userid = request.userid
                     tm.token = Utils.sha256(bytes(code,"utf8"))
                     tm.expiration = int(time.time()+86400)
                     tm.save()
-                return TokenReplay(status=BaseReply(code=0, msg="success"), token=tm.token)
+                return TokenReply(status=BaseReply(code=0, msg="success"), token=tm.token)
             else:
-                return TokenReplay(status=BaseReply(code=3002, msg="Invalid signature"))
-        return TokenReplay(status=BaseReply(code=1, msg="Invalid parameter"))
+                return TokenReply(status=BaseReply(code=3002, msg="Invalid signature"))
+        return TokenReply(status=BaseReply(code=1, msg="Invalid parameter"))
         
     
     def Search(self, request, context):
