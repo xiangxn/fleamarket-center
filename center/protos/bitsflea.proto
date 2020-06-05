@@ -19,7 +19,7 @@ service BitsFlea {
         };
     }
 
-    rpc RefreshToken (RefreshTokenRequest) returns (TokenReplay) {
+    rpc RefreshToken (RefreshTokenRequest) returns (TokenReply) {
         option (google.api.http) = {
             post: "/v1/common/refreshtoken"
             body: "*"
@@ -33,7 +33,7 @@ service BitsFlea {
         };
     }
 
-    rpc Search (SearchRequest) returns (SearchReplay) {
+    rpc Search (SearchRequest) returns (SearchReply) {
         option (google.api.http) = {
             post: "/v1/common/search"
             body: "*"
@@ -105,12 +105,12 @@ message BaseReply {
     string msg = 2;
 }
 
-message SearchReplay {
+message SearchReply {
     BaseReply status = 1;
     string data = 2;
 }
 
-message TokenReplay {
+message TokenReply {
     BaseReply status = 1;
     string token = 2;
 }

@@ -26,7 +26,7 @@ class BitsFleaStub(object):
         self.RefreshToken = channel.unary_unary(
                 '/bitsflea.BitsFlea/RefreshToken',
                 request_serializer=bitsflea__pb2.RefreshTokenRequest.SerializeToString,
-                response_deserializer=bitsflea__pb2.TokenReplay.FromString,
+                response_deserializer=bitsflea__pb2.TokenReply.FromString,
                 )
         self.Referral = channel.unary_unary(
                 '/bitsflea.BitsFlea/Referral',
@@ -36,7 +36,7 @@ class BitsFleaStub(object):
         self.Search = channel.unary_unary(
                 '/bitsflea.BitsFlea/Search',
                 request_serializer=bitsflea__pb2.SearchRequest.SerializeToString,
-                response_deserializer=bitsflea__pb2.SearchReplay.FromString,
+                response_deserializer=bitsflea__pb2.SearchReply.FromString,
                 )
         self.Transaction = channel.unary_unary(
                 '/bitsflea.BitsFlea/Transaction',
@@ -188,7 +188,7 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'RefreshToken': grpc.unary_unary_rpc_method_handler(
                     servicer.RefreshToken,
                     request_deserializer=bitsflea__pb2.RefreshTokenRequest.FromString,
-                    response_serializer=bitsflea__pb2.TokenReplay.SerializeToString,
+                    response_serializer=bitsflea__pb2.TokenReply.SerializeToString,
             ),
             'Referral': grpc.unary_unary_rpc_method_handler(
                     servicer.Referral,
@@ -198,7 +198,7 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'Search': grpc.unary_unary_rpc_method_handler(
                     servicer.Search,
                     request_deserializer=bitsflea__pb2.SearchRequest.FromString,
-                    response_serializer=bitsflea__pb2.SearchReplay.SerializeToString,
+                    response_serializer=bitsflea__pb2.SearchReply.SerializeToString,
             ),
             'Transaction': grpc.unary_unary_rpc_method_handler(
                     servicer.Transaction,
@@ -299,7 +299,7 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/RefreshToken',
             bitsflea__pb2.RefreshTokenRequest.SerializeToString,
-            bitsflea__pb2.TokenReplay.FromString,
+            bitsflea__pb2.TokenReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -331,7 +331,7 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Search',
             bitsflea__pb2.SearchRequest.SerializeToString,
-            bitsflea__pb2.SearchReplay.FromString,
+            bitsflea__pb2.SearchReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
