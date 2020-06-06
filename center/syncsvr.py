@@ -383,7 +383,7 @@ class SyncSvr:
                 u.eosid = user['eosid']
                 u.authKey = user['auth_key']
                 phone = user['phone_encrypt']
-                if u.authKey != "EOS1111111111111111111111111111111114T1Anm":
+                if !(phone.startswith("05FBED483A974456708")):
                     phone = Utils.decrypt_phone(phone, u.authKey, self.public_config['encrypt_key'])
                 u.phone = phone
                 u.status = user['status']
