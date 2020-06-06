@@ -40,8 +40,8 @@ class User(me.Document):
     referralTotal = me.IntField()
     point = me.StringField()
     isReviewer = me.IntField()
+    followTotal = me.IntField(default=0)
     favoriteTotal = me.IntField(default=0)
-    collectionTotal = me.IntField(default=0)
     fansTotal = me.IntField(default=0)
     authKey = me.StringField()
     
@@ -195,8 +195,8 @@ class Follow(me.Document):
     user = me.ReferenceField(User)
     follower = me.ReferenceField(User)
     
-class Collect(me.Document):
-    meta = {"collection": "collects"}
+class Favorite(me.Document):
+    meta = {"collection": "favorites"}
     
     cid = me.SequenceField(primary_key=True)
     user = me.ReferenceField(User)

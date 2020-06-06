@@ -61,16 +61,16 @@ service BitsFlea {
         };
     }
 
-    rpc Collect (CollectRequest) returns (BaseReply) {
+    rpc Favorite (FavoriteRequest) returns (BaseReply) {
         option (google.api.http) = {
-            post: "/v1/common/collect"
+            post: "/v1/common/favorite"
             body: "*"
         };
     }
 
-    rpc UnCollect (CollectRequest) returns (BaseReply) {
+    rpc UnCollect (FavoriteRequest) returns (BaseReply) {
         option (google.api.http) = {
-            post: "/v1/common/uncollect"
+            post: "/v1/common/unfavorite"
             body: "*"
         };
     }
@@ -140,8 +140,8 @@ message User {
     int32 referralTotal = 13;
     string point = 14;
     int32 isReviewer = 15;
-    int32 favoriteTotal = 16;
-    int32 collectionTotal = 17;
+    int32 followTotal = 16;
+    int32 favoriteTotal = 17;
     int32 fansTotal = 18;
 }
 
@@ -186,7 +186,7 @@ message FollowRequest {
     int32 follower = 2;
 }
 
-message CollectRequest {
+message FavoriteRequest {
     int32 user = 1;
     int32 product = 2;
 }

@@ -10,7 +10,7 @@ from .model import Order as OrderModel
 from .model import ProductAudit as ProductAuditModel
 from .model import OtherAddr as OtherAddrModel
 from .model import Follow as FollowModel
-from .model import Collect as CollectModel
+from .model import Favorite as FavoriteModel
 from .model import ReceiptAddress as ReceiptAddressModel
 #import json
 
@@ -55,9 +55,9 @@ class Follow(MongoengineObjectType):
         model = FollowModel
         interfaces = (graphene.relay.Node,)
         
-class Collect(MongoengineObjectType):
+class Favorite(MongoengineObjectType):
     class Meta:
-        model = CollectModel
+        model = FavoriteModel
         interfaces = (graphene.relay.Node,)
         
 class ReceiptAddress(MongoengineObjectType):
@@ -103,9 +103,9 @@ class Query(graphene.ObjectType):
     follow_by_follower = graphene.List(Follow, userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
-    #Collect
-    collects = MongoengineConnectionField(Collect)
-    collect_by_user = graphene.List(Collect, userid=graphene.Int(default_value=0),
+    #Favorite
+    collects = MongoengineConnectionField(Favorite)
+    collect_by_user = graphene.List(Favorite, userid=graphene.Int(default_value=0),
                                     pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #ReceiptAddress

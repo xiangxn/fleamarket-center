@@ -32,7 +32,7 @@ from center.database.schema import schema
 from center.database.model import Sms as SmsModel
 from center.database.model import User as UserModel
 from center.database.model import Product as ProductModel
-from center.database.model import Collect as CollectModel
+from center.database.model import Favorite as FavoriteModel
 from center.database.model import ReceiptAddress as ReceiptAddressModel
 from center.database.model import Tokens as TokensModel
 
@@ -46,7 +46,7 @@ class Server(BitsFleaServicer):
         self.config = config
         self._connectDB(self.config['mongo'])
         self.gateway = Gateway(self.config['gateway'], self.logger)
-        #self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
+        self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
 
     def _connectDB(self, config):
         #连接mongoengine
@@ -240,6 +240,10 @@ class Server(BitsFleaServicer):
                 f.user = u
                 f.follower = fu
                 f.save()
+                u.fansTotal += 1
+                u.save()
+                fu.followTotal += 1
+                fu.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter") 
     
@@ -249,31 +253,43 @@ class Server(BitsFleaServicer):
         if request.user and request.follower:
             f = FollowModel.objects(user=request.user, follower=request.follower).first()
             if f:
+                u = UserModel.objects(userid=request.user).first()
+                u.fansTotal -= 1
+                u.save()
+                fu = UserModel.objects(userid=request.follower).first()
+                fu.followTotal -= 1
+                fu.save()
                 f.delete()
                 return BaseReply(msg="success")
         return BaseReply(code=1,msg="Invalid parameter") 
     
-    def Collect(self, request, context):
+    def Favorite(self, request, context):
         if self._check_auth(request.user, context.invocation_metadata()) == False:
             return BaseReply(code=2, msg="Access denied")
         if request.user and request.product:
             u = UserModel.objects(userid=request.user).first()
             p = ProductModel.objects(productId=request.product).first()
             if u and p:
-                c = CollectModel()
+                c = FavoriteModel()
                 c.user = u
                 c.product = p
                 c.save()
+                u.favoriteTotal += 1
+                u.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1,msg="Invalid parameter") 
     
-    def UnCollect(self, request, context):
+    def UnFavorite(self, request, context):
         if self._check_auth(request.user, context.invocation_metadata()) == False:
             return BaseReply(code=2, msg="Access denied")
         if request.user and request.product:
-             c = CollectModel.objects(user=request.user, product=request.product).first()
+             c = FavoriteModel.objects(user=request.user, product=request.product).first()
              if c:
+                 u = UserModel.objects(userid=request.user).first()
+                 u.favoriteTotal -= 1
+                 u.save()
                  c.delete()
+                 
                  return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter") 
     
