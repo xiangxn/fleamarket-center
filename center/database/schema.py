@@ -104,8 +104,8 @@ class Query(graphene.ObjectType):
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #Favorite
-    collects = MongoengineConnectionField(Favorite)
-    collect_by_user = graphene.List(Favorite, userid=graphene.Int(default_value=0),
+    favorites = MongoengineConnectionField(Favorite)
+    favorite_by_user = graphene.List(Favorite, userid=graphene.Int(default_value=0),
                                     pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #ReceiptAddress
@@ -142,6 +142,18 @@ class Query(graphene.ObjectType):
     
     def resolve_order_by_id(self, info, orderid):
         return OrderModel.objects(orderid=orderid).first()
+    
+    def resolve_follow_by_user(self, info, userid, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        return list(FollowModel.objects(user__userid=userid).skip(offset).limit(pageSize))
+    
+    def resolve_follow_by_follower(self, info, userid, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        return list(FollowModel.objects(follower__userid=userid).skip(offset).limit(pageSize))
+    
+    def resolve_favorite_by_user(self, info, userid, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        return list(FavoriteModel.objects(user__userid=userid).skip(offset).limit(pageSize))
     
     def resolve_withdraw_addr(self, info, userid):
         return list(OtherAddrModel.objects(user__userid=userid))
