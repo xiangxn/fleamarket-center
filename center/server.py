@@ -359,7 +359,7 @@ class Server(BitsFleaServicer):
         
             
 
-class TestInterceptor(grpc.ServerInterceptor):
+class TokenInterceptor(grpc.ServerInterceptor):
     def __init__(self):
 
         def abort(ignored_request, context):
@@ -376,8 +376,10 @@ class TestInterceptor(grpc.ServerInterceptor):
             token = meta['token']
         flag = False
         tm = TokensModel.objects(token=token).first()
-        if method_name[-1] == "RefreshToken" or (tm and (int(time.time())-tm.expiration) <= 86400):
+        if method_name[-1] == "Register" or method_name[-1] == "SendSmsCode" or (tm and (int(time.time())-tm.expiration) <= 86400):
             flag = True
+        if tm and flag == False:
+            tm.delete()
         if flag:
             return continuation(handler_call_details)
         else:
@@ -385,7 +387,7 @@ class TestInterceptor(grpc.ServerInterceptor):
 
 def bits_flea_run(config):
     # 这里通过thread pool来并发处理server的任务
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=(TestInterceptor(),))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=(TokenInterceptor(),))
 
     # 将对应的任务处理函数添加到rpc server中
     fleaSvr = Server(config)

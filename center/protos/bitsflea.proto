@@ -153,6 +153,7 @@ message RegisterRequest {
     string smscode = 5;
     string referral = 6;
     string authkey = 7;
+    string phoneEncrypt = 8;
 }
 
 message RegisterReply {

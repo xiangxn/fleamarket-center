@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='bitsflea',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0e\x62itsflea.proto\x12\x08\x62itsflea\x1a\x1cgoogle/api/annotations.proto\"&\n\tBaseReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"@\n\x0bSearchReply\x12#\n\x06status\x18\x01 \x01(\x0b\x32\x13.bitsflea.BaseReply\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"@\n\nTokenReply\x12#\n\x06status\x18\x01 \x01(\x0b\x32\x13.bitsflea.BaseReply\x12\r\n\x05token\x18\x02 \x01(\t\")\n\x0b\x46ileRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\x0c\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x1d\n\x0c\x45osidRequest\x12\r\n\x05\x65osid\x18\x01 \x01(\t\"\xd9\x02\n\x04User\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05\x65osid\x18\x02 \x01(\t\x12\r\n\x05phone\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x05\x12\x10\n\x08nickname\x18\x05 \x01(\t\x12\x0c\n\x04head\x18\x06 \x01(\t\x12\x13\n\x0b\x63reditValue\x18\x07 \x01(\x05\x12\x10\n\x08referrer\x18\x08 \x01(\t\x12\x16\n\x0elastActiveTime\x18\t \x01(\t\x12\x12\n\npostsTotal\x18\n \x01(\x05\x12\x11\n\tsellTotal\x18\x0b \x01(\x05\x12\x10\n\x08\x62uyTotal\x18\x0c \x01(\x05\x12\x15\n\rreferralTotal\x18\r \x01(\x05\x12\r\n\x05point\x18\x0e \x01(\t\x12\x12\n\nisReviewer\x18\x0f \x01(\x05\x12\x15\n\rfavoriteTotal\x18\x10 \x01(\x05\x12\x17\n\x0f\x63ollectionTotal\x18\x11 \x01(\x05\x12\x11\n\tfansTotal\x18\x12 \x01(\x05\"\x8e\x01\n\x0fRegisterRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\x13\n\x0bownerpubkey\x18\x03 \x01(\t\x12\x11\n\tactpubkey\x18\x04 \x01(\t\x12\x0f\n\x07smscode\x18\x05 \x01(\t\x12\x10\n\x08referral\x18\x06 \x01(\t\x12\x0f\n\x07\x61uthkey\x18\x07 \x01(\t\"R\n\rRegisterReply\x12#\n\x06status\x18\x01 \x01(\x0b\x32\x13.bitsflea.BaseReply\x12\x1c\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x0e.bitsflea.User\"-\n\nSmsRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08\x63odeType\x18\x02 \x01(\x05\"P\n\x13RefreshTokenRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\t\x12\x0c\n\x04time\x18\x03 \x01(\x05\x12\x0c\n\x04sign\x18\x04 \x01(\t\"\x1e\n\rSearchRequest\x12\r\n\x05query\x18\x01 \x01(\t\"/\n\x12TransactionRequest\x12\x0b\n\x03trx\x18\x01 \x01(\t\x12\x0c\n\x04sign\x18\x02 \x01(\x05\"/\n\rFollowRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x10\n\x08\x66ollower\x18\x02 \x01(\x05\"/\n\x0e\x43ollectRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x0f\n\x07product\x18\x02 \x01(\x05\"\xb0\x01\n\x0e\x41\x64\x64ressRequest\x12\x0b\n\x03rid\x18\x01 \x01(\x05\x12\x0e\n\x06userid\x18\x02 \x01(\x05\x12\x10\n\x08province\x18\x03 \x01(\t\x12\x0c\n\x04\x63ity\x18\x04 \x01(\t\x12\x10\n\x08\x64istrict\x18\x05 \x01(\t\x12\r\n\x05phone\x18\x06 \x01(\t\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x08 \x01(\t\x12\x10\n\x08postcode\x18\t \x01(\t\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\n \x01(\x05\"4\n\x15SetDefaultAddrRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\x0b\n\x03rid\x18\x02 \x01(\x05\x32\x8c\n\n\x08\x42itsFlea\x12^\n\x08Register\x12\x19.bitsflea.RegisterRequest\x1a\x17.bitsflea.RegisterReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/register:\x01*\x12[\n\x0bSendSmsCode\x12\x14.bitsflea.SmsRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/sendSmsCode:\x01*\x12g\n\x0cRefreshToken\x12\x1d.bitsflea.RefreshTokenRequest\x1a\x14.bitsflea.TokenReply\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/common/refreshtoken:\x01*\x12W\n\x08Referral\x12\x16.bitsflea.EosidRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/Referral:\x01*\x12V\n\x06Search\x12\x17.bitsflea.SearchRequest\x1a\x15.bitsflea.SearchReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/search:\x01*\x12\x63\n\x0bTransaction\x12\x1c.bitsflea.TransactionRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/transaction:\x01*\x12T\n\x06\x46ollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/follow:\x01*\x12X\n\x08UnFollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/unfollow:\x01*\x12W\n\x07\x43ollect\x12\x18.bitsflea.CollectRequest\x1a\x13.bitsflea.BaseReply\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/common/collect:\x01*\x12[\n\tUnCollect\x12\x18.bitsflea.CollectRequest\x1a\x13.bitsflea.BaseReply\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/common/uncollect:\x01*\x12W\n\x07\x41\x64\x64ress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/common/address:\x01*\x12\x63\n\rUpdateAddress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"#\x82\xd3\xe4\x93\x02\x1d\"\x18/v1/common/updateaddress:\x01*\x12h\n\x0eSetDefaultAddr\x12\x1f.bitsflea.SetDefaultAddrRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/setdefault:\x01*\x12\x36\n\x06Upload\x12\x15.bitsflea.FileRequest\x1a\x13.bitsflea.BaseReply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0e\x62itsflea.proto\x12\x08\x62itsflea\x1a\x1cgoogle/api/annotations.proto\"&\n\tBaseReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\"@\n\x0bSearchReply\x12#\n\x06status\x18\x01 \x01(\x0b\x32\x13.bitsflea.BaseReply\x12\x0c\n\x04\x64\x61ta\x18\x02 \x01(\t\"@\n\nTokenReply\x12#\n\x06status\x18\x01 \x01(\x0b\x32\x13.bitsflea.BaseReply\x12\r\n\x05token\x18\x02 \x01(\t\")\n\x0b\x46ileRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\x0c\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x1d\n\x0c\x45osidRequest\x12\r\n\x05\x65osid\x18\x01 \x01(\t\"\xd5\x02\n\x04User\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05\x65osid\x18\x02 \x01(\t\x12\r\n\x05phone\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x05\x12\x10\n\x08nickname\x18\x05 \x01(\t\x12\x0c\n\x04head\x18\x06 \x01(\t\x12\x13\n\x0b\x63reditValue\x18\x07 \x01(\x05\x12\x10\n\x08referrer\x18\x08 \x01(\t\x12\x16\n\x0elastActiveTime\x18\t \x01(\t\x12\x12\n\npostsTotal\x18\n \x01(\x05\x12\x11\n\tsellTotal\x18\x0b \x01(\x05\x12\x10\n\x08\x62uyTotal\x18\x0c \x01(\x05\x12\x15\n\rreferralTotal\x18\r \x01(\x05\x12\r\n\x05point\x18\x0e \x01(\t\x12\x12\n\nisReviewer\x18\x0f \x01(\x05\x12\x13\n\x0b\x66ollowTotal\x18\x10 \x01(\x05\x12\x15\n\rfavoriteTotal\x18\x11 \x01(\x05\x12\x11\n\tfansTotal\x18\x12 \x01(\x05\"\xa4\x01\n\x0fRegisterRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\x13\n\x0bownerpubkey\x18\x03 \x01(\t\x12\x11\n\tactpubkey\x18\x04 \x01(\t\x12\x0f\n\x07smscode\x18\x05 \x01(\t\x12\x10\n\x08referral\x18\x06 \x01(\t\x12\x0f\n\x07\x61uthkey\x18\x07 \x01(\t\x12\x14\n\x0cphoneEncrypt\x18\x08 \x01(\t\"R\n\rRegisterReply\x12#\n\x06status\x18\x01 \x01(\x0b\x32\x13.bitsflea.BaseReply\x12\x1c\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x0e.bitsflea.User\"-\n\nSmsRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08\x63odeType\x18\x02 \x01(\x05\"Q\n\x13RefreshTokenRequest\x12\x0f\n\x07\x61uthKey\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\x12\x0c\n\x04time\x18\x03 \x01(\x05\x12\x0c\n\x04sign\x18\x04 \x01(\t\"\x1e\n\rSearchRequest\x12\r\n\x05query\x18\x01 \x01(\t\"/\n\x12TransactionRequest\x12\x0b\n\x03trx\x18\x01 \x01(\t\x12\x0c\n\x04sign\x18\x02 \x01(\x05\"/\n\rFollowRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x10\n\x08\x66ollower\x18\x02 \x01(\x05\"0\n\x0f\x46\x61voriteRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x0f\n\x07product\x18\x02 \x01(\x05\"\xb0\x01\n\x0e\x41\x64\x64ressRequest\x12\x0b\n\x03rid\x18\x01 \x01(\x05\x12\x0e\n\x06userid\x18\x02 \x01(\x05\x12\x10\n\x08province\x18\x03 \x01(\t\x12\x0c\n\x04\x63ity\x18\x04 \x01(\t\x12\x10\n\x08\x64istrict\x18\x05 \x01(\t\x12\r\n\x05phone\x18\x06 \x01(\t\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x08 \x01(\t\x12\x10\n\x08postcode\x18\t \x01(\t\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\n \x01(\x05\"4\n\x15SetDefaultAddrRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\x0b\n\x03rid\x18\x02 \x01(\x05\x32\x91\n\n\x08\x42itsFlea\x12^\n\x08Register\x12\x19.bitsflea.RegisterRequest\x1a\x17.bitsflea.RegisterReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/register:\x01*\x12[\n\x0bSendSmsCode\x12\x14.bitsflea.SmsRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/sendSmsCode:\x01*\x12g\n\x0cRefreshToken\x12\x1d.bitsflea.RefreshTokenRequest\x1a\x14.bitsflea.TokenReply\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/common/refreshtoken:\x01*\x12W\n\x08Referral\x12\x16.bitsflea.EosidRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/Referral:\x01*\x12V\n\x06Search\x12\x17.bitsflea.SearchRequest\x1a\x15.bitsflea.SearchReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/search:\x01*\x12\x63\n\x0bTransaction\x12\x1c.bitsflea.TransactionRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/transaction:\x01*\x12T\n\x06\x46ollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/follow:\x01*\x12X\n\x08UnFollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/unfollow:\x01*\x12Z\n\x08\x46\x61vorite\x12\x19.bitsflea.FavoriteRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/favorite:\x01*\x12]\n\tUnCollect\x12\x19.bitsflea.FavoriteRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/unfavorite:\x01*\x12W\n\x07\x41\x64\x64ress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/common/address:\x01*\x12\x63\n\rUpdateAddress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"#\x82\xd3\xe4\x93\x02\x1d\"\x18/v1/common/updateaddress:\x01*\x12h\n\x0eSetDefaultAddr\x12\x1f.bitsflea.SetDefaultAddrRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/setdefault:\x01*\x12\x36\n\x06Upload\x12\x15.bitsflea.FileRequest\x1a\x13.bitsflea.BaseReply\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,])
 
@@ -322,14 +322,14 @@ _USER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='favoriteTotal', full_name='bitsflea.User.favoriteTotal', index=15,
+      name='followTotal', full_name='bitsflea.User.followTotal', index=15,
       number=16, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='collectionTotal', full_name='bitsflea.User.collectionTotal', index=16,
+      name='favoriteTotal', full_name='bitsflea.User.favoriteTotal', index=16,
       number=17, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -355,7 +355,7 @@ _USER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=305,
-  serialized_end=650,
+  serialized_end=646,
 )
 
 
@@ -415,6 +415,13 @@ _REGISTERREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='phoneEncrypt', full_name='bitsflea.RegisterRequest.phoneEncrypt', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -427,8 +434,8 @@ _REGISTERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=653,
-  serialized_end=795,
+  serialized_start=649,
+  serialized_end=813,
 )
 
 
@@ -465,8 +472,8 @@ _REGISTERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=797,
-  serialized_end=879,
+  serialized_start=815,
+  serialized_end=897,
 )
 
 
@@ -503,8 +510,8 @@ _SMSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=881,
-  serialized_end=926,
+  serialized_start=899,
+  serialized_end=944,
 )
 
 
@@ -516,9 +523,9 @@ _REFRESHTOKENREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='userid', full_name='bitsflea.RefreshTokenRequest.userid', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='authKey', full_name='bitsflea.RefreshTokenRequest.authKey', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -555,8 +562,8 @@ _REFRESHTOKENREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=928,
-  serialized_end=1008,
+  serialized_start=946,
+  serialized_end=1027,
 )
 
 
@@ -586,8 +593,8 @@ _SEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1010,
-  serialized_end=1040,
+  serialized_start=1029,
+  serialized_end=1059,
 )
 
 
@@ -624,8 +631,8 @@ _TRANSACTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1042,
-  serialized_end=1089,
+  serialized_start=1061,
+  serialized_end=1108,
 )
 
 
@@ -662,27 +669,27 @@ _FOLLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1091,
-  serialized_end=1138,
+  serialized_start=1110,
+  serialized_end=1157,
 )
 
 
-_COLLECTREQUEST = _descriptor.Descriptor(
-  name='CollectRequest',
-  full_name='bitsflea.CollectRequest',
+_FAVORITEREQUEST = _descriptor.Descriptor(
+  name='FavoriteRequest',
+  full_name='bitsflea.FavoriteRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='user', full_name='bitsflea.CollectRequest.user', index=0,
+      name='user', full_name='bitsflea.FavoriteRequest.user', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='product', full_name='bitsflea.CollectRequest.product', index=1,
+      name='product', full_name='bitsflea.FavoriteRequest.product', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -700,8 +707,8 @@ _COLLECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1140,
-  serialized_end=1187,
+  serialized_start=1159,
+  serialized_end=1207,
 )
 
 
@@ -794,8 +801,8 @@ _ADDRESSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1190,
-  serialized_end=1366,
+  serialized_start=1210,
+  serialized_end=1386,
 )
 
 
@@ -832,8 +839,8 @@ _SETDEFAULTADDRREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1368,
-  serialized_end=1420,
+  serialized_start=1388,
+  serialized_end=1440,
 )
 
 _SEARCHREPLY.fields_by_name['status'].message_type = _BASEREPLY
@@ -853,7 +860,7 @@ DESCRIPTOR.message_types_by_name['RefreshTokenRequest'] = _REFRESHTOKENREQUEST
 DESCRIPTOR.message_types_by_name['SearchRequest'] = _SEARCHREQUEST
 DESCRIPTOR.message_types_by_name['TransactionRequest'] = _TRANSACTIONREQUEST
 DESCRIPTOR.message_types_by_name['FollowRequest'] = _FOLLOWREQUEST
-DESCRIPTOR.message_types_by_name['CollectRequest'] = _COLLECTREQUEST
+DESCRIPTOR.message_types_by_name['FavoriteRequest'] = _FAVORITEREQUEST
 DESCRIPTOR.message_types_by_name['AddressRequest'] = _ADDRESSREQUEST
 DESCRIPTOR.message_types_by_name['SetDefaultAddrRequest'] = _SETDEFAULTADDRREQUEST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -949,12 +956,12 @@ FollowRequest = _reflection.GeneratedProtocolMessageType('FollowRequest', (_mess
   })
 _sym_db.RegisterMessage(FollowRequest)
 
-CollectRequest = _reflection.GeneratedProtocolMessageType('CollectRequest', (_message.Message,), {
-  'DESCRIPTOR' : _COLLECTREQUEST,
+FavoriteRequest = _reflection.GeneratedProtocolMessageType('FavoriteRequest', (_message.Message,), {
+  'DESCRIPTOR' : _FAVORITEREQUEST,
   '__module__' : 'bitsflea_pb2'
-  # @@protoc_insertion_point(class_scope:bitsflea.CollectRequest)
+  # @@protoc_insertion_point(class_scope:bitsflea.FavoriteRequest)
   })
-_sym_db.RegisterMessage(CollectRequest)
+_sym_db.RegisterMessage(FavoriteRequest)
 
 AddressRequest = _reflection.GeneratedProtocolMessageType('AddressRequest', (_message.Message,), {
   'DESCRIPTOR' : _ADDRESSREQUEST,
@@ -978,8 +985,8 @@ _BITSFLEA = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1423,
-  serialized_end=2715,
+  serialized_start=1443,
+  serialized_end=2740,
   methods=[
   _descriptor.MethodDescriptor(
     name='Register',
@@ -1054,22 +1061,22 @@ _BITSFLEA = _descriptor.ServiceDescriptor(
     serialized_options=b'\202\323\344\223\002\030\"\023/v1/common/unfollow:\001*',
   ),
   _descriptor.MethodDescriptor(
-    name='Collect',
-    full_name='bitsflea.BitsFlea.Collect',
+    name='Favorite',
+    full_name='bitsflea.BitsFlea.Favorite',
     index=8,
     containing_service=None,
-    input_type=_COLLECTREQUEST,
+    input_type=_FAVORITEREQUEST,
     output_type=_BASEREPLY,
-    serialized_options=b'\202\323\344\223\002\027\"\022/v1/common/collect:\001*',
+    serialized_options=b'\202\323\344\223\002\030\"\023/v1/common/favorite:\001*',
   ),
   _descriptor.MethodDescriptor(
     name='UnCollect',
     full_name='bitsflea.BitsFlea.UnCollect',
     index=9,
     containing_service=None,
-    input_type=_COLLECTREQUEST,
+    input_type=_FAVORITEREQUEST,
     output_type=_BASEREPLY,
-    serialized_options=b'\202\323\344\223\002\031\"\024/v1/common/uncollect:\001*',
+    serialized_options=b'\202\323\344\223\002\032\"\025/v1/common/unfavorite:\001*',
   ),
   _descriptor.MethodDescriptor(
     name='Address',
