@@ -89,6 +89,13 @@ service BitsFlea {
         };
     }
 
+    rpc DelAddress (AddressRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/deladdress"
+            body: "*"
+        };
+    }
+
     rpc SetDefaultAddr (SetDefaultAddrRequest) returns (BaseReply) {
         option (google.api.http) = {
             post: "/v1/common/setdefault"
@@ -167,7 +174,7 @@ message SmsRequest {
 }
 
 message RefreshTokenRequest {
-    int32 userid = 1;
+    string phone = 1;
     string token = 2;
     int32 time = 3;
     string sign = 4;

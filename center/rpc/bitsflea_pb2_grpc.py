@@ -73,6 +73,11 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.AddressRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
+        self.DelAddress = channel.unary_unary(
+                '/bitsflea.BitsFlea/DelAddress',
+                request_serializer=bitsflea__pb2.AddressRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
         self.SetDefaultAddr = channel.unary_unary(
                 '/bitsflea.BitsFlea/SetDefaultAddr',
                 request_serializer=bitsflea__pb2.SetDefaultAddrRequest.SerializeToString,
@@ -160,6 +165,12 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DelAddress(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SetDefaultAddr(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -232,6 +243,11 @@ def add_BitsFleaServicer_to_server(servicer, server):
             ),
             'UpdateAddress': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateAddress,
+                    request_deserializer=bitsflea__pb2.AddressRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'DelAddress': grpc.unary_unary_rpc_method_handler(
+                    servicer.DelAddress,
                     request_deserializer=bitsflea__pb2.AddressRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
@@ -442,6 +458,22 @@ class BitsFlea(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/UpdateAddress',
+            bitsflea__pb2.AddressRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DelAddress(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/DelAddress',
             bitsflea__pb2.AddressRequest.SerializeToString,
             bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,

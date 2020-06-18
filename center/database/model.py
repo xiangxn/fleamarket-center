@@ -18,7 +18,7 @@ class Sms(me.Document):
 class Tokens(me.Document):
     meta = {"collection": "tokens"}
     
-    userid = me.IntField(required=True, primary_key=True)
+    phone = me.StringField(required=True, primary_key=True)
     token = me.StringField(required=True)
     expiration = me.IntField(required=True)
 

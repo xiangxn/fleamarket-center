@@ -71,15 +71,15 @@ class Server(BitsFleaServicer):
         token = "0"
         if request.token and request.token != "0":
             token = request.token
-        user = UserModel.objects(userid = request.userid).first()
+        user = UserModel.objects(phone = request.phone).first()
         if user:
             # 验证
-            msg = "{}{}{}".format(request.userid, token, request.time)
+            msg = "{}{}{}".format(request.phone, token, request.time)
             #phex = verify_message(msg, unhexlify(request.sign))
             phex = verify_message(msg, request.sign)
             if user.authKey == str(PublicKey(hexlify(phex).decode("ascii"))):
                 code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
-                tm = TokensModel.objects(userid = request.userid).first()
+                tm = TokensModel.objects(phone = request.phone).first()
                 if tm:
                     exp = int(time.time()) - tm.expiration
                     if exp >= 3600 or exp >= 86400:
@@ -90,7 +90,7 @@ class Server(BitsFleaServicer):
                         return TokenReply(status=BaseReply(code=0, msg="success"), token=tm.token)
                 else:
                     tm = TokensModel()
-                    tm.userid = request.userid
+                    tm.phone = request.phone
                     tm.token = Utils.sha256(bytes(code,"utf8"))
                     tm.expiration = int(time.time()+86400)
                     tm.save()
