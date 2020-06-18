@@ -376,7 +376,8 @@ class TokenInterceptor(grpc.ServerInterceptor):
             token = meta['token']
         flag = False
         tm = TokensModel.objects(token=token).first()
-        if method_name[-1] == "Register" or method_name[-1] == "SendSmsCode" or (tm and (int(time.time())-tm.expiration) <= 86400):
+        allows = ['RefreshToken','SendSmsCode','Register']
+        if method_name[-1] in allows or (tm and (int(time.time())-tm.expiration) <= 86400):
             flag = True
         if tm and flag == False:
             tm.delete()

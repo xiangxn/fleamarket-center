@@ -124,39 +124,55 @@ class Query(graphene.ObjectType):
     def resolve_product_by_cid(self, info, categoryId, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
         if userid == 0:
-            return list(ProductModel.objects(category__cid=categoryId).skip(offset).limit(pageSize))
+            #return list(ProductModel.objects(category__cid=categoryId).skip(offset).limit(pageSize))
+            return list(ProductModel.objects(category=categoryId).skip(offset).limit(pageSize))
         else:
-            return list(ProductModel.objects(Q(category__cid=categoryId) & Q(seller__userid=userid)).skip(offset).limit(pageSize))
+            #return list(ProductModel.objects(Q(category__cid=categoryId) & Q(seller__userid=userid)).skip(offset).limit(pageSize))
+            return list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
         
     def resolve_product_by_publisher(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(ProductModel.objects(seller__userid=userid).skip(offset).limit(pageSize))
+        #us = UserModel.objects(userid=userid).scalar('userid')
+        #return list(ProductModel.objects(seller__in=us).skip(offset).limit(pageSize))
+        return list(ProductModel.objects(seller=userid).skip(offset).limit(pageSize))
     
     def resolve_order_by_buyer(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(OrderModel.objects(buyer__userid=userid).skip(offset).limit(pageSize))
+        #us = UserModel.objects(userid=userid).scalar('userid')
+        #return list(OrderModel.objects(buyer__in=us).skip(offset).limit(pageSize))
+        return list(OrderModel.objects(buyer=userid).skip(offset).limit(pageSize))
     
     def resolve_order_by_seller(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(OrderModel.objects(seller__userid=userid).skip(offset).limit(pageSize))
+        #us = UserModel.objects(userid=userid).scalar('userid')
+        #return list(OrderModel.objects(seller__in=us).skip(offset).limit(pageSize))
+        return list(OrderModel.objects(seller=userid).skip(offset).limit(pageSize))
     
     def resolve_order_by_id(self, info, orderid):
         return OrderModel.objects(orderid=orderid).first()
     
     def resolve_follow_by_user(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(FollowModel.objects(user__userid=userid).skip(offset).limit(pageSize))
+        #us = UserModel.objects(userid=userid).scalar('userid')
+        #return list(FollowModel.objects(user__in=us).skip(offset).limit(pageSize))
+        return list(FollowModel.objects(user=userid).skip(offset).limit(pageSize))
     
     def resolve_follow_by_follower(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(FollowModel.objects(follower__userid=userid).skip(offset).limit(pageSize))
+        #fs = UserModel.objects(userid=userid).scalar('userid')
+        #return list(FollowModel.objects(follower__in=fs).skip(offset).limit(pageSize))
+        return list(FollowModel.objects(follower=userid).skip(offset).limit(pageSize))
     
     def resolve_favorite_by_user(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(FavoriteModel.objects(user__userid=userid).skip(offset).limit(pageSize))
+        #us = UserModel.objects(userid=userid).scalar('userid')
+        #return list(FavoriteModel.objects(user__in=us).skip(offset).limit(pageSize))
+        return list(FavoriteModel.objects(user=userid).skip(offset).limit(pageSize))
     
     def resolve_withdraw_addr(self, info, userid):
-        return list(OtherAddrModel.objects(user__userid=userid))
+        #us = UserModel.objects(userid=userid).scalar('userid')
+        #return list(OtherAddrModel.objects(user__in=us))
+        return list(OtherAddrModel.objects(user=userid))
     
     def resolve_rec_addr_by_user(self, info, userid):
         return list(ReceiptAddressModel.objects(userid=userid))
