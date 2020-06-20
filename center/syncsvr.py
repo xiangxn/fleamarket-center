@@ -65,7 +65,7 @@ class SyncSvr:
                     if response.status == 200 or response.status == 202:
                         result = await response.json()
             except Exception as e:
-                print("post error: ", e)
+                print("post error: ", url, e)
         return result
     
     def getIncrementTasks(self, loop):

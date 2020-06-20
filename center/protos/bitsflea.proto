@@ -1,11 +1,12 @@
 syntax = "proto3";
 
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
 
 package bitsflea;
 service BitsFlea {
 
-    rpc Register (RegisterRequest) returns (RegisterReply) {
+    rpc Register (RegisterRequest) returns (BaseReply) {
         option (google.api.http) = {
             post: "/v1/common/register"
             body: "*"
@@ -19,7 +20,7 @@ service BitsFlea {
         };
     }
 
-    rpc RefreshToken (RefreshTokenRequest) returns (TokenReply) {
+    rpc RefreshToken (RefreshTokenRequest) returns (BaseReply) {
         option (google.api.http) = {
             post: "/v1/common/refreshtoken"
             body: "*"
@@ -33,7 +34,7 @@ service BitsFlea {
         };
     }
 
-    rpc Search (SearchRequest) returns (SearchReply) {
+    rpc Search (SearchRequest) returns (BaseReply) {
         option (google.api.http) = {
             post: "/v1/common/search"
             body: "*"
@@ -110,16 +111,7 @@ service BitsFlea {
 message BaseReply {
     int32 code = 1;
     string msg = 2;
-}
-
-message SearchReply {
-    BaseReply status = 1;
-    string data = 2;
-}
-
-message TokenReply {
-    BaseReply status = 1;
-    string token = 2;
+    google.protobuf.Any data = 3;
 }
 
 message FileRequest {
@@ -161,11 +153,6 @@ message RegisterRequest {
     string referral = 6;
     string authkey = 7;
     string phoneEncrypt = 8;
-}
-
-message RegisterReply {
-    BaseReply status = 1;
-    User data = 2;
 }
 
 message SmsRequest {

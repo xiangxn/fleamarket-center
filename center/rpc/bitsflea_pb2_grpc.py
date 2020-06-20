@@ -16,7 +16,7 @@ class BitsFleaStub(object):
         self.Register = channel.unary_unary(
                 '/bitsflea.BitsFlea/Register',
                 request_serializer=bitsflea__pb2.RegisterRequest.SerializeToString,
-                response_deserializer=bitsflea__pb2.RegisterReply.FromString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
         self.SendSmsCode = channel.unary_unary(
                 '/bitsflea.BitsFlea/SendSmsCode',
@@ -26,7 +26,7 @@ class BitsFleaStub(object):
         self.RefreshToken = channel.unary_unary(
                 '/bitsflea.BitsFlea/RefreshToken',
                 request_serializer=bitsflea__pb2.RefreshTokenRequest.SerializeToString,
-                response_deserializer=bitsflea__pb2.TokenReply.FromString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
         self.Referral = channel.unary_unary(
                 '/bitsflea.BitsFlea/Referral',
@@ -36,7 +36,7 @@ class BitsFleaStub(object):
         self.Search = channel.unary_unary(
                 '/bitsflea.BitsFlea/Search',
                 request_serializer=bitsflea__pb2.SearchRequest.SerializeToString,
-                response_deserializer=bitsflea__pb2.SearchReply.FromString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
         self.Transaction = channel.unary_unary(
                 '/bitsflea.BitsFlea/Transaction',
@@ -189,7 +189,7 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'Register': grpc.unary_unary_rpc_method_handler(
                     servicer.Register,
                     request_deserializer=bitsflea__pb2.RegisterRequest.FromString,
-                    response_serializer=bitsflea__pb2.RegisterReply.SerializeToString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
             'SendSmsCode': grpc.unary_unary_rpc_method_handler(
                     servicer.SendSmsCode,
@@ -199,7 +199,7 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'RefreshToken': grpc.unary_unary_rpc_method_handler(
                     servicer.RefreshToken,
                     request_deserializer=bitsflea__pb2.RefreshTokenRequest.FromString,
-                    response_serializer=bitsflea__pb2.TokenReply.SerializeToString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
             'Referral': grpc.unary_unary_rpc_method_handler(
                     servicer.Referral,
@@ -209,7 +209,7 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'Search': grpc.unary_unary_rpc_method_handler(
                     servicer.Search,
                     request_deserializer=bitsflea__pb2.SearchRequest.FromString,
-                    response_serializer=bitsflea__pb2.SearchReply.SerializeToString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
             'Transaction': grpc.unary_unary_rpc_method_handler(
                     servicer.Transaction,
@@ -283,7 +283,7 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Register',
             bitsflea__pb2.RegisterRequest.SerializeToString,
-            bitsflea__pb2.RegisterReply.FromString,
+            bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -315,7 +315,7 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/RefreshToken',
             bitsflea__pb2.RefreshTokenRequest.SerializeToString,
-            bitsflea__pb2.TokenReply.FromString,
+            bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -347,7 +347,7 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/Search',
             bitsflea__pb2.SearchRequest.SerializeToString,
-            bitsflea__pb2.SearchReply.FromString,
+            bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 

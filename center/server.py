@@ -10,14 +10,10 @@ import time
 import json
 
 from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply, SearchReply, TokenReply
+from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply
 from bitsflea_pb2 import SearchRequest
 from bitsflea_pb2 import FollowRequest
 from bitsflea_pb2 import RefreshTokenRequest
-
-
-from center.database.model import Follow as FollowModel
-from center.database.model import User as UserModel
 
 from center.gateway import Gateway
 from center.utils import Utils
@@ -27,8 +23,9 @@ from center.eoslib.keys import PublicKey
 from binascii import unhexlify, hexlify
 
 import mongoengine
-from center.database.schema import schema
 
+from center.database.schema import schema
+from center.database.model import Follow as FollowModel
 from center.database.model import Sms as SmsModel
 from center.database.model import User as UserModel
 from center.database.model import Product as ProductModel
@@ -87,33 +84,33 @@ class Server(BitsFleaServicer):
                         tm.expiration = int(time.time()+86400)
                         tm.save()
                     else:
-                        return TokenReply(status=BaseReply(code=0, msg="success"), token=tm.token)
+                        return BaseReply(code=0, msg="success", data=tm.token)
                 else:
                     tm = TokensModel()
                     tm.phone = request.phone
                     tm.token = Utils.sha256(bytes(code,"utf8"))
                     tm.expiration = int(time.time()+86400)
                     tm.save()
-                return TokenReply(status=BaseReply(code=0, msg="success"), token=tm.token)
+                return BaseReply(code=0, msg="success", data=tm.token)
             else:
-                return TokenReply(status=BaseReply(code=3002, msg="Invalid signature"))
-        return TokenReply(status=BaseReply(code=1, msg="Invalid parameter"))
+                return BaseReply(code=3002, msg="Invalid signature")
+        return BaseReply(code=1, msg="Invalid parameter")
         
     
     def Search(self, request, context):
         #print( context.invocation_metadata())
-        sur = SearchReply()
+        sur = BaseReply()
         if request.query:
             result = schema.execute(request.query)
             if result.data:
-                sur.status.msg = "success"
+                sur.msg = "success"
                 sur.data = json.dumps(result.data)
             else:
-                sur.status.code = 400
-                sur.status.msg = "no data"
+                sur.code = 400
+                sur.msg = "no data"
         else:
-            sur.status.code = 1
-            sur.status.msg = "Invalid parameter"
+            sur.code = 1
+            sur.msg = "Invalid parameter"
         return sur
         
     def Transaction(self, request, context):
@@ -180,7 +177,7 @@ class Server(BitsFleaServicer):
                 sms_info.delete()
         else:
             flag = True
-        m = RegisterReply()
+        m = BaseReply()
         if flag and len(request.phone) > 0 and len(request.ownerpubkey) == 53 and len(request.actpubkey) == 53:
             en_phone = None
             authkey = None
@@ -195,31 +192,48 @@ class Server(BitsFleaServicer):
             #print(user_info)
             if user_info and "status" in user_info:
                 if "uid" in user_info:
-                    m.status.msg = "registration successful"
-                    m.data.userid = user_info['uid']
-                    m.data.eosid = user_info['eosid']
-                    m.data.phone = request.phone    #user_info['phone_encrypt']
-                    m.data.status = user_info['status']
-                    m.data.nickname = user_info['nickname']
-                    m.data.creditValue = user_info['credit_value']
-                    m.data.referrer = referral      #str(user_info['referrer'])
-                    m.data.lastActiveTime = user_info['last_active_time']
-                    m.data.postsTotal = user_info['posts_total']
-                    m.data.sellTotal = user_info['sell_total']
-                    m.data.buyTotal = user_info['buy_total']
-                    m.data.referralTotal = user_info['referral_total']
-                    m.data.point = user_info['point']
-                    m.data.isReviewer = user_info['is_reviewer']
+                    m.msg = "registration successful"
+                    user = User()
+                    user.userid = user_info['uid']
+                    user.eosid = user_info['eosid']
+                    user.phone = request.phone    #user_info['phone_encrypt']
+                    user.status = user_info['status']
+                    user.nickname = user_info['nickname']
+                    user.creditValue = user_info['credit_value']
+                    user.referrer = referral      #str(user_info['referrer'])
+                    user.lastActiveTime = user_info['last_active_time']
+                    user.postsTotal = user_info['posts_total']
+                    user.sellTotal = user_info['sell_total']
+                    user.buyTotal = user_info['buy_total']
+                    user.referralTotal = user_info['referral_total']
+                    user.point = user_info['point']
+                    user.isReviewer = user_info['is_reviewer']
+                    m.data = user
+                    um = UserModel()
+                    um.authKey = authkey
+                    um.userid = user.userid
+                    um.eosid = user.eosid
+                    um.phone = user.phone
+                    um.status = user.status
+                    um.nickname = user.nickname
+                    um.head = user.head
+                    um.creditValue = user.creditValue
+                    um.referrer = user.referral
+                    um.lastActiveTime = user.lastActiveTime
+                    um.referralTotal = user.referralTotal
+                    um.point = user.point
+                    um.isReviewer = user.isReviewer
+                    um.save()
                 else:
-                    m.status.code = 101
-                    m.status.msg = user_info['message']
+                    m.code = 101
+                    m.msg = user_info['message']
             else:
-                m.status.code = 500
-                m.status.msg = "An error occurred while requesting the gateway"
+                m.code = 500
+                m.msg = "An error occurred while requesting the gateway"
             return m
         else:
-            m.status.code = 1
-            m.status.msg = "Invalid parameter"
+            m.code = 1
+            m.msg = "Invalid parameter"
             return m
         
     def _check_auth(self, userid, metadata):
