@@ -44,5 +44,3 @@ class TestKey(object):
         pubKey = PublicKey(phex)
         print("pubkey: ", pubKey, priKey.pubkey)
         assert str(priKey.pubkey) == str(pubKey)
-        
-        

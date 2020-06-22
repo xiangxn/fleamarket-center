@@ -10,4 +10,4 @@ mongoengine>=0.19.1
 graphene_mongo>=0.2.12
 graphene>=2.1.8
 aiohttp>=3.6.2
-ipfshttpclient
+-e git+https://github.com/mike7c2/py-ipfs-http-client.git#egg=ipfshttpclient
