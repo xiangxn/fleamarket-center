@@ -32,9 +32,12 @@ fi
 
 python -m grpc_tools.protoc -I=./center/protos \
     -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+    -I$PROTOBUF \
     --python_out=./center/rpc \
     --grpc_python_out=./center/rpc \
-    ./center/protos/bitsflea.proto
+    ./center/protos/bitsflea.proto \
+    $PROTOBUF/google/protobuf/any.proto \
+    $PROTOBUF/google/protobuf/wrappers.proto
 
 python -m grpc_tools.protoc -I=./center/protos \
     -I/usr/local/include \

@@ -9,11 +9,14 @@ import asyncio
 import time
 import json
 
-from bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from bitsflea_pb2 import RegisterRequest, RegisterReply, User, BaseReply
-from bitsflea_pb2 import SearchRequest
-from bitsflea_pb2 import FollowRequest
-from bitsflea_pb2 import RefreshTokenRequest
+from center.rpc.bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
+from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply
+from center.rpc.bitsflea_pb2 import SearchRequest
+from center.rpc.bitsflea_pb2 import FollowRequest
+from center.rpc.bitsflea_pb2 import RefreshTokenRequest
+from center.rpc.google.protobuf.wrappers_pb2 import StringValue
+
+
 
 from center.gateway import Gateway
 from center.utils import Utils
@@ -65,6 +68,7 @@ class Server(BitsFleaServicer):
         return BaseReply(code=3001, msg="Phone numbers not currently supported")
     
     def RefreshToken(self, request, context):
+        from center.rpc.google.protobuf.any_pb2 import Any
         token = "0"
         if request.token and request.token != "0":
             token = request.token
@@ -74,7 +78,9 @@ class Server(BitsFleaServicer):
             msg = "{}{}{}".format(request.phone, token, request.time)
             #phex = verify_message(msg, unhexlify(request.sign))
             phex = verify_message(msg, request.sign)
-            if user.authKey == str(PublicKey(hexlify(phex).decode("ascii"))):
+            authKey = str(PublicKey(hexlify(phex).decode("ascii")))
+            br = BaseReply()
+            if user.authKey == authKey:
                 code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
                 tm = TokensModel.objects(phone = request.phone).first()
                 if tm:
@@ -83,15 +89,15 @@ class Server(BitsFleaServicer):
                         tm.token = Utils.sha256(bytes(code,"utf8"))
                         tm.expiration = int(time.time()+86400)
                         tm.save()
-                    else:
-                        return BaseReply(code=0, msg="success", data=tm.token)
                 else:
                     tm = TokensModel()
                     tm.phone = request.phone
                     tm.token = Utils.sha256(bytes(code,"utf8"))
                     tm.expiration = int(time.time()+86400)
                     tm.save()
-                return BaseReply(code=0, msg="success", data=tm.token)
+                br.msg = "success"
+                br.data.Pack(StringValue(value=tm.token))
+                return br
             else:
                 return BaseReply(code=3002, msg="Invalid signature")
         return BaseReply(code=1, msg="Invalid parameter")
@@ -104,7 +110,7 @@ class Server(BitsFleaServicer):
             result = schema.execute(request.query)
             if result.data:
                 sur.msg = "success"
-                sur.data = json.dumps(result.data)
+                sur.data.Pack(StringValue(value=json.dumps(result.data)))
             else:
                 sur.code = 400
                 sur.msg = "no data"
@@ -208,7 +214,7 @@ class Server(BitsFleaServicer):
                     user.referralTotal = user_info['referral_total']
                     user.point = user_info['point']
                     user.isReviewer = user_info['is_reviewer']
-                    m.data = user
+                    m.data.Pack(user)
                     um = UserModel()
                     um.authKey = authkey
                     um.userid = user.userid
@@ -218,7 +224,7 @@ class Server(BitsFleaServicer):
                     um.nickname = user.nickname
                     um.head = user.head
                     um.creditValue = user.creditValue
-                    um.referrer = user.referral
+                    um.referrer = user.referrer
                     um.lastActiveTime = user.lastActiveTime
                     um.referralTotal = user.referralTotal
                     um.point = user.point
@@ -377,7 +383,7 @@ class TokenInterceptor(grpc.ServerInterceptor):
     def __init__(self):
 
         def abort(ignored_request, context):
-            context.abort(grpc.StatusCode.UNAUTHENTICATED, 'Invalid signature')
+            context.abort(grpc.StatusCode.UNAUTHENTICATED, 'Invalid token')
 
         self._abortion = grpc.unary_unary_rpc_method_handler(abort)
     
