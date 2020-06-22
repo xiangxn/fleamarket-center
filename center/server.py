@@ -46,7 +46,10 @@ class Server(BitsFleaServicer):
         self.config = config
         self._connectDB(self.config['mongo'])
         self.gateway = Gateway(self.config['gateway'], self.logger)
-        self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
+        try:
+            self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
+        except Exception as e:
+            print("IPFS ConnectionError:", e)
 
     def _connectDB(self, config):
         #连接mongoengine
@@ -80,6 +83,7 @@ class Server(BitsFleaServicer):
             phex = verify_message(msg, request.sign)
             authKey = str(PublicKey(hexlify(phex).decode("ascii")))
             br = BaseReply()
+            print("RefreshToken: ", user.authKey, authKey)
             if user.authKey == authKey:
                 code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
                 tm = TokensModel.objects(phone = request.phone).first()
@@ -194,7 +198,7 @@ class Server(BitsFleaServicer):
                 authkey = request.authkey
             if hasattr(request, "nickname"):
                 nickname = request.nickname
-            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, request.referral, authkey, nickname)
+            user_info, referral = self._register(request.phone, en_phone, request.ownerpubkey, request.actpubkey, authkey, request.referral, nickname)
             #print(user_info)
             if user_info and "status" in user_info:
                 if "uid" in user_info:

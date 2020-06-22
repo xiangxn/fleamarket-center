@@ -233,7 +233,8 @@ class SyncSvr:
                 for log in logs:
                     id, more = await self.getUsers(userid=int(log.primary), limit=1)
                     log.delete()
-                #print("Sync to user id:{}".format(id))
+                if id > 0:
+                    print("Sync to user id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("users incremental sync stop...")
