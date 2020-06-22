@@ -379,7 +379,7 @@ class Server(BitsFleaServicer):
         
     def closeIPFS(self):
         if self.ipfs_client:
-            self.ipfs_client.stop()
+            self.ipfs_client.close()
         
             
 
