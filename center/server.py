@@ -83,7 +83,7 @@ class Server(BitsFleaServicer):
             phex = verify_message(msg, request.sign)
             authKey = str(PublicKey(hexlify(phex).decode("ascii")))
             br = BaseReply()
-            print("RefreshToken: ", user.authKey, authKey)
+            #print("RefreshToken: ", user.authKey, authKey)
             if user.authKey == authKey:
                 code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
                 tm = TokensModel.objects(phone = request.phone).first()
@@ -124,6 +124,7 @@ class Server(BitsFleaServicer):
         return sur
         
     def Transaction(self, request, context):
+        #print("request:",request)
         if request.trx:
             sign = True if request.sign else False
             if sign:
