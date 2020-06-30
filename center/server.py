@@ -219,9 +219,10 @@ class Server(BitsFleaServicer):
                     user.referralTotal = user_info['referral_total']
                     user.point = user_info['point']
                     user.isReviewer = user_info['is_reviewer']
+                    user.authKey = authkey
                     m.data.Pack(user)
                     um = UserModel()
-                    um.authKey = authkey
+                    um.authKey = user.authKey
                     um.userid = user.userid
                     um.eosid = user.eosid
                     um.phone = user.phone
