@@ -142,7 +142,7 @@ message User {
     int32 followTotal = 16;
     int32 favoriteTotal = 17;
     int32 fansTotal = 18;
-    string authkey = 19;
+    string authKey = 19;
 }
 
 message RegisterRequest {
