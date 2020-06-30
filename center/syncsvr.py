@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 import mongoengine
 import json
+import time
 
 from mongoengine.queryset.visitor import Q
 
@@ -90,7 +91,7 @@ class SyncSvr:
                 id, more = await self.getUsers(userid, limit)
                 while(more):
                     id, more = await self.getUsers(id, limit)
-                print("Sync to user id:{}".format(id))
+                print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),id))
             except KeyboardInterrupt as ke:
                 print("init users sync stop...")
         tasks.append(loop.create_task(syncUser()))
@@ -234,7 +235,7 @@ class SyncSvr:
                     id, more = await self.getUsers(userid=int(log.primary), limit=1)
                     log.delete()
                 if id > 0:
-                    print("Sync to user id:{}".format(id))
+                    print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("users incremental sync stop...")
