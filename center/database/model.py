@@ -70,7 +70,7 @@ class Product(me.Document):
     position = me.StringField()
     releaseTime = me.StringField(required=True)
     desc = me.StringField()
-    imgs = me.ListField()
+    imgs = me.ListField(me.StringField())
     collections = me.IntField(default=0)
     price = me.StringField(required=True)
     saleMethod = me.IntField(default=0)

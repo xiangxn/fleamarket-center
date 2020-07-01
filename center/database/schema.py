@@ -12,9 +12,22 @@ from .model import OtherAddr as OtherAddrModel
 from .model import Follow as FollowModel
 from .model import Favorite as FavoriteModel
 from .model import ReceiptAddress as ReceiptAddressModel
+from collections import OrderedDict
+
 #import json
 
 #mongoengine.connect(db="bf_center", host="localhost", port=3001)
+class PageConnection(graphene.Connection):
+    class Meta:
+        abstract = True
+
+    total_count = graphene.Int()
+
+    def resolve_total_count(root, info, **kwargs):
+        print(info)
+        print(kwargs)
+        return root.list_length
+    
 class User(MongoengineObjectType):
     class Meta:
         model = UserModel
@@ -29,6 +42,7 @@ class Category(MongoengineObjectType):
     class Meta:
         model = CategoryModel
         interfaces = (graphene.relay.Node,)
+        connection_class = PageConnection
         
 class Reviewer(MongoengineObjectType):
     class Meta:
@@ -65,12 +79,21 @@ class ReceiptAddress(MongoengineObjectType):
         model = ReceiptAddressModel
         interfaces = (graphene.relay.Node,)
         
+
+def _create_page_type(obj_type):
+    return type("Page{}".format(obj_type),(graphene.ObjectType,),{
+        'pageNo':graphene.Int(),
+        'pageSize':graphene.Int(),
+        'totalCount':graphene.Int(),
+        'list':graphene.List(obj_type)
+    })
+        
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     # User
     user = graphene.Field(User, userid=graphene.Int())
     users = MongoengineConnectionField(User)
-    user_page = graphene.List(User, pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    user_page = graphene.Field(_create_page_type(User), pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     # OtherAddr
     withdraw_addr = graphene.List(OtherAddr, userid=graphene.Int(default_value=0))
@@ -82,30 +105,31 @@ class Query(graphene.ObjectType):
     reviewers = MongoengineConnectionField(Reviewer)
     
     #Product
-    product_by_cid = graphene.List(Product, categoryId=graphene.Int(default_value=1), userid=graphene.Int(default_value=0),
+    product_by_cid = graphene.Field(_create_page_type(Product), categoryId=graphene.Int(default_value=1), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
-    product_by_publisher = graphene.List(Product, userid=graphene.Int(default_value=1),
+    
+    product_by_publisher = graphene.Field(_create_page_type(Product), userid=graphene.Int(default_value=1),
                                          pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     product_audits = MongoengineConnectionField(ProductAudit)
     products = MongoengineConnectionField(Product)
     
     #Order
-    order_by_buyer = graphene.List(Order, userid=graphene.Int(default_value=0),
+    order_by_buyer = graphene.Field(_create_page_type(Order), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
-    order_by_seller = graphene.List(Order, userid=graphene.Int(default_value=0),
+    order_by_seller = graphene.Field(_create_page_type(Order), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
-    order_by_id = graphene.List(Order, orderid=graphene.String())
+    order_by_id = graphene.Field(Order, orderid=graphene.String())
     
     #Follow
     follows = MongoengineConnectionField(Follow)
-    follow_by_user = graphene.List(Follow, userid=graphene.Int(default_value=0),
+    follow_by_user = graphene.Field(_create_page_type(Follow), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
-    follow_by_follower = graphene.List(Follow, userid=graphene.Int(default_value=0),
+    follow_by_follower = graphene.Field(_create_page_type(Follow), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #Favorite
     favorites = MongoengineConnectionField(Favorite)
-    favorite_by_user = graphene.List(Favorite, userid=graphene.Int(default_value=0),
+    favorite_by_user = graphene.Field(_create_page_type(Favorite), userid=graphene.Int(default_value=0),
                                     pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #ReceiptAddress
@@ -119,59 +143,84 @@ class Query(graphene.ObjectType):
     
     def resolve_user_page(self, info, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        return list(UserModel.objects.skip(offset).limit(pageSize))
+        obj = _create_page_type(User)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = UserModel.objects().count()
+        obj.list = list(UserModel.objects.skip(offset).limit(pageSize))
+        return obj
     
     def resolve_product_by_cid(self, info, categoryId, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
+        obj = _create_page_type(Product)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
         if userid == 0:
-            #return list(ProductModel.objects(category__cid=categoryId).skip(offset).limit(pageSize))
-            return list(ProductModel.objects(category=categoryId).skip(offset).limit(pageSize))
+            obj.totalCount = ProductModel.objects(category=categoryId).count()
+            obj.list = list(ProductModel.objects(category=categoryId).skip(offset).limit(pageSize))
         else:
-            #return list(ProductModel.objects(Q(category__cid=categoryId) & Q(seller__userid=userid)).skip(offset).limit(pageSize))
-            return list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
+            obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).count()
+            obj.list = list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
+        return obj
         
     def resolve_product_by_publisher(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        #us = UserModel.objects(userid=userid).scalar('userid')
-        #return list(ProductModel.objects(seller__in=us).skip(offset).limit(pageSize))
-        return list(ProductModel.objects(seller=userid).skip(offset).limit(pageSize))
+        obj = _create_page_type(Product)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = ProductModel.objects(seller=userid).count()
+        obj.list = list(ProductModel.objects(seller=userid).skip(offset).limit(pageSize))
+        return obj
     
     def resolve_order_by_buyer(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        #us = UserModel.objects(userid=userid).scalar('userid')
-        #return list(OrderModel.objects(buyer__in=us).skip(offset).limit(pageSize))
-        return list(OrderModel.objects(buyer=userid).skip(offset).limit(pageSize))
+        obj = _create_page_type(Order)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = OrderModel.objects(buyer=userid).count()
+        obj.list = list(OrderModel.objects(buyer=userid).skip(offset).limit(pageSize))
+        return obj
     
     def resolve_order_by_seller(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        #us = UserModel.objects(userid=userid).scalar('userid')
-        #return list(OrderModel.objects(seller__in=us).skip(offset).limit(pageSize))
-        return list(OrderModel.objects(seller=userid).skip(offset).limit(pageSize))
+        obj = _create_page_type(Order)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = OrderModel.objects(seller=userid).count()
+        obj.list = list(OrderModel.objects(seller=userid).skip(offset).limit(pageSize))
+        return obj
     
     def resolve_order_by_id(self, info, orderid):
         return OrderModel.objects(orderid=orderid).first()
     
     def resolve_follow_by_user(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        #us = UserModel.objects(userid=userid).scalar('userid')
-        #return list(FollowModel.objects(user__in=us).skip(offset).limit(pageSize))
-        return list(FollowModel.objects(user=userid).skip(offset).limit(pageSize))
+        obj = _create_page_type(Follow)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = FollowModel.objects(user=userid).count()
+        obj.list = list(FollowModel.objects(user=userid).skip(offset).limit(pageSize))
+        return obj
     
     def resolve_follow_by_follower(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        #fs = UserModel.objects(userid=userid).scalar('userid')
-        #return list(FollowModel.objects(follower__in=fs).skip(offset).limit(pageSize))
-        return list(FollowModel.objects(follower=userid).skip(offset).limit(pageSize))
+        obj = _create_page_type(Follow)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = FollowModel.objects(follower=userid).count()
+        obj.list = list(FollowModel.objects(follower=userid).skip(offset).limit(pageSize))
+        return obj
     
     def resolve_favorite_by_user(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        #us = UserModel.objects(userid=userid).scalar('userid')
-        #return list(FavoriteModel.objects(user__in=us).skip(offset).limit(pageSize))
-        return list(FavoriteModel.objects(user=userid).skip(offset).limit(pageSize))
+        obj = _create_page_type(Favorite)()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = FavoriteModel.objects(user=userid).count()
+        obj.list = list(FavoriteModel.objects(user=userid).skip(offset).limit(pageSize))
+        return obj
     
     def resolve_withdraw_addr(self, info, userid):
-        #us = UserModel.objects(userid=userid).scalar('userid')
-        #return list(OtherAddrModel.objects(user__in=us))
         return list(OtherAddrModel.objects(user=userid))
     
     def resolve_rec_addr_by_user(self, info, userid):
