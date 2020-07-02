@@ -49,14 +49,14 @@ class User(me.Document):
         return self.to_json()
     
 class Category(me.Document):
-    meta = {"collection": "category"}
+    meta = {"collection": "category", "ordering":["cid"]}
     
     cid = me.IntField(required=True, primary_key=True)
     view = me.StringField(required=True)
     parent = me.IntField(required=True)
     
 class Product(me.Document):
-    meta = {"collection": "product"}
+    meta = {"collection": "product", "ordering":["-releaseTime"]}
     
     productId = me.IntField(required=True, primary_key=True)
     #categoryId = me.IntField(required=True)

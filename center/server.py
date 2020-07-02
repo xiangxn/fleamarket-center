@@ -402,7 +402,7 @@ class TokenInterceptor(grpc.ServerInterceptor):
             token = meta['token']
         flag = False
         tm = TokensModel.objects(token=token).first()
-        allows = ['RefreshToken','SendSmsCode','Register']
+        allows = ['RefreshToken','SendSmsCode','Register','Search']
         if method_name[-1] in allows or (tm and (int(time.time())-tm.expiration) <= 86400):
             flag = True
         if tm and flag == False:

@@ -161,12 +161,20 @@ class Query(graphene.ObjectType):
         obj = PageProduct()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
-        if userid == 0:
-            obj.totalCount = ProductModel.objects(category=categoryId).count()
-            obj.list = list(ProductModel.objects(category=categoryId).skip(offset).limit(pageSize))
+        if categoryId == 0:
+            if userid == 0:
+                obj.totalCount = ProductModel.objects().count()
+                obj.list = list(ProductModel.objects().skip(offset).limit(pageSize))
+            else:
+                obj.totalCount = ProductModel.objects(seller=userid).count()
+                obj.list = list(ProductModel.objects(seller=userid).skip(offset).limit(pageSize))
         else:
-            obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).count()
-            obj.list = list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
+            if userid == 0:
+                obj.totalCount = ProductModel.objects(category=categoryId).count()
+                obj.list = list(ProductModel.objects(category=categoryId).skip(offset).limit(pageSize))
+            else:
+                obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).count()
+                obj.list = list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
         return obj
         
     def resolve_product_by_publisher(self, info, userid, pageNo, pageSize):
@@ -222,8 +230,10 @@ class Query(graphene.ObjectType):
         obj = PageFavorite()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
-        obj.totalCount = FavoriteModel.objects(user=userid).count()
-        obj.list = list(FavoriteModel.objects(user=userid).skip(offset).limit(pageSize))
+        fms = FavoriteModel.objects(user=userid)
+        obj.totalCount = fms.count()
+        pids = fms.skip(offset).limit(pageSize).scalar("product")
+        obj.list = list(ProductModel.objects(productId__in=pids))
         return obj
     
     def resolve_withdraw_addr(self, info, userid):
