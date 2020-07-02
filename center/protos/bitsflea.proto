@@ -69,7 +69,7 @@ service BitsFlea {
         };
     }
 
-    rpc UnCollect (FavoriteRequest) returns (BaseReply) {
+    rpc UnFavorite (FavoriteRequest) returns (BaseReply) {
         option (google.api.http) = {
             post: "/v1/common/unfavorite"
             body: "*"

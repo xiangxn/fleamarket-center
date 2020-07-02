@@ -87,13 +87,19 @@ def _create_page_type(obj_type):
         'totalCount':graphene.Int(),
         'list':graphene.List(obj_type)
     })
+
+PageUser = _create_page_type(User)
+PageProduct = _create_page_type(Product)
+PageOrder = _create_page_type(Order)
+PageFollow = _create_page_type(Follow)
+PageFavorite = _create_page_type(Favorite)
         
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     # User
     user = graphene.Field(User, userid=graphene.Int())
     users = MongoengineConnectionField(User)
-    user_page = graphene.Field(_create_page_type(User), pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    user_page = graphene.Field(PageUser, pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     # OtherAddr
     withdraw_addr = graphene.List(OtherAddr, userid=graphene.Int(default_value=0))
@@ -105,31 +111,31 @@ class Query(graphene.ObjectType):
     reviewers = MongoengineConnectionField(Reviewer)
     
     #Product
-    product_by_cid = graphene.Field(_create_page_type(Product), categoryId=graphene.Int(default_value=1), userid=graphene.Int(default_value=0),
+    product_by_cid = graphene.Field(PageProduct, categoryId=graphene.Int(default_value=1), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
-    product_by_publisher = graphene.Field(_create_page_type(Product), userid=graphene.Int(default_value=1),
+    product_by_publisher = graphene.Field(PageProduct, userid=graphene.Int(default_value=1),
                                          pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     product_audits = MongoengineConnectionField(ProductAudit)
     products = MongoengineConnectionField(Product)
     
     #Order
-    order_by_buyer = graphene.Field(_create_page_type(Order), userid=graphene.Int(default_value=0),
+    order_by_buyer = graphene.Field(PageOrder, userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
-    order_by_seller = graphene.Field(_create_page_type(Order), userid=graphene.Int(default_value=0),
+    order_by_seller = graphene.Field(PageOrder, userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     order_by_id = graphene.Field(Order, orderid=graphene.String())
     
     #Follow
     follows = MongoengineConnectionField(Follow)
-    follow_by_user = graphene.Field(_create_page_type(Follow), userid=graphene.Int(default_value=0),
+    follow_by_user = graphene.Field(PageFollow, userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
-    follow_by_follower = graphene.Field(_create_page_type(Follow), userid=graphene.Int(default_value=0),
+    follow_by_follower = graphene.Field(PageFollow, userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #Favorite
     favorites = MongoengineConnectionField(Favorite)
-    favorite_by_user = graphene.Field(_create_page_type(Favorite), userid=graphene.Int(default_value=0),
+    favorite_by_user = graphene.Field(PageFavorite, userid=graphene.Int(default_value=0),
                                     pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #ReceiptAddress
@@ -143,7 +149,7 @@ class Query(graphene.ObjectType):
     
     def resolve_user_page(self, info, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(User)()
+        obj = PageUser()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = UserModel.objects().count()
@@ -152,7 +158,7 @@ class Query(graphene.ObjectType):
     
     def resolve_product_by_cid(self, info, categoryId, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Product)()
+        obj = PageProduct()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         if userid == 0:
@@ -165,7 +171,7 @@ class Query(graphene.ObjectType):
         
     def resolve_product_by_publisher(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Product)()
+        obj = PageProduct()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = ProductModel.objects(seller=userid).count()
@@ -174,7 +180,7 @@ class Query(graphene.ObjectType):
     
     def resolve_order_by_buyer(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Order)()
+        obj = PageOrder()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = OrderModel.objects(buyer=userid).count()
@@ -183,7 +189,7 @@ class Query(graphene.ObjectType):
     
     def resolve_order_by_seller(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Order)()
+        obj = PageOrder()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = OrderModel.objects(seller=userid).count()
@@ -195,7 +201,7 @@ class Query(graphene.ObjectType):
     
     def resolve_follow_by_user(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Follow)()
+        obj = PageFollow()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = FollowModel.objects(user=userid).count()
@@ -204,7 +210,7 @@ class Query(graphene.ObjectType):
     
     def resolve_follow_by_follower(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Follow)()
+        obj = PageFollow()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = FollowModel.objects(follower=userid).count()
@@ -213,7 +219,7 @@ class Query(graphene.ObjectType):
     
     def resolve_favorite_by_user(self, info, userid, pageNo, pageSize):
         offset = (pageNo-1)*pageSize
-        obj = _create_page_type(Favorite)()
+        obj = PageFavorite()
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = FavoriteModel.objects(user=userid).count()

@@ -58,8 +58,8 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.FavoriteRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
-        self.UnCollect = channel.unary_unary(
-                '/bitsflea.BitsFlea/UnCollect',
+        self.UnFavorite = channel.unary_unary(
+                '/bitsflea.BitsFlea/UnFavorite',
                 request_serializer=bitsflea__pb2.FavoriteRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
@@ -147,7 +147,7 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def UnCollect(self, request, context):
+    def UnFavorite(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -231,8 +231,8 @@ def add_BitsFleaServicer_to_server(servicer, server):
                     request_deserializer=bitsflea__pb2.FavoriteRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
-            'UnCollect': grpc.unary_unary_rpc_method_handler(
-                    servicer.UnCollect,
+            'UnFavorite': grpc.unary_unary_rpc_method_handler(
+                    servicer.UnFavorite,
                     request_deserializer=bitsflea__pb2.FavoriteRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
@@ -416,7 +416,7 @@ class BitsFlea(object):
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def UnCollect(request,
+    def UnFavorite(request,
             target,
             options=(),
             channel_credentials=None,
@@ -425,7 +425,7 @@ class BitsFlea(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/UnCollect',
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/UnFavorite',
             bitsflea__pb2.FavoriteRequest.SerializeToString,
             bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
