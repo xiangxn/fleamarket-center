@@ -37,6 +37,8 @@ from center.database.model import ReceiptAddress as ReceiptAddressModel
 from center.database.model import Tokens as TokensModel
 
 import ipfshttpclient as IPFS
+from eospy.cleos import Cleos
+from eospy.types import PackedTransaction
 
 
 class Server(BitsFleaServicer):
@@ -46,6 +48,7 @@ class Server(BitsFleaServicer):
         self.config = config
         self._connectDB(self.config['mongo'])
         self.gateway = Gateway(self.config['gateway'], self.logger)
+        self.eosapi = Cleos(self.config['sync_cfg']['api_url'])
         try:
             self.ipfs_client = IPFS.connect(self.config['ipfs_api'])
         except Exception as e:
@@ -83,7 +86,7 @@ class Server(BitsFleaServicer):
             phex = verify_message(msg, request.sign)
             authKey = str(PublicKey(hexlify(phex).decode("ascii")))
             br = BaseReply()
-            print("RefreshToken: ", user.authKey, authKey)
+            #print("RefreshToken: ", user.authKey, authKey)
             if user.authKey == authKey:
                 code = "".join(random.sample('0123456789abcdefghijklmnopqrstuvwxyz',16))
                 tm = TokensModel.objects(phone = request.phone).first()
@@ -128,7 +131,16 @@ class Server(BitsFleaServicer):
         if request.trx:
             sign = True if request.sign else False
             if sign:
-                tmp_trx = json.loads(request.trx)['transaction']
+                tmp_trx = json.loads(request.trx)
+                if "transaction" in tmp_trx:
+                    tmp_trx = tmp_trx['transaction']
+                elif "packed_trx" in tmp_trx:
+                    print(tmp_trx)
+                    p_Trx = PackedTransaction(tmp_trx['packed_trx'], self.eosapi)
+                    tmp_trx = p_Trx.get_transaction()
+                    print(json.dumps(tmp_trx))
+                else:
+                    return BaseReply(code=1,msg="Invalid parameter")
                 if len(tmp_trx['actions']) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
                     return BaseReply(code=401,msg="This action has no permissions")
             result = None

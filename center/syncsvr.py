@@ -59,7 +59,7 @@ class SyncSvr:
     async def _post(self, data=None, json=None, uri="get_table_rows"):
         result = None
         url = self.config['api_url']
-        url = "{}{}{}".format(url, ("" if url.endswith("/") else "/"), uri)
+        url = "{}{}{}".format(url, ("v1/chain/" if url.endswith("/") else "/v1/chain/"), uri)
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.post(url, data=data, json=json) as response:
@@ -490,7 +490,7 @@ class SyncSvr:
                 p.price = product['price']
                 p.saleMethod = product['sale_method']
                 p.stockCount = product['stock_count']
-                p.isRetail = product['is_retail']
+                p.isRetail = product['is_retail'] != 0
                 category = CategoryModel.objects(cid=product['category']).first()
                 if not category:
                     await self.getCategories(cid=product['category'], limit=1)
