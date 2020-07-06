@@ -135,12 +135,12 @@ class Server(BitsFleaServicer):
                 if "transaction" in tmp_trx:
                     tmp_trx = tmp_trx['transaction']
                 elif "packed_trx" in tmp_trx:
-                    print(tmp_trx)
+                    #print(tmp_trx)
                     p_Trx = PackedTransaction(tmp_trx['packed_trx'], self.eosapi)
                     tmp_trx = p_Trx.get_transaction()
-                    print(json.dumps(tmp_trx))
+                    #print(json.dumps(tmp_trx))
                 else:
-                    return BaseReply(code=1,msg="Invalid parameter")
+                    return BaseReply(code=1, msg="Invalid parameter")
                 if len(tmp_trx['actions']) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
                     return BaseReply(code=401,msg="This action has no permissions")
             result = None
