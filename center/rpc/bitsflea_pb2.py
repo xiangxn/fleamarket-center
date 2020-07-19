@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='bitsflea',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0e\x62itsflea.proto\x12\x08\x62itsflea\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\"J\n\tBaseReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x03 \x01(\x0b\x32\x14.google.protobuf.Any\")\n\x0b\x46ileRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\x0c\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x1d\n\x0c\x45osidRequest\x12\r\n\x05\x65osid\x18\x01 \x01(\t\"\xe6\x02\n\x04User\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05\x65osid\x18\x02 \x01(\t\x12\r\n\x05phone\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x05\x12\x10\n\x08nickname\x18\x05 \x01(\t\x12\x0c\n\x04head\x18\x06 \x01(\t\x12\x13\n\x0b\x63reditValue\x18\x07 \x01(\x05\x12\x10\n\x08referrer\x18\x08 \x01(\t\x12\x16\n\x0elastActiveTime\x18\t \x01(\t\x12\x12\n\npostsTotal\x18\n \x01(\x05\x12\x11\n\tsellTotal\x18\x0b \x01(\x05\x12\x10\n\x08\x62uyTotal\x18\x0c \x01(\x05\x12\x15\n\rreferralTotal\x18\r \x01(\x05\x12\r\n\x05point\x18\x0e \x01(\t\x12\x12\n\nisReviewer\x18\x0f \x01(\x05\x12\x13\n\x0b\x66ollowTotal\x18\x10 \x01(\x05\x12\x15\n\rfavoriteTotal\x18\x11 \x01(\x05\x12\x11\n\tfansTotal\x18\x12 \x01(\x05\x12\x0f\n\x07\x61uthKey\x18\x13 \x01(\t\"\xa4\x01\n\x0fRegisterRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\x13\n\x0bownerpubkey\x18\x03 \x01(\t\x12\x11\n\tactpubkey\x18\x04 \x01(\t\x12\x0f\n\x07smscode\x18\x05 \x01(\t\x12\x10\n\x08referral\x18\x06 \x01(\t\x12\x0f\n\x07\x61uthkey\x18\x07 \x01(\t\x12\x14\n\x0cphoneEncrypt\x18\x08 \x01(\t\"-\n\nSmsRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08\x63odeType\x18\x02 \x01(\x05\"O\n\x13RefreshTokenRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\x12\x0c\n\x04time\x18\x03 \x01(\x05\x12\x0c\n\x04sign\x18\x04 \x01(\t\"\x1e\n\rSearchRequest\x12\r\n\x05query\x18\x01 \x01(\t\"/\n\x12TransactionRequest\x12\x0b\n\x03trx\x18\x01 \x01(\t\x12\x0c\n\x04sign\x18\x02 \x01(\x05\"/\n\rFollowRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x10\n\x08\x66ollower\x18\x02 \x01(\x05\"0\n\x0f\x46\x61voriteRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x0f\n\x07product\x18\x02 \x01(\x05\"\xb0\x01\n\x0e\x41\x64\x64ressRequest\x12\x0b\n\x03rid\x18\x01 \x01(\x05\x12\x0e\n\x06userid\x18\x02 \x01(\x05\x12\x10\n\x08province\x18\x03 \x01(\t\x12\x0c\n\x04\x63ity\x18\x04 \x01(\t\x12\x10\n\x08\x64istrict\x18\x05 \x01(\t\x12\r\n\x05phone\x18\x06 \x01(\t\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x08 \x01(\t\x12\x10\n\x08postcode\x18\t \x01(\t\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\n \x01(\x05\"4\n\x15SetDefaultAddrRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\x0b\n\x03rid\x18\x02 \x01(\x05\x32\xea\n\n\x08\x42itsFlea\x12Z\n\x08Register\x12\x19.bitsflea.RegisterRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/register:\x01*\x12[\n\x0bSendSmsCode\x12\x14.bitsflea.SmsRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/sendSmsCode:\x01*\x12\x66\n\x0cRefreshToken\x12\x1d.bitsflea.RefreshTokenRequest\x1a\x13.bitsflea.BaseReply\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/common/refreshtoken:\x01*\x12W\n\x08Referral\x12\x16.bitsflea.EosidRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/Referral:\x01*\x12T\n\x06Search\x12\x17.bitsflea.SearchRequest\x1a\x13.bitsflea.BaseReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/search:\x01*\x12\x63\n\x0bTransaction\x12\x1c.bitsflea.TransactionRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/transaction:\x01*\x12T\n\x06\x46ollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/follow:\x01*\x12X\n\x08UnFollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/unfollow:\x01*\x12Z\n\x08\x46\x61vorite\x12\x19.bitsflea.FavoriteRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/favorite:\x01*\x12^\n\nUnFavorite\x12\x19.bitsflea.FavoriteRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/unfavorite:\x01*\x12W\n\x07\x41\x64\x64ress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/common/address:\x01*\x12\x63\n\rUpdateAddress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"#\x82\xd3\xe4\x93\x02\x1d\"\x18/v1/common/updateaddress:\x01*\x12]\n\nDelAddress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/deladdress:\x01*\x12h\n\x0eSetDefaultAddr\x12\x1f.bitsflea.SetDefaultAddrRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/setdefault:\x01*\x12\x36\n\x06Upload\x12\x15.bitsflea.FileRequest\x1a\x13.bitsflea.BaseReply\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0e\x62itsflea.proto\x12\x08\x62itsflea\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\"J\n\tBaseReply\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12\"\n\x04\x64\x61ta\x18\x03 \x01(\x0b\x32\x14.google.protobuf.Any\")\n\x0b\x46ileRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\x0c\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x1d\n\x0c\x45osidRequest\x12\r\n\x05\x65osid\x18\x01 \x01(\t\"\xe6\x02\n\x04User\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\r\n\x05\x65osid\x18\x02 \x01(\t\x12\r\n\x05phone\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\x05\x12\x10\n\x08nickname\x18\x05 \x01(\t\x12\x0c\n\x04head\x18\x06 \x01(\t\x12\x13\n\x0b\x63reditValue\x18\x07 \x01(\x05\x12\x10\n\x08referrer\x18\x08 \x01(\t\x12\x16\n\x0elastActiveTime\x18\t \x01(\t\x12\x12\n\npostsTotal\x18\n \x01(\x05\x12\x11\n\tsellTotal\x18\x0b \x01(\x05\x12\x10\n\x08\x62uyTotal\x18\x0c \x01(\x05\x12\x15\n\rreferralTotal\x18\r \x01(\x05\x12\r\n\x05point\x18\x0e \x01(\t\x12\x12\n\nisReviewer\x18\x0f \x01(\x05\x12\x13\n\x0b\x66ollowTotal\x18\x10 \x01(\x05\x12\x15\n\rfavoriteTotal\x18\x11 \x01(\x05\x12\x11\n\tfansTotal\x18\x12 \x01(\x05\x12\x0f\n\x07\x61uthKey\x18\x13 \x01(\t\"\xa4\x01\n\x0fRegisterRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\x13\n\x0bownerpubkey\x18\x03 \x01(\t\x12\x11\n\tactpubkey\x18\x04 \x01(\t\x12\x0f\n\x07smscode\x18\x05 \x01(\t\x12\x10\n\x08referral\x18\x06 \x01(\t\x12\x0f\n\x07\x61uthkey\x18\x07 \x01(\t\x12\x14\n\x0cphoneEncrypt\x18\x08 \x01(\t\"-\n\nSmsRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\x10\n\x08\x63odeType\x18\x02 \x01(\x05\"O\n\x13RefreshTokenRequest\x12\r\n\x05phone\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\x12\x0c\n\x04time\x18\x03 \x01(\x05\x12\x0c\n\x04sign\x18\x04 \x01(\t\"5\n\x08\x43\x61tegory\x12\x0b\n\x03\x63id\x18\x01 \x01(\x05\x12\x0c\n\x04view\x18\x02 \x01(\t\x12\x0e\n\x06parent\x18\x03 \x01(\x05\"\xf3\x02\n\x07Product\x12\x11\n\tproductId\x18\x01 \x01(\r\x12$\n\x08\x63\x61tegory\x18\x02 \x01(\x0b\x32\x12.bitsflea.Category\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0e\n\x06status\x18\x04 \x01(\r\x12\r\n\x05isNew\x18\x05 \x01(\x08\x12\x11\n\tisReturns\x18\x06 \x01(\x08\x12\x13\n\x0btransMethod\x18\x07 \x01(\r\x12\x0f\n\x07postage\x18\x08 \x01(\t\x12\x10\n\x08position\x18\t \x01(\t\x12\x13\n\x0breleaseTime\x18\n \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x0b \x01(\t\x12\x0e\n\x06photos\x18\x0c \x03(\t\x12\x13\n\x0b\x63ollections\x18\r \x01(\r\x12\r\n\x05price\x18\x0e \x01(\t\x12\x12\n\nsaleMethod\x18\x0f \x01(\r\x12\x1e\n\x06seller\x18\x10 \x01(\x0b\x32\x0e.bitsflea.User\x12\x12\n\nstockCount\x18\x11 \x01(\r\x12\x10\n\x08isRetail\x18\x12 \x01(\x08\"\xd3\x01\n\x07\x41uction\x12\x0b\n\x03\x61id\x18\x01 \x01(\x04\x12\"\n\x07product\x18\x02 \x01(\x0b\x32\x11.bitsflea.Product\x12\x10\n\x08security\x18\x03 \x01(\t\x12\x0e\n\x06markup\x18\x04 \x01(\t\x12\x14\n\x0c\x63urrentPrice\x18\x05 \x01(\t\x12\x14\n\x0c\x61uctionTimes\x18\x06 \x01(\r\x12%\n\rlastPriceUser\x18\x07 \x01(\x0b\x32\x0e.bitsflea.User\x12\x11\n\tstartTime\x18\x08 \x01(\t\x12\x0f\n\x07\x65ndTime\x18\t \x01(\t\"\x1e\n\rSearchRequest\x12\r\n\x05query\x18\x01 \x01(\t\"/\n\x12TransactionRequest\x12\x0b\n\x03trx\x18\x01 \x01(\t\x12\x0c\n\x04sign\x18\x02 \x01(\x05\"/\n\rFollowRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x10\n\x08\x66ollower\x18\x02 \x01(\x05\"0\n\x0f\x46\x61voriteRequest\x12\x0c\n\x04user\x18\x01 \x01(\x05\x12\x0f\n\x07product\x18\x02 \x01(\x05\"\xb0\x01\n\x0e\x41\x64\x64ressRequest\x12\x0b\n\x03rid\x18\x01 \x01(\x05\x12\x0e\n\x06userid\x18\x02 \x01(\x05\x12\x10\n\x08province\x18\x03 \x01(\t\x12\x0c\n\x04\x63ity\x18\x04 \x01(\t\x12\x10\n\x08\x64istrict\x18\x05 \x01(\t\x12\r\n\x05phone\x18\x06 \x01(\t\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x08 \x01(\t\x12\x10\n\x08postcode\x18\t \x01(\t\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\n \x01(\x05\"4\n\x15SetDefaultAddrRequest\x12\x0e\n\x06userid\x18\x01 \x01(\x05\x12\x0b\n\x03rid\x18\x02 \x01(\x05\"\xb0\x01\n\x08Reviewer\x12\x0b\n\x03rid\x18\x01 \x01(\x04\x12\x1c\n\x04user\x18\x02 \x01(\x0b\x32\x0e.bitsflea.User\x12\r\n\x05\x65osid\x18\x03 \x01(\t\x12\x12\n\nvotedCount\x18\x04 \x01(\x05\x12\x12\n\ncreateTime\x18\x05 \x01(\t\x12\x16\n\x0elastActiveTime\x18\x06 \x01(\t\x12\x14\n\x0cvoterApprove\x18\x07 \x03(\x04\x12\x14\n\x0cvoterAgainst\x18\x08 \x03(\x04\"\xa1\x01\n\x0cProductAudit\x12\x0c\n\x04paid\x18\x01 \x01(\x04\x12\"\n\x07product\x18\x02 \x01(\x0b\x32\x11.bitsflea.Product\x12 \n\x08reviewer\x18\x03 \x01(\x0b\x32\x0e.bitsflea.User\x12\x12\n\nisDelisted\x18\x04 \x01(\x08\x12\x15\n\rreviewDetails\x18\x05 \x01(\t\x12\x12\n\nreviewTime\x18\x06 \x01(\t\"\x85\x03\n\x05Order\x12\x0f\n\x07orderid\x18\x01 \x01(\t\x12&\n\x0bproductInfo\x18\x02 \x01(\x0b\x32\x11.bitsflea.Product\x12\x1e\n\x06seller\x18\x03 \x01(\x0b\x32\x0e.bitsflea.User\x12\x1d\n\x05\x62uyer\x18\x04 \x01(\x0b\x32\x0e.bitsflea.User\x12\x0e\n\x06status\x18\x05 \x01(\r\x12\r\n\x05price\x18\x06 \x01(\t\x12\x0f\n\x07postage\x18\x07 \x01(\t\x12\x0f\n\x07payAddr\x18\x08 \x01(\t\x12\x0f\n\x07shipNum\x18\t \x01(\t\x12\x12\n\ncreateTime\x18\n \x01(\t\x12\x0f\n\x07payTime\x18\x0b \x01(\t\x12\x12\n\npayOutTime\x18\x0c \x01(\t\x12\x10\n\x08shipTime\x18\r \x01(\t\x12\x13\n\x0bshipOutTime\x18\x0e \x01(\t\x12\x13\n\x0breceiptTime\x18\x0f \x01(\t\x12\x16\n\x0ereceiptOutTime\x18\x10 \x01(\t\x12\x0f\n\x07\x65ndTime\x18\x11 \x01(\t\x12\x14\n\x0c\x64\x65layedCount\x18\x12 \x01(\r\"\x8e\x02\n\tProReturn\x12\x0c\n\x04prid\x18\x01 \x01(\r\x12\r\n\x05order\x18\x02 \x01(\t\x12\x0f\n\x07product\x18\x03 \x01(\r\x12\x12\n\norderPrice\x18\x04 \x01(\t\x12\x0e\n\x06status\x18\x05 \x01(\r\x12\x0f\n\x07reasons\x18\x06 \x01(\t\x12\x12\n\ncreateTime\x18\x07 \x01(\t\x12\x0f\n\x07shipNum\x18\x08 \x01(\t\x12\x10\n\x08shipTime\x18\t \x01(\t\x12\x13\n\x0bshipOutTime\x18\n \x01(\t\x12\x13\n\x0breceiptTime\x18\x0b \x01(\t\x12\x16\n\x0ereceiptOutTime\x18\x0c \x01(\t\x12\x0f\n\x07\x65ndTime\x18\r \x01(\t\x12\x14\n\x0c\x64\x65layedCount\x18\x0e \x01(\r\"\xbc\x02\n\x0b\x41rbitration\x12\x0b\n\x03\x61id\x18\x01 \x01(\r\x12\x11\n\tplaintiff\x18\x02 \x01(\x04\x12\x0f\n\x07product\x18\x03 \x01(\r\x12\r\n\x05order\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\r\x12\x0e\n\x06status\x18\x06 \x01(\r\x12\r\n\x05title\x18\x07 \x01(\t\x12\x0e\n\x06resume\x18\x08 \x01(\t\x12\x10\n\x08\x64\x65tailed\x18\t \x01(\t\x12\x12\n\ncreateTime\x18\n \x01(\t\x12\x11\n\tdefendant\x18\x0b \x01(\x04\x12\x14\n\x0cproofContent\x18\x0c \x01(\t\x12\x1a\n\x12\x61rbitrationResults\x18\r \x01(\t\x12\x0e\n\x06winner\x18\x0e \x01(\x04\x12\x11\n\tstartTime\x18\x0f \x01(\t\x12\x0f\n\x07\x65ndTime\x18\x10 \x01(\t\x12\x11\n\treviewers\x18\x11 \x03(\x04\"G\n\tOtherAddr\x12\x0c\n\x04oaid\x18\x01 \x01(\r\x12\x0c\n\x04user\x18\x02 \x01(\x04\x12\x10\n\x08\x63oinType\x18\x03 \x01(\t\x12\x0c\n\x04\x61\x64\x64r\x18\x04 \x01(\t\"U\n\x06\x46ollow\x12\x0b\n\x03\x66id\x18\x01 \x01(\r\x12\x1c\n\x04user\x18\x02 \x01(\x0b\x32\x0e.bitsflea.User\x12 \n\x08\x66ollower\x18\x03 \x01(\x0b\x32\x0e.bitsflea.User\"Y\n\x08\x46\x61vorite\x12\x0b\n\x03\x63id\x18\x01 \x01(\r\x12\x1c\n\x04user\x18\x02 \x01(\x0b\x32\x0e.bitsflea.User\x12\"\n\x07product\x18\x03 \x01(\x0b\x32\x11.bitsflea.Product\"\xb0\x01\n\x0eReceiptAddress\x12\x0b\n\x03rid\x18\x01 \x01(\r\x12\x0e\n\x06userid\x18\x02 \x01(\x04\x12\x10\n\x08province\x18\x03 \x01(\t\x12\x0c\n\x04\x63ity\x18\x04 \x01(\t\x12\x10\n\x08\x64istrict\x18\x05 \x01(\t\x12\r\n\x05phone\x18\x06 \x01(\t\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x08 \x01(\t\x12\x10\n\x08postcode\x18\t \x01(\t\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\n \x01(\x08\x32\xea\n\n\x08\x42itsFlea\x12Z\n\x08Register\x12\x19.bitsflea.RegisterRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/register:\x01*\x12[\n\x0bSendSmsCode\x12\x14.bitsflea.SmsRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/sendSmsCode:\x01*\x12\x66\n\x0cRefreshToken\x12\x1d.bitsflea.RefreshTokenRequest\x1a\x13.bitsflea.BaseReply\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/common/refreshtoken:\x01*\x12W\n\x08Referral\x12\x16.bitsflea.EosidRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/Referral:\x01*\x12T\n\x06Search\x12\x17.bitsflea.SearchRequest\x1a\x13.bitsflea.BaseReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/search:\x01*\x12\x63\n\x0bTransaction\x12\x1c.bitsflea.TransactionRequest\x1a\x13.bitsflea.BaseReply\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/common/transaction:\x01*\x12T\n\x06\x46ollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/common/follow:\x01*\x12X\n\x08UnFollow\x12\x17.bitsflea.FollowRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/unfollow:\x01*\x12Z\n\x08\x46\x61vorite\x12\x19.bitsflea.FavoriteRequest\x1a\x13.bitsflea.BaseReply\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/common/favorite:\x01*\x12^\n\nUnFavorite\x12\x19.bitsflea.FavoriteRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/unfavorite:\x01*\x12W\n\x07\x41\x64\x64ress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/common/address:\x01*\x12\x63\n\rUpdateAddress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\"#\x82\xd3\xe4\x93\x02\x1d\"\x18/v1/common/updateaddress:\x01*\x12]\n\nDelAddress\x12\x18.bitsflea.AddressRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/deladdress:\x01*\x12h\n\x0eSetDefaultAddr\x12\x1f.bitsflea.SetDefaultAddrRequest\x1a\x13.bitsflea.BaseReply\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/common/setdefault:\x01*\x12\x36\n\x06Upload\x12\x15.bitsflea.FileRequest\x1a\x13.bitsflea.BaseReply\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,])
 
@@ -468,6 +468,288 @@ _REFRESHTOKENREQUEST = _descriptor.Descriptor(
 )
 
 
+_CATEGORY = _descriptor.Descriptor(
+  name='Category',
+  full_name='bitsflea.Category',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='cid', full_name='bitsflea.Category.cid', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='view', full_name='bitsflea.Category.view', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='parent', full_name='bitsflea.Category.parent', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=891,
+  serialized_end=944,
+)
+
+
+_PRODUCT = _descriptor.Descriptor(
+  name='Product',
+  full_name='bitsflea.Product',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='productId', full_name='bitsflea.Product.productId', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='category', full_name='bitsflea.Product.category', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='bitsflea.Product.title', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='bitsflea.Product.status', index=3,
+      number=4, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='isNew', full_name='bitsflea.Product.isNew', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='isReturns', full_name='bitsflea.Product.isReturns', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='transMethod', full_name='bitsflea.Product.transMethod', index=6,
+      number=7, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='postage', full_name='bitsflea.Product.postage', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='position', full_name='bitsflea.Product.position', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='releaseTime', full_name='bitsflea.Product.releaseTime', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='description', full_name='bitsflea.Product.description', index=10,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='photos', full_name='bitsflea.Product.photos', index=11,
+      number=12, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='collections', full_name='bitsflea.Product.collections', index=12,
+      number=13, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='price', full_name='bitsflea.Product.price', index=13,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='saleMethod', full_name='bitsflea.Product.saleMethod', index=14,
+      number=15, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='seller', full_name='bitsflea.Product.seller', index=15,
+      number=16, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='stockCount', full_name='bitsflea.Product.stockCount', index=16,
+      number=17, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='isRetail', full_name='bitsflea.Product.isRetail', index=17,
+      number=18, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=947,
+  serialized_end=1318,
+)
+
+
+_AUCTION = _descriptor.Descriptor(
+  name='Auction',
+  full_name='bitsflea.Auction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='aid', full_name='bitsflea.Auction.aid', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='product', full_name='bitsflea.Auction.product', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='security', full_name='bitsflea.Auction.security', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='markup', full_name='bitsflea.Auction.markup', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='currentPrice', full_name='bitsflea.Auction.currentPrice', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='auctionTimes', full_name='bitsflea.Auction.auctionTimes', index=5,
+      number=6, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lastPriceUser', full_name='bitsflea.Auction.lastPriceUser', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='startTime', full_name='bitsflea.Auction.startTime', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='endTime', full_name='bitsflea.Auction.endTime', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1321,
+  serialized_end=1532,
+)
+
+
 _SEARCHREQUEST = _descriptor.Descriptor(
   name='SearchRequest',
   full_name='bitsflea.SearchRequest',
@@ -494,8 +776,8 @@ _SEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=891,
-  serialized_end=921,
+  serialized_start=1534,
+  serialized_end=1564,
 )
 
 
@@ -532,8 +814,8 @@ _TRANSACTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=923,
-  serialized_end=970,
+  serialized_start=1566,
+  serialized_end=1613,
 )
 
 
@@ -570,8 +852,8 @@ _FOLLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=972,
-  serialized_end=1019,
+  serialized_start=1615,
+  serialized_end=1662,
 )
 
 
@@ -608,8 +890,8 @@ _FAVORITEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1021,
-  serialized_end=1069,
+  serialized_start=1664,
+  serialized_end=1712,
 )
 
 
@@ -702,8 +984,8 @@ _ADDRESSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1072,
-  serialized_end=1248,
+  serialized_start=1715,
+  serialized_end=1891,
 )
 
 
@@ -740,11 +1022,822 @@ _SETDEFAULTADDRREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1250,
-  serialized_end=1302,
+  serialized_start=1893,
+  serialized_end=1945,
+)
+
+
+_REVIEWER = _descriptor.Descriptor(
+  name='Reviewer',
+  full_name='bitsflea.Reviewer',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='rid', full_name='bitsflea.Reviewer.rid', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='bitsflea.Reviewer.user', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='eosid', full_name='bitsflea.Reviewer.eosid', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='votedCount', full_name='bitsflea.Reviewer.votedCount', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='createTime', full_name='bitsflea.Reviewer.createTime', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lastActiveTime', full_name='bitsflea.Reviewer.lastActiveTime', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='voterApprove', full_name='bitsflea.Reviewer.voterApprove', index=6,
+      number=7, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='voterAgainst', full_name='bitsflea.Reviewer.voterAgainst', index=7,
+      number=8, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1948,
+  serialized_end=2124,
+)
+
+
+_PRODUCTAUDIT = _descriptor.Descriptor(
+  name='ProductAudit',
+  full_name='bitsflea.ProductAudit',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='paid', full_name='bitsflea.ProductAudit.paid', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='product', full_name='bitsflea.ProductAudit.product', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reviewer', full_name='bitsflea.ProductAudit.reviewer', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='isDelisted', full_name='bitsflea.ProductAudit.isDelisted', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reviewDetails', full_name='bitsflea.ProductAudit.reviewDetails', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reviewTime', full_name='bitsflea.ProductAudit.reviewTime', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2127,
+  serialized_end=2288,
+)
+
+
+_ORDER = _descriptor.Descriptor(
+  name='Order',
+  full_name='bitsflea.Order',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='orderid', full_name='bitsflea.Order.orderid', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='productInfo', full_name='bitsflea.Order.productInfo', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='seller', full_name='bitsflea.Order.seller', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='buyer', full_name='bitsflea.Order.buyer', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='bitsflea.Order.status', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='price', full_name='bitsflea.Order.price', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='postage', full_name='bitsflea.Order.postage', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='payAddr', full_name='bitsflea.Order.payAddr', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shipNum', full_name='bitsflea.Order.shipNum', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='createTime', full_name='bitsflea.Order.createTime', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='payTime', full_name='bitsflea.Order.payTime', index=10,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='payOutTime', full_name='bitsflea.Order.payOutTime', index=11,
+      number=12, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shipTime', full_name='bitsflea.Order.shipTime', index=12,
+      number=13, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shipOutTime', full_name='bitsflea.Order.shipOutTime', index=13,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='receiptTime', full_name='bitsflea.Order.receiptTime', index=14,
+      number=15, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='receiptOutTime', full_name='bitsflea.Order.receiptOutTime', index=15,
+      number=16, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='endTime', full_name='bitsflea.Order.endTime', index=16,
+      number=17, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='delayedCount', full_name='bitsflea.Order.delayedCount', index=17,
+      number=18, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2291,
+  serialized_end=2680,
+)
+
+
+_PRORETURN = _descriptor.Descriptor(
+  name='ProReturn',
+  full_name='bitsflea.ProReturn',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='prid', full_name='bitsflea.ProReturn.prid', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='order', full_name='bitsflea.ProReturn.order', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='product', full_name='bitsflea.ProReturn.product', index=2,
+      number=3, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='orderPrice', full_name='bitsflea.ProReturn.orderPrice', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='bitsflea.ProReturn.status', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reasons', full_name='bitsflea.ProReturn.reasons', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='createTime', full_name='bitsflea.ProReturn.createTime', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shipNum', full_name='bitsflea.ProReturn.shipNum', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shipTime', full_name='bitsflea.ProReturn.shipTime', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shipOutTime', full_name='bitsflea.ProReturn.shipOutTime', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='receiptTime', full_name='bitsflea.ProReturn.receiptTime', index=10,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='receiptOutTime', full_name='bitsflea.ProReturn.receiptOutTime', index=11,
+      number=12, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='endTime', full_name='bitsflea.ProReturn.endTime', index=12,
+      number=13, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='delayedCount', full_name='bitsflea.ProReturn.delayedCount', index=13,
+      number=14, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2683,
+  serialized_end=2953,
+)
+
+
+_ARBITRATION = _descriptor.Descriptor(
+  name='Arbitration',
+  full_name='bitsflea.Arbitration',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='aid', full_name='bitsflea.Arbitration.aid', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='plaintiff', full_name='bitsflea.Arbitration.plaintiff', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='product', full_name='bitsflea.Arbitration.product', index=2,
+      number=3, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='order', full_name='bitsflea.Arbitration.order', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='bitsflea.Arbitration.type', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='bitsflea.Arbitration.status', index=5,
+      number=6, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='title', full_name='bitsflea.Arbitration.title', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resume', full_name='bitsflea.Arbitration.resume', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='detailed', full_name='bitsflea.Arbitration.detailed', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='createTime', full_name='bitsflea.Arbitration.createTime', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='defendant', full_name='bitsflea.Arbitration.defendant', index=10,
+      number=11, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='proofContent', full_name='bitsflea.Arbitration.proofContent', index=11,
+      number=12, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='arbitrationResults', full_name='bitsflea.Arbitration.arbitrationResults', index=12,
+      number=13, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='winner', full_name='bitsflea.Arbitration.winner', index=13,
+      number=14, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='startTime', full_name='bitsflea.Arbitration.startTime', index=14,
+      number=15, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='endTime', full_name='bitsflea.Arbitration.endTime', index=15,
+      number=16, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reviewers', full_name='bitsflea.Arbitration.reviewers', index=16,
+      number=17, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2956,
+  serialized_end=3272,
+)
+
+
+_OTHERADDR = _descriptor.Descriptor(
+  name='OtherAddr',
+  full_name='bitsflea.OtherAddr',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='oaid', full_name='bitsflea.OtherAddr.oaid', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='bitsflea.OtherAddr.user', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='coinType', full_name='bitsflea.OtherAddr.coinType', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='addr', full_name='bitsflea.OtherAddr.addr', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3274,
+  serialized_end=3345,
+)
+
+
+_FOLLOW = _descriptor.Descriptor(
+  name='Follow',
+  full_name='bitsflea.Follow',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='fid', full_name='bitsflea.Follow.fid', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='bitsflea.Follow.user', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='follower', full_name='bitsflea.Follow.follower', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3347,
+  serialized_end=3432,
+)
+
+
+_FAVORITE = _descriptor.Descriptor(
+  name='Favorite',
+  full_name='bitsflea.Favorite',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='cid', full_name='bitsflea.Favorite.cid', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user', full_name='bitsflea.Favorite.user', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='product', full_name='bitsflea.Favorite.product', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3434,
+  serialized_end=3523,
+)
+
+
+_RECEIPTADDRESS = _descriptor.Descriptor(
+  name='ReceiptAddress',
+  full_name='bitsflea.ReceiptAddress',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='rid', full_name='bitsflea.ReceiptAddress.rid', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='userid', full_name='bitsflea.ReceiptAddress.userid', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='province', full_name='bitsflea.ReceiptAddress.province', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='city', full_name='bitsflea.ReceiptAddress.city', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='district', full_name='bitsflea.ReceiptAddress.district', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='phone', full_name='bitsflea.ReceiptAddress.phone', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='bitsflea.ReceiptAddress.name', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='address', full_name='bitsflea.ReceiptAddress.address', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='postcode', full_name='bitsflea.ReceiptAddress.postcode', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='default', full_name='bitsflea.ReceiptAddress.default', index=9,
+      number=10, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3526,
+  serialized_end=3702,
 )
 
 _BASEREPLY.fields_by_name['data'].message_type = google_dot_protobuf_dot_any__pb2._ANY
+_PRODUCT.fields_by_name['category'].message_type = _CATEGORY
+_PRODUCT.fields_by_name['seller'].message_type = _USER
+_AUCTION.fields_by_name['product'].message_type = _PRODUCT
+_AUCTION.fields_by_name['lastPriceUser'].message_type = _USER
+_REVIEWER.fields_by_name['user'].message_type = _USER
+_PRODUCTAUDIT.fields_by_name['product'].message_type = _PRODUCT
+_PRODUCTAUDIT.fields_by_name['reviewer'].message_type = _USER
+_ORDER.fields_by_name['productInfo'].message_type = _PRODUCT
+_ORDER.fields_by_name['seller'].message_type = _USER
+_ORDER.fields_by_name['buyer'].message_type = _USER
+_FOLLOW.fields_by_name['user'].message_type = _USER
+_FOLLOW.fields_by_name['follower'].message_type = _USER
+_FAVORITE.fields_by_name['user'].message_type = _USER
+_FAVORITE.fields_by_name['product'].message_type = _PRODUCT
 DESCRIPTOR.message_types_by_name['BaseReply'] = _BASEREPLY
 DESCRIPTOR.message_types_by_name['FileRequest'] = _FILEREQUEST
 DESCRIPTOR.message_types_by_name['EosidRequest'] = _EOSIDREQUEST
@@ -752,12 +1845,24 @@ DESCRIPTOR.message_types_by_name['User'] = _USER
 DESCRIPTOR.message_types_by_name['RegisterRequest'] = _REGISTERREQUEST
 DESCRIPTOR.message_types_by_name['SmsRequest'] = _SMSREQUEST
 DESCRIPTOR.message_types_by_name['RefreshTokenRequest'] = _REFRESHTOKENREQUEST
+DESCRIPTOR.message_types_by_name['Category'] = _CATEGORY
+DESCRIPTOR.message_types_by_name['Product'] = _PRODUCT
+DESCRIPTOR.message_types_by_name['Auction'] = _AUCTION
 DESCRIPTOR.message_types_by_name['SearchRequest'] = _SEARCHREQUEST
 DESCRIPTOR.message_types_by_name['TransactionRequest'] = _TRANSACTIONREQUEST
 DESCRIPTOR.message_types_by_name['FollowRequest'] = _FOLLOWREQUEST
 DESCRIPTOR.message_types_by_name['FavoriteRequest'] = _FAVORITEREQUEST
 DESCRIPTOR.message_types_by_name['AddressRequest'] = _ADDRESSREQUEST
 DESCRIPTOR.message_types_by_name['SetDefaultAddrRequest'] = _SETDEFAULTADDRREQUEST
+DESCRIPTOR.message_types_by_name['Reviewer'] = _REVIEWER
+DESCRIPTOR.message_types_by_name['ProductAudit'] = _PRODUCTAUDIT
+DESCRIPTOR.message_types_by_name['Order'] = _ORDER
+DESCRIPTOR.message_types_by_name['ProReturn'] = _PRORETURN
+DESCRIPTOR.message_types_by_name['Arbitration'] = _ARBITRATION
+DESCRIPTOR.message_types_by_name['OtherAddr'] = _OTHERADDR
+DESCRIPTOR.message_types_by_name['Follow'] = _FOLLOW
+DESCRIPTOR.message_types_by_name['Favorite'] = _FAVORITE
+DESCRIPTOR.message_types_by_name['ReceiptAddress'] = _RECEIPTADDRESS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 BaseReply = _reflection.GeneratedProtocolMessageType('BaseReply', (_message.Message,), {
@@ -809,6 +1914,27 @@ RefreshTokenRequest = _reflection.GeneratedProtocolMessageType('RefreshTokenRequ
   })
 _sym_db.RegisterMessage(RefreshTokenRequest)
 
+Category = _reflection.GeneratedProtocolMessageType('Category', (_message.Message,), {
+  'DESCRIPTOR' : _CATEGORY,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Category)
+  })
+_sym_db.RegisterMessage(Category)
+
+Product = _reflection.GeneratedProtocolMessageType('Product', (_message.Message,), {
+  'DESCRIPTOR' : _PRODUCT,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Product)
+  })
+_sym_db.RegisterMessage(Product)
+
+Auction = _reflection.GeneratedProtocolMessageType('Auction', (_message.Message,), {
+  'DESCRIPTOR' : _AUCTION,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Auction)
+  })
+_sym_db.RegisterMessage(Auction)
+
 SearchRequest = _reflection.GeneratedProtocolMessageType('SearchRequest', (_message.Message,), {
   'DESCRIPTOR' : _SEARCHREQUEST,
   '__module__' : 'bitsflea_pb2'
@@ -851,6 +1977,69 @@ SetDefaultAddrRequest = _reflection.GeneratedProtocolMessageType('SetDefaultAddr
   })
 _sym_db.RegisterMessage(SetDefaultAddrRequest)
 
+Reviewer = _reflection.GeneratedProtocolMessageType('Reviewer', (_message.Message,), {
+  'DESCRIPTOR' : _REVIEWER,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Reviewer)
+  })
+_sym_db.RegisterMessage(Reviewer)
+
+ProductAudit = _reflection.GeneratedProtocolMessageType('ProductAudit', (_message.Message,), {
+  'DESCRIPTOR' : _PRODUCTAUDIT,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.ProductAudit)
+  })
+_sym_db.RegisterMessage(ProductAudit)
+
+Order = _reflection.GeneratedProtocolMessageType('Order', (_message.Message,), {
+  'DESCRIPTOR' : _ORDER,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Order)
+  })
+_sym_db.RegisterMessage(Order)
+
+ProReturn = _reflection.GeneratedProtocolMessageType('ProReturn', (_message.Message,), {
+  'DESCRIPTOR' : _PRORETURN,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.ProReturn)
+  })
+_sym_db.RegisterMessage(ProReturn)
+
+Arbitration = _reflection.GeneratedProtocolMessageType('Arbitration', (_message.Message,), {
+  'DESCRIPTOR' : _ARBITRATION,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Arbitration)
+  })
+_sym_db.RegisterMessage(Arbitration)
+
+OtherAddr = _reflection.GeneratedProtocolMessageType('OtherAddr', (_message.Message,), {
+  'DESCRIPTOR' : _OTHERADDR,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.OtherAddr)
+  })
+_sym_db.RegisterMessage(OtherAddr)
+
+Follow = _reflection.GeneratedProtocolMessageType('Follow', (_message.Message,), {
+  'DESCRIPTOR' : _FOLLOW,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Follow)
+  })
+_sym_db.RegisterMessage(Follow)
+
+Favorite = _reflection.GeneratedProtocolMessageType('Favorite', (_message.Message,), {
+  'DESCRIPTOR' : _FAVORITE,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.Favorite)
+  })
+_sym_db.RegisterMessage(Favorite)
+
+ReceiptAddress = _reflection.GeneratedProtocolMessageType('ReceiptAddress', (_message.Message,), {
+  'DESCRIPTOR' : _RECEIPTADDRESS,
+  '__module__' : 'bitsflea_pb2'
+  # @@protoc_insertion_point(class_scope:bitsflea.ReceiptAddress)
+  })
+_sym_db.RegisterMessage(ReceiptAddress)
+
 
 
 _BITSFLEA = _descriptor.ServiceDescriptor(
@@ -859,8 +2048,8 @@ _BITSFLEA = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1305,
-  serialized_end=2691,
+  serialized_start=3705,
+  serialized_end=5091,
   methods=[
   _descriptor.MethodDescriptor(
     name='Register',

@@ -168,6 +168,45 @@ message RefreshTokenRequest {
     string sign = 4;
 }
 
+message Category {
+    int32 cid = 1;
+    string view = 2;
+    int32 parent = 3;
+}
+
+message Product {
+    uint32 productId = 1;
+    Category category = 2;
+    string title = 3;
+    uint32 status = 4;
+    bool isNew = 5;
+    bool isReturns = 6;
+    uint32 transMethod = 7;
+    string postage = 8;
+    string position = 9;
+    string releaseTime = 10;
+    string description = 11;
+    repeated string photos = 12;
+    uint32 collections = 13;
+    string price = 14;
+    uint32 saleMethod = 15;
+    User seller = 16;
+    uint32 stockCount = 17;
+    bool isRetail = 18;
+}
+
+message Auction {
+    uint64 aid = 1;
+    Product product = 2;
+    string security = 3;
+    string markup = 4;
+    string currentPrice = 5;
+    uint32 auctionTimes = 6;
+    User lastPriceUser = 7;
+    string startTime = 8;
+    string endTime = 9;
+}
+
 message SearchRequest {
     string query = 1;
 }
@@ -205,3 +244,112 @@ message SetDefaultAddrRequest {
     int32 rid = 2;
 }
 
+message Reviewer {
+    uint64 rid = 1;
+    User user = 2;
+    string eosid = 3;
+    int32 votedCount = 4;
+    string createTime = 5;
+    string lastActiveTime = 6;
+    repeated uint64 voterApprove = 7;
+    repeated uint64 voterAgainst = 8;
+}
+
+message ProductAudit {
+    uint64 paid = 1;
+    Product product = 2;
+    User reviewer = 3;
+    bool isDelisted = 4;
+    string reviewDetails = 5;
+    string reviewTime = 6;
+}
+
+message Order {
+    string orderid = 1;
+    Product productInfo = 2;
+    User seller = 3;
+    User buyer = 4;
+    uint32 status = 5;
+    string price = 6;
+    string postage = 7;
+    string payAddr = 8;
+    string shipNum = 9;
+    string createTime = 10;
+    string payTime = 11;
+    string payOutTime = 12;
+    string shipTime = 13;
+    string shipOutTime = 14;
+    string receiptTime = 15;
+    string receiptOutTime = 16;
+    string endTime = 17;
+    uint32 delayedCount = 18;
+}
+
+message ProReturn {
+    uint32 prid = 1;
+    string order = 2;
+    uint32 product = 3;
+    string orderPrice = 4;
+    uint32 status = 5;
+    string reasons = 6;
+    string createTime = 7;
+    string shipNum = 8;
+    string shipTime = 9;
+    string shipOutTime = 10;
+    string receiptTime = 11;
+    string receiptOutTime = 12;
+    string endTime = 13;
+    uint32 delayedCount = 14;
+}
+
+message Arbitration {
+    uint32 aid = 1;
+    uint64 plaintiff = 2;
+    uint32 product = 3;
+    string order = 4;
+    uint32 type = 5;
+    uint32 status = 6;
+    string title = 7;
+    string resume = 8;
+    string detailed = 9;
+    string createTime = 10;
+    uint64 defendant = 11;
+    string proofContent = 12;
+    string arbitrationResults = 13;
+    uint64 winner = 14;
+    string startTime = 15;
+    string endTime = 16;
+    repeated uint64 reviewers = 17;
+}
+
+message OtherAddr {
+    uint32 oaid = 1;
+    uint64 user = 2;
+    string coinType = 3;
+    string addr = 4;
+}
+
+message Follow {
+    uint32 fid = 1;
+    User user = 2;
+    User follower = 3;
+}
+
+message Favorite {
+    uint32 cid = 1;
+    User user = 2;
+    Product product = 3;
+}
+
+message ReceiptAddress {
+    uint32 rid = 1;
+    uint64 userid = 2;
+    string province = 3;
+    string city = 4;
+    string district = 5;
+    string phone = 6;
+    string name = 7;
+    string address = 8;
+    string postcode = 9;
+    bool default = 10;
+}
