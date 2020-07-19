@@ -329,18 +329,6 @@ message OtherAddr {
     string addr = 4;
 }
 
-message Follow {
-    uint32 fid = 1;
-    User user = 2;
-    User follower = 3;
-}
-
-message Favorite {
-    uint32 cid = 1;
-    User user = 2;
-    Product product = 3;
-}
-
 message ReceiptAddress {
     uint32 rid = 1;
     uint64 userid = 2;
