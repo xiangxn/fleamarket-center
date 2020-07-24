@@ -114,6 +114,9 @@ class Query(graphene.ObjectType):
     product_by_cid = graphene.Field(PageProduct, categoryId=graphene.Int(default_value=1), userid=graphene.Int(default_value=0),
                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
+    product_by_title = graphene.Field(PageProduct, title=graphene.String(), userid=graphene.Int(default_value=0),
+                                    pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    
     product_by_publisher = graphene.Field(PageProduct, userid=graphene.Int(default_value=1),
                                          pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     product_audits = MongoengineConnectionField(ProductAudit)
@@ -175,6 +178,19 @@ class Query(graphene.ObjectType):
             else:
                 obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).count()
                 obj.list = list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
+        return obj
+    
+    def resolve_product_by_title(self, info, title, userid, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        obj = PageProduct()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        if userid == 0:
+            obj.totalCount = ProductModel.objects(title__icontains=title).count()
+            obj.list = list(ProductModel.objects(title__icontains=title).skip(offset).limit(pageSize))
+        else:
+            obj.totalCount = ProductModel.objects(Q(title__icontains=title) & Q(seller=userid)).count()
+            obj.list = list(ProductModel.objects(Q(title__icontains=title) & Q(seller=userid)).skip(offset).limit(pageSize))
         return obj
         
     def resolve_product_by_publisher(self, info, userid, pageNo, pageSize):
