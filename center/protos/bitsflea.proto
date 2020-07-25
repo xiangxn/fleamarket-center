@@ -138,7 +138,7 @@ message User {
     int32 buyTotal = 12;
     int32 referralTotal = 13;
     string point = 14;
-    int32 isReviewer = 15;
+    bool isReviewer = 15;
     int32 followTotal = 16;
     int32 favoriteTotal = 17;
     int32 fansTotal = 18;

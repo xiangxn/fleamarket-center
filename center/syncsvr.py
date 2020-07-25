@@ -399,7 +399,7 @@ class SyncSvr:
                 u.buyTotal = user['buy_total']
                 u.referralTotal = user['referral_total']
                 u.point = user['point']
-                u.isReviewer = user['is_reviewer']
+                u.isReviewer = user['is_reviewer']>0
                 u.save()
                 uid = u.userid
             if uid == userid and result['more']:
@@ -479,8 +479,8 @@ class SyncSvr:
                 p = ProductModel(productId=product['pid'])
                 p.title = product['title']
                 p.status = product['status']
-                p.isNew = product['is_new']
-                p.isReturns = product['is_returns']
+                p.isNew = product['is_new']>0
+                p.isReturns = product['is_returns']>0
                 p.transMethod = product['transaction_method']
                 p.postage = product['postage']
                 p.position = product['position']
