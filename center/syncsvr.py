@@ -219,7 +219,7 @@ class SyncSvr:
                 while(more):
                     tid, more = await self.getTableLogs(tid)
                     await asyncio.sleep(2)
-                if tid >= 0:
+                if tid > 0:
                     self._deleteLogs(tid)
                 await asyncio.sleep(self.config['sync_log_interval'])
         except KeyboardInterrupt as ke:
