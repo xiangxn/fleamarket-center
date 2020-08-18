@@ -21,6 +21,7 @@ class Tokens(me.Document):
     phone = me.StringField(required=True, primary_key=True)
     token = me.StringField(required=True)
     expiration = me.IntField(required=True)
+    userid = me.IntField(required=True)
 
 class User(me.Document):
     meta = {"collection": "user"}

@@ -93,11 +93,13 @@ class Server(BitsFleaServicer):
                 if tm:
                     exp = int(time.time()) - tm.expiration
                     if exp >= 3600 or exp >= 86400:
+                        tm.userid = user.userid
                         tm.token = Utils.sha256(bytes(code,"utf8"))
                         tm.expiration = int(time.time()+86400)
                         tm.save()
                 else:
                     tm = TokensModel()
+                    tm.userid = user.userid
                     tm.phone = request.phone
                     tm.token = Utils.sha256(bytes(code,"utf8"))
                     tm.expiration = int(time.time()+86400)
