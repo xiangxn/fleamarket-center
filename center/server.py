@@ -316,6 +316,8 @@ class Server(BitsFleaServicer):
                 c.save()
                 u.favoriteTotal += 1
                 u.save()
+                p.collections += 1
+                p.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1,msg="Invalid parameter") 
     
@@ -324,7 +326,10 @@ class Server(BitsFleaServicer):
             return BaseReply(code=2, msg="Access denied")
         if request.user and request.product:
              c = FavoriteModel.objects(user=request.user, product=request.product).first()
+             p = ProductModel.objects(productId=request.product).first()
              if c:
+                 p.collections -= 1
+                 p.save()
                  u = UserModel.objects(userid=request.user).first()
                  u.favoriteTotal -= 1
                  u.save()
