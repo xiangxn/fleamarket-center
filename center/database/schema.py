@@ -248,8 +248,9 @@ class Query(graphene.ObjectType):
         obj.pageSize = pageSize
         fms = FavoriteModel.objects(user=userid)
         obj.totalCount = fms.count()
-        pids = fms.skip(offset).limit(pageSize).scalar("product")
-        obj.list = list(ProductModel.objects(productId__in=pids))
+        # pids = fms.skip(offset).limit(pageSize).scalar("product")
+        # obj.list = list(ProductModel.objects(productId__in=pids))
+        obj.list = list(fms.skip(offset).limit(pageSize))
         return obj
     
     def resolve_withdraw_addr(self, info, userid):
