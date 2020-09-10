@@ -199,7 +199,7 @@ class Query(graphene.ObjectType):
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = ProductModel.objects(seller=userid).count()
-        obj.list = list(ProductModel.objects(seller=userid).skip(offset).limit(pageSize))
+        obj.list = list(ProductModel.objects(seller=userid).order_by("-releaseTime").skip(offset).limit(pageSize))
         return obj
     
     def resolve_order_by_buyer(self, info, userid, pageNo, pageSize):
@@ -208,7 +208,7 @@ class Query(graphene.ObjectType):
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = OrderModel.objects(buyer=userid).count()
-        obj.list = list(OrderModel.objects(buyer=userid).skip(offset).limit(pageSize))
+        obj.list = list(OrderModel.objects(buyer=userid).order_by("-createTime").skip(offset).limit(pageSize))
         return obj
     
     def resolve_order_by_seller(self, info, userid, pageNo, pageSize):
@@ -217,7 +217,7 @@ class Query(graphene.ObjectType):
         obj.pageNo = pageNo
         obj.pageSize = pageSize
         obj.totalCount = OrderModel.objects(seller=userid).count()
-        obj.list = list(OrderModel.objects(seller=userid).skip(offset).limit(pageSize))
+        obj.list = list(OrderModel.objects(seller=userid).order_by("-createTime").skip(offset).limit(pageSize))
         return obj
     
     def resolve_order_by_id(self, info, orderid):
