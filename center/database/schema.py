@@ -100,6 +100,7 @@ class Query(graphene.ObjectType):
     user = graphene.Field(User, userid=graphene.Int())
     users = MongoengineConnectionField(User)
     user_page = graphene.Field(PageUser, pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    user_invited = graphene.Field(PageUser,userid=graphene.Int(), pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     # OtherAddr
     withdraw_addr = graphene.List(OtherAddr, userid=graphene.Int(default_value=0))
@@ -157,6 +158,15 @@ class Query(graphene.ObjectType):
         obj.pageSize = pageSize
         obj.totalCount = UserModel.objects().count()
         obj.list = list(UserModel.objects.skip(offset).limit(pageSize))
+        return obj
+    
+    def resolve_user_invited(self,info,userid, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        obj = PageUser()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = UserModel.objects(referrer=userid).count()
+        obj.list = list(UserModel.objects(referrer=userid).order_by("-userid").skip(offset).limit(pageSize))
         return obj
     
     def resolve_product_by_cid(self, info, categoryId, userid, pageNo, pageSize):
