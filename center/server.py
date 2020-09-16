@@ -387,6 +387,16 @@ class Server(BitsFleaServicer):
                 r.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter")
+    
+    def DelAddress(self, request, context):
+        if self._check_auth(request.userid, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
+        if request.rid :
+            r = ReceiptAddressModel.objects(rid=request.rid).first()
+            if r :
+                r.delete()
+                return BaseReply(msg="success")
+        return BaseReply(code=1, msg="Invalid parameter")
 
     def Upload(self, request, context):
         #file = bytes(request.file)
