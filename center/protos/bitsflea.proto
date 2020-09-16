@@ -236,7 +236,7 @@ message AddressRequest {
     string name = 7;
     string address = 8;
     string postcode = 9;
-    int32 default = 10;
+    bool isDefault = 10;
 }
 
 message SetDefaultAddrRequest {
@@ -339,5 +339,5 @@ message ReceiptAddress {
     string name = 7;
     string address = 8;
     string postcode = 9;
-    bool default = 10;
+    bool isDefault = 10;
 }

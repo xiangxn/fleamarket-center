@@ -352,7 +352,7 @@ class Server(BitsFleaServicer):
                 r.name = request.name
                 r.address = request.address
                 r.postcode = request.postcode
-                r.default = request.default
+                r.isDefault = request.isDefault
                 r.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter")
@@ -371,7 +371,7 @@ class Server(BitsFleaServicer):
                 r.name = request.name
                 r.address = request.address
                 r.postcode = request.postcode
-                r.default = request.default
+                r.isDefault = request.isDefault
                 r.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter")
@@ -382,8 +382,8 @@ class Server(BitsFleaServicer):
         if request.rid and request.userid:
             r = ReceiptAddressModel.objects(rid=request.rid).first()
             if r and r.userid == request.userid:
-                ReceiptAddressModel.objects(userid=request.userid).update(default=0)
-                r.default = 1
+                ReceiptAddressModel.objects(userid=request.userid).update(isDefault=False)
+                r.isDefault = True
                 r.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter")

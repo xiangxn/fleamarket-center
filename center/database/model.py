@@ -215,7 +215,7 @@ class ReceiptAddress(me.Document):
     name = me.StringField(required=True)
     address = me.StringField(required=True)
     postcode = me.StringField(required=True)
-    default = me.IntField(default=0)
+    isDefault = me.BooleanField(default=False)
     
     
     
