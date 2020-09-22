@@ -93,6 +93,7 @@ PageProduct = _create_page_type(Product)
 PageOrder = _create_page_type(Order)
 PageFollow = _create_page_type(Follow)
 PageFavorite = _create_page_type(Favorite)
+PageReviewer = _create_page_type(Reviewer)
         
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
@@ -110,6 +111,7 @@ class Query(graphene.ObjectType):
     
     #Reviewer
     reviewers = MongoengineConnectionField(Reviewer)
+    reviewer_page = graphene.Field(PageReviewer, pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     
     #Product
     product_by_cid = graphene.Field(PageProduct, categoryId=graphene.Int(default_value=1), userid=graphene.Int(default_value=0),
@@ -167,6 +169,15 @@ class Query(graphene.ObjectType):
         obj.pageSize = pageSize
         obj.totalCount = UserModel.objects(referrer=ref).count()
         obj.list = list(UserModel.objects(referrer=ref).order_by("-userid").skip(offset).limit(pageSize))
+        return obj
+    
+    def resolve_reviewer_page(self, info, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        obj = PageReviewer()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = ReviewerModel.objects().count()
+        obj.list = list(ReviewerModel.objects.order_by("-votedCount").skip(offset).limit(pageSize))
         return obj
     
     def resolve_product_by_cid(self, info, categoryId, userid, pageNo, pageSize):
