@@ -103,8 +103,8 @@ class Reviewer(me.Document):
     votedCount = me.IntField(default=0)
     createTime = me.StringField()
     lastActiveTime = me.StringField()
-    voterApprove = me.ListField()
-    voterAgainst = me.ListField()
+    voterApprove = me.ListField(me.IntField())
+    voterAgainst = me.ListField(me.IntField())
     
     
 class ProductAudit(me.Document):
