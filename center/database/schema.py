@@ -122,6 +122,8 @@ class Query(graphene.ObjectType):
     
     product_by_publisher = graphene.Field(PageProduct, userid=graphene.Int(default_value=1),
                                          pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
+    product_by_status = graphene.Field(PageProduct, status=graphene.Int(default_value=1),
+                                         pageNo=graphene.Int(default_value=1), pageSize=graphene.Int(default_value=10))
     product_audits = MongoengineConnectionField(ProductAudit)
     products = MongoengineConnectionField(Product)
     
@@ -221,6 +223,15 @@ class Query(graphene.ObjectType):
         obj.pageSize = pageSize
         obj.totalCount = ProductModel.objects(seller=userid).count()
         obj.list = list(ProductModel.objects(seller=userid).order_by("-releaseTime").skip(offset).limit(pageSize))
+        return obj
+    
+    def resolve_product_by_status(self, info, status, pageNo, pageSize):
+        offset = (pageNo-1)*pageSize
+        obj = PageProduct()
+        obj.pageNo = pageNo
+        obj.pageSize = pageSize
+        obj.totalCount = ProductModel.objects(status=status).count()
+        obj.list = list(ProductModel.objects(status=status).order_by("releaseTime").skip(offset).limit(pageSize))
         return obj
     
     def resolve_order_by_buyer(self, info, userid, pageNo, pageSize):
