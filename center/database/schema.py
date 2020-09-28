@@ -189,18 +189,18 @@ class Query(graphene.ObjectType):
         obj.pageSize = pageSize
         if categoryId == 0:
             if userid == 0:
-                obj.totalCount = ProductModel.objects().count()
-                obj.list = list(ProductModel.objects().skip(offset).limit(pageSize))
+                obj.totalCount = ProductModel.objects(status=100).count()
+                obj.list = list(ProductModel.objects(status=100).skip(offset).limit(pageSize))
             else:
-                obj.totalCount = ProductModel.objects(seller=userid).count()
-                obj.list = list(ProductModel.objects(seller=userid).skip(offset).limit(pageSize))
+                obj.totalCount = ProductModel.objects(Q(seller=userid) & Q(status=100)).count()
+                obj.list = list(ProductModel.objects(Q(seller=userid) & Q(status=100)).skip(offset).limit(pageSize))
         else:
             if userid == 0:
-                obj.totalCount = ProductModel.objects(category=categoryId).count()
-                obj.list = list(ProductModel.objects(category=categoryId).skip(offset).limit(pageSize))
+                obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(status=100)).count()
+                obj.list = list(ProductModel.objects(category=categoryId & Q(status=100)).skip(offset).limit(pageSize))
             else:
-                obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).count()
-                obj.list = list(ProductModel.objects(Q(category=categoryId) & Q(seller=userid)).skip(offset).limit(pageSize))
+                obj.totalCount = ProductModel.objects(Q(category=categoryId) & Q(status=100) & Q(seller=userid)).count()
+                obj.list = list(ProductModel.objects(Q(category=categoryId) & Q(status=100) & Q(seller=userid)).skip(offset).limit(pageSize))
         return obj
     
     def resolve_product_by_title(self, info, title, userid, pageNo, pageSize):
