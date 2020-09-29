@@ -572,10 +572,10 @@ class SyncSvr:
                     await self.getProducts(pid=audit['pid'], limit=1)
                     product = ProductModel.objects(productId=audit['pid']).first()
                 a.product = product
-                reviewer = ReviewerModel.objects(user__userid=audit['reviewer_uid']).first()
+                reviewer = ReviewerModel.objects(user=audit['reviewer_uid']).first()
                 if not reviewer:
                     await self.getReviewers(uid=audit['reviewer_uid'], limit=1)
-                    reviewer = ReviewerModel.objects(user__userid=audit['reviewer_uid']).first()
+                    reviewer = ReviewerModel.objects(user=audit['reviewer_uid']).first()
                 a.reviewer = reviewer
                 a.save()
                 id = a.product.productId
