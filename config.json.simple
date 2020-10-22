@@ -7,7 +7,8 @@
     "sync_cfg": {
         "contract": "bitsfleamain",
         "api_url": "https://api-bostest.blockzone.net/v1/chain/",
-        "sync_log_interval": 60
+        "sync_log_interval": 60,
+        "retry_max": 3
     },
     "sms": {
         "svr_url": "https://sms.tencentcloudapi.com/?Action=SendSms",

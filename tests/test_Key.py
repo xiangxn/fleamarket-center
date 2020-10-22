@@ -5,7 +5,9 @@ from center.eoslib.keys import PrivateKey, PublicKey
 from center.eoslib.memo import encode_memo, decode_memo
 from center.eoslib.signature import sign_message, verify_message
 from binascii import hexlify, unhexlify
+from center.utils import Utils
 import random
+import json
 
 parametrize = pytest.mark.parametrize
 
@@ -44,3 +46,11 @@ class TestKey(object):
         pubKey = PublicKey(phex)
         print("pubkey: ", pubKey, priKey.pubkey)
         assert str(priKey.pubkey) == str(pubKey)
+        
+    def test_hash(self):
+        data={"id":1}
+        m= json.dumps(data)
+        print("m:{}".format(m))
+        print(m.encode())
+        hash = Utils.sha256(m.encode())
+        print('hash:{}'.format(hash))

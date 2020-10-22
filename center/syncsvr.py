@@ -1,7 +1,7 @@
 import asyncio
 import aiohttp
 import mongoengine
-import json
+import json as JSON
 import time
 
 from mongoengine.queryset.visitor import Q
@@ -23,7 +23,6 @@ from center.database.model import OtherAddr as OtherAddrModel
 
 
 class SyncSvr:
-    
     def __init__(self, config, get_init=False):
         self.logger = Logger("sync")
         self.config = config['sync_cfg']
@@ -32,169 +31,197 @@ class SyncSvr:
         self.get_init = get_init
         self._init_db()
         self.gateway = Gateway(config['gateway'], self.logger)
-        
+        self.retry_times = {}
+
     def _init_db(self):
         #连接mongoengine
         mongoengine.connect(db=self.db_config['db'], host=self.db_config['host'], port=self.db_config['port'])
-        
+
     def _deleteLogs(self, tid):
         payload = {
-                "account": self.config['contract'],
-                "name": "deletelog",
-                "authorization": [{
-                    "actor": self.config['contract'],
-                    "permission": "active",
-                }],
-                "data": {
-                    "id": tid
-                }
+            "account": self.config['contract'],
+            "name": "deletelog",
+            "authorization": [{
+                "actor": self.config['contract'],
+                "permission": "active",
+            }],
+            "data": {
+                "id": tid
             }
-        trx = {"transaction":{"actions": [payload]}}
+        }
+        trx = {"transaction": {"actions": [payload]}}
         result = self.gateway.broadcast(trx, sign=True)
         if result['status'] == "success":
             print("The chain log of [{}] has been deleted".format(tid))
         else:
             self.logger.Error("Failed to delete logs on the chain", None, result, screen=True)
-        
+
     async def _post(self, data=None, json=None, uri="get_table_rows"):
         result = None
         url = self.config['api_url']
         url = "{}{}{}".format(url, ("v1/chain/" if url.endswith("/") else "/v1/chain/"), uri)
+        tkey = Utils.sha256(("{}{}".format(url, JSON.dumps(data))).encode())
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.post(url, data=data, json=json) as response:
                     if response.status == 200 or response.status == 202:
                         result = await response.json()
+                        self.retry_times.pop(tkey,0)
             except Exception as e:
                 print("post error: ", url, e)
+                times = 1
+                if self.retry_times.has_key(tkey):
+                    times = self.retry_times[tkey] + 1
+                    self.retry_times[tkey] = times
+                else:
+                    self.retry_times[tkey] = times
+                if times < self.config['retry_max']:
+                    print("post retry: ", url)
+                    return self._post(data, json, uri)
+                else:
+                    del self.retry_times[tkey]
+                    print("post retry failure: ", url)
         return result
-    
+
     def getIncrementTasks(self, loop):
-        tasks = [loop.create_task(self.taskSyncTableLog()),
-                    loop.create_task(self.taskSyncUser()),
-                    loop.create_task(self.taskSyncOtherAddr()),
-                    loop.create_task(self.taskSyncReviewer()),
-                    loop.create_task(self.taskSyncProduct()),
-                    loop.create_task(self.taskSyncAuction()),
-                    loop.create_task(self.taskSyncAudit()),
-                    loop.create_task(self.taskSyncOrder()),
-                    loop.create_task(self.taskSyncReturn()),
-                    loop.create_task(self.taskSyncArbitration()),
-                    loop.create_task(self.taskSyncCategory())]
+        tasks = [
+            loop.create_task(self.taskSyncTableLog()),
+            loop.create_task(self.taskSyncUser()),
+            loop.create_task(self.taskSyncOtherAddr()),
+            loop.create_task(self.taskSyncReviewer()),
+            loop.create_task(self.taskSyncProduct()),
+            loop.create_task(self.taskSyncAuction()),
+            loop.create_task(self.taskSyncAudit()),
+            loop.create_task(self.taskSyncOrder()),
+            loop.create_task(self.taskSyncReturn()),
+            loop.create_task(self.taskSyncArbitration()),
+            loop.create_task(self.taskSyncCategory())
+        ]
         return tasks
-    
+
     def getInitTasks(self, loop):
         tasks = []
+
         # users
         async def syncUser(userid=0, limit=50):
             try:
                 id, more = await self.getUsers(userid, limit)
-                while(more):
+                while (more):
                     id, more = await self.getUsers(id, limit)
-                print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),id))
+                print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), id))
             except KeyboardInterrupt as ke:
                 print("init users sync stop...")
+
         tasks.append(loop.create_task(syncUser()))
-        
+
         #Categories
         async def syncCategory(cid=0, limit=50):
             try:
                 id, more = await self.getCategories(cid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getCategories(id, limit=limit)
                 print("Sync to category id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init categories sync stop...")
+
         tasks.append(loop.create_task(syncCategory()))
-        
+
         #Reviewers
         async def syncReviewer(uid=0, limit=50):
             try:
                 id, more = await self.getReviewers(uid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getReviewers(id, limit=limit)
                 print("Sync to reviewer id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init reviewers sync stop...")
+
         tasks.append(loop.create_task(syncReviewer()))
-        
+
         #products
         async def syncProduct(pid=0, limit=50):
             try:
                 id, more = await self.getProducts(pid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getProducts(id, limit=limit)
                 print("Sync to product id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init products sync stop...")
+
         tasks.append(loop.create_task(syncProduct()))
-        
+
         #Auctions
         async def syncAuction(pid=0, limit=50):
             try:
                 id, more = await self.getAuctions(pid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getAuctions(id, limit=limit)
                 print("Sync to auction id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init auctions sync stop...")
+
         tasks.append(loop.create_task(syncAuction()))
-        
+
         #ProductAudits
         async def syncProductAudit(pid=0, limit=50):
             try:
                 id, more = await self.getAudits(pid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getAudits(id, limit=limit)
                 print("Sync to audit id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init ProductAudits sync stop...")
+
         tasks.append(loop.create_task(syncProductAudit()))
-        
+
         #Orders
         async def syncOrder(oid=0, limit=50):
             try:
                 id, more = await self.getOrders(oid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getOrders(id, limit=limit)
                 print("Sync to order id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init orders sync stop...")
+
         tasks.append(loop.create_task(syncOrder()))
-        
+
         #ProReturns
         async def syncProReturn(oid=0, limit=50):
             try:
                 id, more = await self.getReturns(oid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getReturns(id, limit=limit)
                 print("Sync to return id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init returns sync stop...")
+
         tasks.append(loop.create_task(syncProReturn()))
-        
+
         #Arbitrations
         async def syncArbitration(aid=0, limit=50):
             try:
                 id, more = await self.getArbitrations(aid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getArbitrations(id, limit=limit)
                 print("Sync to arbitration id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init arbitrations sync stop...")
+
         tasks.append(loop.create_task(syncArbitration()))
-        
+
         #OtherAddrs
         async def syncOtherAddr(oaid=0, limit=50):
             try:
                 id, more = await self.getOtherAddrs(oaid, limit=limit)
-                while(more):
+                while (more):
                     id, more = await self.getOtherAddrs(id, limit=limit)
                 print("Sync to otheraddr id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print("init otheraddr sync stop...")
+
         tasks.append(loop.create_task(syncOtherAddr()))
-        
+
         return tasks
 
     def Run(self):
@@ -209,14 +236,14 @@ class SyncSvr:
             loop.close()
         except KeyboardInterrupt as ke:
             print("sync server stop.")
-        
+
     #   incremental sync task
-    
+
     async def taskSyncTableLog(self):
         try:
-            while(True):
+            while (True):
                 tid, more = await self.getTableLogs(0)
-                while(more):
+                while (more):
                     tid, more = await self.getTableLogs(tid)
                     await asyncio.sleep(2)
                 if tid > 0:
@@ -224,25 +251,25 @@ class SyncSvr:
                 await asyncio.sleep(self.config['sync_log_interval'])
         except KeyboardInterrupt as ke:
             print("tablelog sync stop...")
-        
+
     async def taskSyncUser(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="users").limit(50)
-                id=0
-                more=False
+                id = 0
+                more = False
                 for log in logs:
                     id, more = await self.getUsers(userid=int(log.primary), limit=1)
                     log.delete()
                 if id > 0:
-                    print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),id))
+                    print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("users incremental sync stop...")
-            
+
     async def taskSyncCategory(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="categories").limit(50)
                 for log in logs:
                     await self.getCategories(cid=int(log.primary), limit=1)
@@ -250,10 +277,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("categories incremental sync stop...")
-            
+
     async def taskSyncReviewer(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="reviewers").limit(50)
                 for log in logs:
                     await self.getReviewers(uid=int(log.primary), limit=1)
@@ -261,10 +288,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("reviewers incremental sync stop...")
-            
+
     async def taskSyncProduct(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="products").limit(50)
                 for log in logs:
                     await self.getProducts(pid=int(log.primary), limit=1)
@@ -272,10 +299,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("products incremental sync stop...")
-            
+
     async def taskSyncAuction(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="proauction").limit(50)
                 for log in logs:
                     await self.getAuctions(pid=int(log.primary), limit=1)
@@ -283,10 +310,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("proauction incremental sync stop...")
-            
+
     async def taskSyncAudit(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="proaudits").limit(50)
                 for log in logs:
                     await self.getAudits(pid=int(log.primary), limit=1)
@@ -294,10 +321,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("proaudits incremental sync stop...")
-            
+
     async def taskSyncOrder(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="orders").limit(50)
                 for log in logs:
                     await self.getOrders(oid=log.primary, limit=1)
@@ -305,10 +332,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("orders incremental sync stop...")
-            
+
     async def taskSyncReturn(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="returns").limit(50)
                 for log in logs:
                     await self.getReviewers(oid=log.primary, limit=1)
@@ -316,10 +343,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("returns incremental sync stop...")
-            
+
     async def taskSyncArbitration(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="arbitrations").limit(50)
                 for log in logs:
                     await self.getArbitrations(aid=int(log.primary), limit=1)
@@ -327,10 +354,10 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("arbitrations incremental sync stop...")
-            
+
     async def taskSyncOtherAddr(self):
         try:
-            while(True):
+            while (True):
                 logs = TableLogModel.objects(table="otheraddr").limit(50)
                 for log in logs:
                     await self.getOtherAddrs(oaid=int(log.primary), limit=1)
@@ -338,20 +365,13 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("otheraddr incremental sync stop...")
-           
-    #   incremental sync task end 
-        
+
+    #   incremental sync task end
+
     # pull data methods
-    
+
     async def getTableLogs(self, id=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table":"tablelogs",
-            "lower_bound": id,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "tablelogs", "lower_bound": id, "limit": limit, "json": True}
         tid = id
         result = await self._post(json=data)
         if result and len(result['rows']) > 0:
@@ -365,7 +385,7 @@ class SyncSvr:
                     l.save()
                 tid = log['id']
         return tid, result['more']
-        
+
     async def getUsers(self, userid=0, limit=50):
         data = {
             "code": self.config['contract'],
@@ -399,23 +419,16 @@ class SyncSvr:
                 u.buyTotal = user['buy_total']
                 u.referralTotal = user['referral_total']
                 u.point = user['point']
-                u.isReviewer = user['is_reviewer']>0
+                u.isReviewer = user['is_reviewer'] > 0
                 u.save()
                 uid = u.userid
             if uid == userid and result['more']:
                 uid += 1
             return uid, result['more']
         return uid, False
-    
+
     async def getCategories(self, cid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "categories",
-            "lower_bound": cid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "categories", "lower_bound": cid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = cid
         if result and len(result['rows']) > 0:
@@ -429,16 +442,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getReviewers(self, uid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "reviewers",
-            "lower_bound": uid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "reviewers", "lower_bound": uid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = uid
         if result and len(result['rows']) > 0:
@@ -462,16 +468,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getProducts(self, pid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "products",
-            "lower_bound": pid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "products", "lower_bound": pid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = pid
         if result and len(result['rows']) > 0:
@@ -479,8 +478,8 @@ class SyncSvr:
                 p = ProductModel(productId=product['pid'])
                 p.title = product['title']
                 p.status = product['status']
-                p.isNew = product['is_new']>0
-                p.isReturns = product['is_returns']>0
+                p.isNew = product['is_new'] > 0
+                p.isReturns = product['is_returns'] > 0
                 p.transMethod = product['transaction_method']
                 p.postage = product['postage']
                 p.position = product['position']
@@ -512,16 +511,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-                
+
     async def getAuctions(self, pid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "proauction",
-            "lower_bound": pid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "proauction", "lower_bound": pid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = pid
         if result and len(result['rows']) > 0:
@@ -549,16 +541,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getAudits(self, pid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "proaudits",
-            "lower_bound": pid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "proaudits", "lower_bound": pid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = pid
         if result and len(result['rows']) > 0:
@@ -583,16 +568,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getOrders(self, oid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "orders",
-            "lower_bound": oid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "lower_bound": oid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = oid
         if result and len(result['rows']) > 0:
@@ -633,16 +611,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getReturns(self, oid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "returns",
-            "lower_bound": oid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "returns", "lower_bound": oid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = oid
         if result and len(result['rows']) > 0:
@@ -675,16 +646,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getArbitrations(self, aid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "arbitrations",
-            "lower_bound": aid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "arbitrations", "lower_bound": aid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = aid
         if result and len(result['rows']) > 0:
@@ -736,16 +700,9 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getOtherAddrs(self, oaid=0, limit=50):
-        data = {
-            "code": self.config['contract'],
-            "scope": self.config['contract'],
-            "table": "otheraddr",
-            "lower_bound": oaid,
-            "limit": limit,
-            "json": True
-        }
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "otheraddr", "lower_bound": oaid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = oaid
         if result and len(result['rows']) > 0:
