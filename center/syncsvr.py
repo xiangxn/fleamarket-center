@@ -77,6 +77,7 @@ class SyncSvr:
                     self.retry_times[tkey] = times
                 if times < self.config['retry_max']:
                     print("post retry: ", url)
+                    asyncio.sleep(1)
                     return self._post(data, json, uri)
                 else:
                     del self.retry_times[tkey]
