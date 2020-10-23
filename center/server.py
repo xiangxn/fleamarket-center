@@ -414,7 +414,12 @@ class Server(BitsFleaServicer):
         if request.userId and request.productId and request.amount and request.symbol:
             # create order id
             orderid = str(((request.userId << 64) | (request.productId << 32)) | int(time.time()))
-            addr = self.gateway.createAddress(orderid, request.symbol)
+            # get pay address
+            addr = {}
+            if request.mainPay:
+                addr['address'] = self.config['sync_cfg']['contract']
+            else:
+                addr = self.gateway.createAddress(orderid, request.symbol)
             pay_info = PayInfo()
             pay_info.orderid = orderid
             pay_info.amount = request.amount

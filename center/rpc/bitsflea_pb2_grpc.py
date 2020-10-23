@@ -91,7 +91,7 @@ class BitsFleaStub(object):
         self.CreatePayInfo = channel.unary_unary(
                 '/bitsflea.BitsFlea/CreatePayInfo',
                 request_serializer=bitsflea__pb2.PayInfoRequest.SerializeToString,
-                response_deserializer=bitsflea__pb2.PayInfo.FromString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
 
 
@@ -275,7 +275,7 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'CreatePayInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.CreatePayInfo,
                     request_deserializer=bitsflea__pb2.PayInfoRequest.FromString,
-                    response_serializer=bitsflea__pb2.PayInfo.SerializeToString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -539,6 +539,6 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/CreatePayInfo',
             bitsflea__pb2.PayInfoRequest.SerializeToString,
-            bitsflea__pb2.PayInfo.FromString,
+            bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
