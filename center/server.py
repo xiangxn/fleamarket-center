@@ -10,7 +10,7 @@ import time
 import json
 
 from center.rpc.bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply
+from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply, PayInfo
 from center.rpc.bitsflea_pb2 import SearchRequest
 from center.rpc.bitsflea_pb2 import FollowRequest
 from center.rpc.bitsflea_pb2 import RefreshTokenRequest
@@ -139,7 +139,8 @@ class Server(BitsFleaServicer):
                     # print(json.dumps(tmp_trx))
                 else:
                     return BaseReply(code=1, msg="Invalid parameter")
-                if len(tmp_trx['actions']) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
+                if len(tmp_trx['actions']
+                       ) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
                     return BaseReply(code=401, msg="This action has no permissions")
             result = None
             try:
@@ -387,13 +388,13 @@ class Server(BitsFleaServicer):
                 r.save()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter")
-    
+
     def DelAddress(self, request, context):
         if self._check_auth(request.userid, context.invocation_metadata()) == False:
             return BaseReply(code=2, msg="Access denied")
-        if request.rid :
+        if request.rid:
             r = ReceiptAddressModel.objects(rid=request.rid).first()
-            if r :
+            if r:
                 r.delete()
                 return BaseReply(msg="success")
         return BaseReply(code=1, msg="Invalid parameter")
@@ -406,6 +407,25 @@ class Server(BitsFleaServicer):
             return BaseReply(msg=res)
         else:
             return BaseReply(code=1, msg="Invalid parameter")
+
+    def CreatePayInfo(self, request, context):
+        if self._check_auth(request.userId, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
+        if request.userId and request.productId and request.amount and request.symbol:
+            # create order id
+            orderid = str(((request.userId << 64) | (request.productId << 32)) | int(time.time()))
+            addr = self.gateway.createAddress(orderid, request.symbol)
+            pay_info = PayInfo()
+            pay_info.orderid = orderid
+            pay_info.amount = request.amount
+            pay_info.symbol = request.symbol
+            pay_info.payAddr = addr['address']
+            pay_info.userId = request.userId
+            pay_info.productId = request.productId
+            br = BaseReply(msg="success")
+            br.data.Pack(pay_info)
+            return br
+        return BaseReply(code=1, msg="Invalid parameter")
 
     def closeIPFS(self):
         if self.ipfs_client:

@@ -106,6 +106,13 @@ service BitsFlea {
 
     rpc Upload (FileRequest) returns (BaseReply){}
 
+    rpc CreatePayInfo (PayInfoRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/createpayinfo"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -340,4 +347,20 @@ message ReceiptAddress {
     string address = 8;
     string postcode = 9;
     bool isDefault = 10;
+}
+
+message PayInfo {
+    string orderid = 1;
+    double amount = 2;
+    string symbol = 3;
+    string payAddr = 4;
+    uint64 userId = 5;
+    uint32 productId = 6;
+}
+
+message PayInfoRequest {
+    uint64 userId = 1;
+    uint32 productId = 2;
+    double amount = 3;
+    string symbol = 4;
 }
