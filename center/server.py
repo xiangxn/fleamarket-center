@@ -140,7 +140,7 @@ class Server(BitsFleaServicer):
                 else:
                     return BaseReply(code=1, msg="Invalid parameter")
                 if len(tmp_trx['actions']
-                       ) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or tmp_trx['actions'][0]['name'] != "publish":
+                       ) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or (tmp_trx['actions'][0]['name'] not in self.config['sgin_actions'] ):
                     return BaseReply(code=401, msg="This action has no permissions")
             result = None
             try:
