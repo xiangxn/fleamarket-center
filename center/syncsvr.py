@@ -21,6 +21,8 @@ from center.database.model import ProReturn as ProReturnModel
 from center.database.model import Arbitration as ArbitrationModel
 from center.database.model import OtherAddr as OtherAddrModel
 
+from eospy.utils import decimalToBinary, binaryToDecimal
+
 
 class SyncSvr:
     def __init__(self, config, get_init=False):
@@ -571,12 +573,14 @@ class SyncSvr:
         return id, False
 
     async def getOrders(self, oid=0, limit=50):
-        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "lower_bound": oid, "limit": limit, "json": True}
+        oid = "0x{}".format(decimalToBinary(16, str(oid)).hex())
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "index_position":6, "key_type":"i128", "lower_bound": oid, "limit": limit, "json": True}
         result = await self._post(json=data)
         id = oid
         if result and len(result['rows']) > 0:
             for order in result['rows']:
-                o = OrderModel(orderid=order['id'])
+                order_id_data = decimalToBinary(16, order['id'])
+                o = OrderModel(orderid=binaryToDecimal(order_id_data))
                 o.status = order['status']
                 o.price = order['price']
                 o.postage = order['postage']

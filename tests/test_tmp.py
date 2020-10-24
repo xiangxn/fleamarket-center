@@ -2,6 +2,7 @@ import sys
 sys.path.append('../center')
 import pytest
 import time
+from eospy.utils import decimalToBinary
 
 parametrize = pytest.mark.parametrize
 
@@ -28,3 +29,7 @@ class TestKey(object):
         x = x >> 64
         print("x3: {}".format(x))
         print(str(x))
+        
+    def test_uint128(self):
+        u128 = decimalToBinary(16, "18446744092492947880")
+        print(u128.hex())
