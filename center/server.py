@@ -419,7 +419,10 @@ class Server(BitsFleaServicer):
             if request.mainPay:
                 addr['address'] = self.config['sync_cfg']['contract']
             else:
-                addr = self.gateway.createAddress(orderid, request.symbol)
+                if request.symbol == "USDT":
+                    addr = self.gateway.createAddress(orderid, "ETH") #目前只支持ERC20的usdt
+                else:
+                    addr = self.gateway.createAddress(orderid, request.symbol)
             pay_info = PayInfo()
             pay_info.orderid = orderid
             pay_info.amount = request.amount
