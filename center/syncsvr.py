@@ -180,7 +180,7 @@ class SyncSvr:
         #Orders
         async def syncOrder(oid=0, limit=50):
             try:
-                id, more = await self.getOrders(oid, limit=limit)
+                id, more = await self.getOrders(int(oid), limit=limit)
                 while (more):
                     id, more = await self.getOrders(id, limit=limit)
                 print("Sync to order id:{}".format(id))
@@ -329,12 +329,16 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="orders").limit(50)
+                oid = 0
                 for log in logs:
+                    oid = int(log.primary)
                     if log.ttype == 1:
-                        OrderModel.delete(orderid=log.primary)
+                        OrderModel.objects(oid=oid).delete()
                     else:
-                        await self.getOrders(oid=log.primary, limit=1)
+                        await self.getOrders(oid=oid, limit=1)
                     log.delete()
+                if oid > 0:
+                    print("[{}]Sync to order id: {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), oid))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print("orders incremental sync stop...")
@@ -576,14 +580,15 @@ class SyncSvr:
         return id, False
 
     async def getOrders(self, oid=0, limit=50):
-        oid = "0x{}".format(decimalToBinary(16, str(oid)).hex())
-        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "index_position":6, "key_type":"i128", "lower_bound": oid, "limit": limit, "json": True}
+        # data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "index_position":6, "key_type":"i128", "lower_bound": oid, "limit": limit, "json": True}
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "lower_bound": oid, "limit": limit, "json": True}
         result = await self._post(json=data)
-        id = oid
+        id = int(oid)
         if result and len(result['rows']) > 0:
             for order in result['rows']:
-                order_id_data = decimalToBinary(16, order['id'])
-                o = OrderModel(orderid=binaryToDecimal(order_id_data))
+                o = OrderModel(oid=int(order['id']))
+                order_id_data = decimalToBinary(16,order['oid'])
+                o.orderid = binaryToDecimal(order_id_data)
                 o.status = order['status']
                 o.price = order['price']
                 o.postage = order['postage']
@@ -614,7 +619,7 @@ class SyncSvr:
                     buyer = UserModel.objects(userid=order['buyer_uid']).first()
                 o.buyer = buyer
                 o.save()
-                id = o.orderid
+                id = int(o.oid)
             if result['more'] and id == oid:
                 id += 1
             return id, result['more']
