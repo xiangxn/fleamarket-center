@@ -330,7 +330,10 @@ class SyncSvr:
             while (True):
                 logs = TableLogModel.objects(table="orders").limit(50)
                 for log in logs:
-                    await self.getOrders(oid=log.primary, limit=1)
+                    if log.ttype == 1:
+                        OrderModel.delete(orderid=log.primary)
+                    else:
+                        await self.getOrders(oid=log.primary, limit=1)
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
