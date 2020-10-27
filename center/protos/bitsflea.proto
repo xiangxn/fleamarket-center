@@ -356,6 +356,7 @@ message PayInfo {
     string payAddr = 4;
     uint64 userId = 5;
     uint32 productId = 6;
+    uint32 payMode = 7;
 }
 
 message PayInfoRequest {
