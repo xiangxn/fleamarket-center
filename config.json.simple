@@ -4,6 +4,8 @@
     "referrer": [1,"reviewer1112"],
     "encrypt_key": "5JTjhoW4cbBDcHkfDVE6C3DwHqgU4yccqTAxrV7xc7JMDwa1xja",
     "ipfs_api": "/ip4/127.0.0.1/tcp/5001",
+    "logistics_api": "https://ali-deliver.showapi.com/showapi_expInfo",
+    "logistics_api_key": "9395f4a625a147e39beb8d3145367b69",
     "sgin_actions": [
         "publish",
         "placeorder"

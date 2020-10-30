@@ -5,7 +5,7 @@ class Logger(object):
     def __init__(self, name="center"):
         self.logger = logging.getLogger("%s_logger" % name)
         self.logger.setLevel(logging.DEBUG)
-        self.formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s")
+        self.formatter = logging.Formatter("[%(asctime)s] %(name)s %(levelname)s %(message)s")
         self.err_handler = logging.FileHandler(filename="%s_error.log" % name)
         self.err_handler.setLevel(logging.ERROR)
         self.err_handler.setFormatter(self.formatter)
@@ -18,11 +18,12 @@ class Logger(object):
         
 
     def Error(self, msg, e = None, extra=None, screen=False):
+        
         self.logger.error(msg, exc_info=e, stack_info=False, extra=extra)
         if screen:
-            print(msg, extra if extra else "")
+            print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg), extra if extra else "")
 
     def Warning(self, msg, extra=None, screen=False):
         self.logger.warning(msg, extra=extra)
         if screen:
-            print(msg, extra if extra else "")
+            print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg), extra if extra else "")

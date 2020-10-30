@@ -62,15 +62,16 @@ class SyncSvr:
         result = None
         url = self.config['api_url']
         url = "{}{}{}".format(url, ("v1/chain/" if url.endswith("/") else "/v1/chain/"), uri)
-        tkey = Utils.sha256(("{}{}".format(url, JSON.dumps(data))).encode())
+        tkey = Utils.sha256(("{}{}{}".format(url, JSON.dumps(data),JSON.dumps(json))).encode())
+        print("tkey: ",tkey)
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.post(url, data=data, json=json) as response:
                     if response.status == 200 or response.status == 202:
                         result = await response.json()
-                        self.retry_times.pop(tkey,0)
+                        self.retry_times.pop(tkey, 0)
             except Exception as e:
-                print("post error: ", url, e)
+                self.logger.Error("post error: {}".format(url), e=e, screen=True)
                 times = 1
                 if self.retry_times.has_key(tkey):
                     times = self.retry_times[tkey] + 1
@@ -78,12 +79,12 @@ class SyncSvr:
                 else:
                     self.retry_times[tkey] = times
                 if times < self.config['retry_max']:
-                    print("post retry: ", url)
+                    self.logger.Error("post retry: {}".format(url), screen=True)
                     asyncio.sleep(1)
                     return self._post(data, json, uri)
                 else:
                     del self.retry_times[tkey]
-                    print("post retry failure: ", url)
+                    self.logger.Error("post retry failure: {}".format(url), screen=True)
         return result
 
     def getIncrementTasks(self, loop):
@@ -587,7 +588,7 @@ class SyncSvr:
         if result and len(result['rows']) > 0:
             for order in result['rows']:
                 o = OrderModel(oid=int(order['id']))
-                order_id_data = decimalToBinary(16,order['oid'])
+                order_id_data = decimalToBinary(16, order['oid'])
                 o.orderid = binaryToDecimal(order_id_data)
                 o.status = order['status']
                 o.price = order['price']
@@ -603,6 +604,7 @@ class SyncSvr:
                 o.receiptOutTime = order['receipt_time_out']
                 o.endTime = order['end_time']
                 o.delayedCount = order['delayed_count']
+                o.toAddr = order['to_addr']
                 product = ProductModel.objects(productId=order['pid']).first()
                 if not product:
                     await self.getProducts(pid=order['pid'], limit=1)

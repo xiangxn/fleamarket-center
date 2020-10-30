@@ -140,6 +140,7 @@ class Order(me.Document):
     receiptOutTime = me.StringField()
     endTime = me.StringField()
     delayedCount = me.IntField()
+    toAddr = me.IntField()
     
 class ProReturn(me.Document):
     meta = {"collection": "proreturn"}

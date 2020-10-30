@@ -113,6 +113,13 @@ service BitsFlea {
         };
     }
 
+    rpc LogisticsInfo (LogisticsRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/logisticsinfo"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -290,6 +297,7 @@ message Order {
     string receiptOutTime = 16;
     string endTime = 17;
     uint32 delayedCount = 18;
+    uint32 toAddr = 19;
 }
 
 message ProReturn {
@@ -365,4 +373,10 @@ message PayInfoRequest {
     double amount = 3;
     string symbol = 4;
     bool mainPay = 5;
+}
+
+message LogisticsRequest {
+    string com = 1;
+    string number = 2;
+    uint64 userId = 3;
 }

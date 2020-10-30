@@ -8,6 +8,7 @@ import random
 import asyncio
 import time
 import json
+import requests
 
 from center.rpc.bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
 from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply, PayInfo
@@ -139,8 +140,8 @@ class Server(BitsFleaServicer):
                     # print(json.dumps(tmp_trx))
                 else:
                     return BaseReply(code=1, msg="Invalid parameter")
-                if len(tmp_trx['actions']
-                       ) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or (tmp_trx['actions'][0]['name'] not in self.config['sgin_actions'] ):
+                if len(tmp_trx['actions']) != 1 or tmp_trx['actions'][0]['account'] != self.config['sync_cfg']['contract'] or (
+                        tmp_trx['actions'][0]['name'] not in self.config['sgin_actions']):
                     return BaseReply(code=401, msg="This action has no permissions")
             result = None
             try:
@@ -420,7 +421,7 @@ class Server(BitsFleaServicer):
                 addr['address'] = self.config['sync_cfg']['contract']
             else:
                 if request.symbol == "USDT":
-                    addr = self.gateway.createAddress(orderid, "ETH") #目前只支持ERC20的usdt
+                    addr = self.gateway.createAddress(orderid, "ETH")  #目前只支持ERC20的usdt
                 else:
                     addr = self.gateway.createAddress(orderid, request.symbol)
             pay_info = PayInfo()
@@ -433,6 +434,22 @@ class Server(BitsFleaServicer):
             br = BaseReply(msg="success")
             br.data.Pack(pay_info)
             return br
+        return BaseReply(code=1, msg="Invalid parameter")
+
+    def LogisticsInfo(self, request, context):
+        if self._check_auth(request.userId, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
+        if request.number:
+            com = request.com if request.com else "auto"
+            try:
+                headers = {'Authorization': 'APPCODE ' + self.config['logistics_api_key']}
+                html = requests.get(self.config['logistics_api'], headers=headers, data={'com': com, 'nu': request.number})
+                if html.status_code == 200:
+                    return BaseReply(msg=html.text)
+                return BaseReply(code=3003, msg="search logistics info error")
+            except Exception as e:
+                self.logger.Error("get logistics info error:", e=e, screen=True)
+                return BaseReply(code=3003, msg="get logistics info error")
         return BaseReply(code=1, msg="Invalid parameter")
 
     def closeIPFS(self):
