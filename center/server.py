@@ -451,6 +451,15 @@ class Server(BitsFleaServicer):
                 self.logger.Error("get logistics info error:", e=e, screen=True)
                 return BaseReply(code=3003, msg="get logistics info error")
         return BaseReply(code=1, msg="Invalid parameter")
+    
+    def GetPhone(self, request,context):
+        if self._check_auth(request.fromUserId, context.invocation_metadata()) == False:
+            return BaseReply(code=2, msg="Access denied")
+        if request.toUserId:
+            toUser = UserModel.objects(userid=request.toUserId).first()
+            if toUser:
+                return BaseReply(msg="{}".format(toUser.phone))
+        return BaseReply(code=1, msg="Invalid parameter")
 
     def closeIPFS(self):
         if self.ipfs_client:

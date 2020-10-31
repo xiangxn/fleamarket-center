@@ -63,7 +63,7 @@ class SyncSvr:
         url = self.config['api_url']
         url = "{}{}{}".format(url, ("v1/chain/" if url.endswith("/") else "/v1/chain/"), uri)
         tkey = Utils.sha256(("{}{}{}".format(url, JSON.dumps(data),JSON.dumps(json))).encode())
-        print("tkey: ",tkey)
+        # print("tkey: ",tkey)
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.post(url, data=data, json=json) as response:

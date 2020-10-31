@@ -120,6 +120,13 @@ service BitsFlea {
         };
     }
 
+    rpc GetPhone (GetPhoneRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/getphone"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -379,4 +386,9 @@ message LogisticsRequest {
     string com = 1;
     string number = 2;
     uint64 userId = 3;
+}
+
+message GetPhoneRequest {
+    uint32 fromUserId = 1;
+    uint32 toUserId = 2;
 }
