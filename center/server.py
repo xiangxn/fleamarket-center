@@ -440,10 +440,10 @@ class Server(BitsFleaServicer):
         if self._check_auth(request.userId, context.invocation_metadata()) == False:
             return BaseReply(code=2, msg="Access denied")
         if request.number:
-            com = request.com if request.com else "auto"
+            com = request.com if request.com else "AUTO"
             try:
                 headers = {'Authorization': 'APPCODE ' + self.config['logistics_api_key']}
-                html = requests.get(self.config['logistics_api'], headers=headers, data={'com': com, 'nu': request.number})
+                html = requests.get(self.config['logistics_api'], headers=headers, data={'type': com, 'no': request.number})
                 if html.status_code == 200:
                     return BaseReply(msg=html.text)
                 return BaseReply(code=3003, msg="search logistics info error")
