@@ -161,6 +161,7 @@ class ProReturn(me.Document):
     receiptOutTime = me.StringField()
     endTime = me.StringField()
     delayedCount = me.IntField(default=0)
+    toAddr = me.IntField()
     
 class Arbitration(me.Document):
     meta = {"collection": "arbitrations"}

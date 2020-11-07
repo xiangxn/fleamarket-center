@@ -349,7 +349,7 @@ class SyncSvr:
             while (True):
                 logs = TableLogModel.objects(table="returns").limit(50)
                 for log in logs:
-                    await self.getReviewers(oid=log.primary, limit=1)
+                    await self.getReturns(oid=log.primary, limit=1)
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:

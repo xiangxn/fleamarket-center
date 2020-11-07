@@ -322,6 +322,7 @@ message ProReturn {
     string receiptOutTime = 12;
     string endTime = 13;
     uint32 delayedCount = 14;
+    uint32 toAddr = 15;
 }
 
 message Arbitration {
