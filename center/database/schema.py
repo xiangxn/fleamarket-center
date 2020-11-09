@@ -12,6 +12,7 @@ from .model import OtherAddr as OtherAddrModel
 from .model import Follow as FollowModel
 from .model import Favorite as FavoriteModel
 from .model import ReceiptAddress as ReceiptAddressModel
+from .model import ProReturn as ProReturnModel
 from collections import OrderedDict
 
 #import json
@@ -79,6 +80,10 @@ class ReceiptAddress(MongoengineObjectType):
         model = ReceiptAddressModel
         interfaces = (graphene.relay.Node,)
         
+class ProReturn(MongoengineObjectType):
+    class Meta:
+        model = ProReturnModel
+        interfaces = (graphene.relay.Node,)
 
 def _create_page_type(obj_type):
     return type("Page{}".format(obj_type),(graphene.ObjectType,),{
@@ -149,6 +154,9 @@ class Query(graphene.ObjectType):
     #ReceiptAddress
     receiptaddresses = MongoengineConnectionField(ReceiptAddress)
     rec_addr_by_user = graphene.List(ReceiptAddress, userid=graphene.Int(default_value=0))
+    
+    #returns
+    returns = MongoengineConnectionField(ProReturn)
     
     
     
