@@ -581,8 +581,53 @@ class SyncSvr:
         return id, False
 
     async def getOrders(self, oid=0, limit=50):
-        # data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "index_position":6, "key_type":"i128", "lower_bound": oid, "limit": limit, "json": True}
         data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "lower_bound": oid, "limit": limit, "json": True}
+        result = await self._post(json=data)
+        id = int(oid)
+        if result and len(result['rows']) > 0:
+            for order in result['rows']:
+                o = OrderModel(oid=int(order['id']))
+                order_id_data = decimalToBinary(16, order['oid'])
+                o.orderid = binaryToDecimal(order_id_data)
+                o.status = order['status']
+                o.price = order['price']
+                o.postage = order['postage']
+                o.shipNum = order['shipment_number']
+                o.payAddr = order['pay_addr']
+                o.createTime = order['create_time']
+                o.payTime = order['pay_time']
+                o.payOutTime = order['pay_time_out']
+                o.shipTime = order['ship_time']
+                o.shipOutTime = order['ship_time_out']
+                o.receiptTime = order['receipt_time']
+                o.receiptOutTime = order['receipt_time_out']
+                o.endTime = order['end_time']
+                o.delayedCount = order['delayed_count']
+                o.toAddr = order['to_addr']
+                product = ProductModel.objects(productId=order['pid']).first()
+                if not product:
+                    await self.getProducts(pid=order['pid'], limit=1)
+                    product = ProductModel.objects(productId=order['pid']).first()
+                o.productInfo = product
+                seller = UserModel.objects(userid=order['seller_uid']).first()
+                if not seller:
+                    await self.getUsers(userid=order['seller_uid'], limit=1)
+                    seller = UserModel.objects(userid=order['seller_uid']).first()
+                o.seller = seller
+                buyer = UserModel.objects(userid=order['buyer_uid']).first()
+                if not buyer:
+                    await self.getUsers(userid=order['buyer_uid'], limit=1)
+                    buyer = UserModel.objects(userid=order['buyer_uid']).first()
+                o.buyer = buyer
+                o.save()
+                id = int(o.oid)
+            if result['more'] and id == oid:
+                id += 1
+            return id, result['more']
+        return id, False
+    
+    async def getOrder(self, oid=0):
+        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "index_position":6, "key_type":"i128", "lower_bound": oid, "limit": 1, "json": True}
         result = await self._post(json=data)
         id = int(oid)
         if result and len(result['rows']) > 0:
@@ -645,10 +690,13 @@ class SyncSvr:
                 pr.receiptOutTime = pro['receipt_time_out']
                 pr.endTime = pro['end_time']
                 pr.delayedCount = pro['delayed_count']
-                order = OrderModel.objects(orderid=pro['order_id']).first()
+                pr.toAddr = pro['to_addr']
+                order_id_data = decimalToBinary(16, pro['order_id'])
+                orderid = binaryToDecimal(order_id_data)
+                order = OrderModel.objects(orderid=orderid).first()
                 if not order:
-                    await self.getOrders(oid=pro['order_id'], limit=1)
-                    order = OrderModel.objects(orderid=pro['order_id']).first()
+                    await self.getOrder(oid=pro['order_id'], limit=1)
+                    order = OrderModel.objects(orderid=orderid).first()
                 pr.order = order
                 product = ProductModel.objects(productId=pro['pid']).first()
                 if not product:
@@ -656,7 +704,7 @@ class SyncSvr:
                     product = ProductModel.objects(productId=pro['pid']).first()
                 pr.product = product
                 pr.save()
-                id = pr.order.orderid
+                id = pr.prid
             if result['more'] and id == oid:
                 id += 1
             return id, result['more']

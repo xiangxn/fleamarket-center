@@ -309,8 +309,8 @@ message Order {
 
 message ProReturn {
     uint32 prid = 1;
-    string order = 2;
-    uint32 product = 3;
+    Order order = 2;
+    Product product = 3;
     string orderPrice = 4;
     uint32 status = 5;
     string reasons = 6;
