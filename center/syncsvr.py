@@ -24,6 +24,10 @@ from center.database.model import OtherAddr as OtherAddrModel
 from eospy.utils import decimalToBinary, binaryToDecimal
 
 
+def print_log(msg):
+    print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg))
+
+
 class SyncSvr:
     def __init__(self, config, get_init=False):
         self.logger = Logger("sync")
@@ -54,7 +58,7 @@ class SyncSvr:
         trx = {"transaction": {"actions": [payload]}}
         result = self.gateway.broadcast(trx, sign=True)
         if result['status'] == "success":
-            print("The chain log of [{}] has been deleted".format(tid))
+            print_log("The chain log of [{}] has been deleted".format(tid))
         else:
             self.logger.Error("Failed to delete logs on the chain", None, result, screen=True)
 
@@ -62,7 +66,7 @@ class SyncSvr:
         result = None
         url = self.config['api_url']
         url = "{}{}{}".format(url, ("v1/chain/" if url.endswith("/") else "/v1/chain/"), uri)
-        tkey = Utils.sha256(("{}{}{}".format(url, JSON.dumps(data),JSON.dumps(json))).encode())
+        tkey = Utils.sha256(("{}{}{}".format(url, JSON.dumps(data), JSON.dumps(json))).encode())
         # print("tkey: ",tkey)
         async with aiohttp.ClientSession() as session:
             try:
@@ -73,14 +77,14 @@ class SyncSvr:
             except Exception as e:
                 self.logger.Error("post error: {}".format(url), e=e, screen=True)
                 times = 1
-                if self.retry_times.has_key(tkey):
+                if tkey in self.retry_times:
                     times = self.retry_times[tkey] + 1
                     self.retry_times[tkey] = times
                 else:
                     self.retry_times[tkey] = times
                 if times < self.config['retry_max']:
-                    self.logger.Error("post retry: {}".format(url), screen=True)
-                    await asyncio.sleep(1)
+                    self.logger.Error("post retry[{}] in 2 seconds: {}".format(times, url), screen=True)
+                    await asyncio.sleep(2)
                     result = await self._post(data, json, uri)
                 else:
                     del self.retry_times[tkey]
@@ -112,9 +116,9 @@ class SyncSvr:
                 id, more = await self.getUsers(userid, limit)
                 while (more):
                     id, more = await self.getUsers(id, limit)
-                print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), id))
+                print_log("Sync to user id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init users sync stop...")
+                print_log("init users sync stop...")
 
         tasks.append(loop.create_task(syncUser()))
 
@@ -124,9 +128,9 @@ class SyncSvr:
                 id, more = await self.getCategories(cid, limit=limit)
                 while (more):
                     id, more = await self.getCategories(id, limit=limit)
-                print("Sync to category id:{}".format(id))
+                print_log("Sync to category id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init categories sync stop...")
+                print_log("init categories sync stop...")
 
         tasks.append(loop.create_task(syncCategory()))
 
@@ -136,9 +140,9 @@ class SyncSvr:
                 id, more = await self.getReviewers(uid, limit=limit)
                 while (more):
                     id, more = await self.getReviewers(id, limit=limit)
-                print("Sync to reviewer id:{}".format(id))
+                print_log("Sync to reviewer id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init reviewers sync stop...")
+                print_log("init reviewers sync stop...")
 
         tasks.append(loop.create_task(syncReviewer()))
 
@@ -148,9 +152,9 @@ class SyncSvr:
                 id, more = await self.getProducts(pid, limit=limit)
                 while (more):
                     id, more = await self.getProducts(id, limit=limit)
-                print("Sync to product id:{}".format(id))
+                print_log("Sync to product id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init products sync stop...")
+                print_log("init products sync stop...")
 
         tasks.append(loop.create_task(syncProduct()))
 
@@ -160,9 +164,9 @@ class SyncSvr:
                 id, more = await self.getAuctions(pid, limit=limit)
                 while (more):
                     id, more = await self.getAuctions(id, limit=limit)
-                print("Sync to auction id:{}".format(id))
+                print_log("Sync to auction id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init auctions sync stop...")
+                print_log("init auctions sync stop...")
 
         tasks.append(loop.create_task(syncAuction()))
 
@@ -172,9 +176,9 @@ class SyncSvr:
                 id, more = await self.getAudits(pid, limit=limit)
                 while (more):
                     id, more = await self.getAudits(id, limit=limit)
-                print("Sync to audit id:{}".format(id))
+                print_log("Sync to audit id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init ProductAudits sync stop...")
+                print_log("init ProductAudits sync stop...")
 
         tasks.append(loop.create_task(syncProductAudit()))
 
@@ -184,9 +188,9 @@ class SyncSvr:
                 id, more = await self.getOrders(int(oid), limit=limit)
                 while (more):
                     id, more = await self.getOrders(id, limit=limit)
-                print("Sync to order id:{}".format(id))
+                print_log("Sync to order id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init orders sync stop...")
+                print_log("init orders sync stop...")
 
         tasks.append(loop.create_task(syncOrder()))
 
@@ -196,9 +200,9 @@ class SyncSvr:
                 id, more = await self.getReturns(oid, limit=limit)
                 while (more):
                     id, more = await self.getReturns(id, limit=limit)
-                print("Sync to return id:{}".format(id))
+                print_log("Sync to return id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init returns sync stop...")
+                print_log("init returns sync stop...")
 
         tasks.append(loop.create_task(syncProReturn()))
 
@@ -208,9 +212,9 @@ class SyncSvr:
                 id, more = await self.getArbitrations(aid, limit=limit)
                 while (more):
                     id, more = await self.getArbitrations(id, limit=limit)
-                print("Sync to arbitration id:{}".format(id))
+                print_log("Sync to arbitration id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init arbitrations sync stop...")
+                print_log("init arbitrations sync stop...")
 
         tasks.append(loop.create_task(syncArbitration()))
 
@@ -220,9 +224,9 @@ class SyncSvr:
                 id, more = await self.getOtherAddrs(oaid, limit=limit)
                 while (more):
                     id, more = await self.getOtherAddrs(id, limit=limit)
-                print("Sync to otheraddr id:{}".format(id))
+                print_log("Sync to otheraddr id:{}".format(id))
             except KeyboardInterrupt as ke:
-                print("init otheraddr sync stop...")
+                print_log("init otheraddr sync stop...")
 
         tasks.append(loop.create_task(syncOtherAddr()))
 
@@ -232,14 +236,14 @@ class SyncSvr:
         loop = asyncio.get_event_loop()
         try:
             if self.get_init:
-                print("init data...")
+                print_log("init data...")
                 loop.run_until_complete(asyncio.wait(self.getInitTasks(loop)))
-                print("init data complete.")
-            print("Start incremental sync...")
+                print_log("init data complete.")
+            print_log("Start incremental sync...")
             loop.run_until_complete(asyncio.wait(self.getIncrementTasks(loop)))
             loop.close()
         except KeyboardInterrupt as ke:
-            print("sync server stop.")
+            print_log("sync server stop.")
 
     #   incremental sync task
 
@@ -254,7 +258,7 @@ class SyncSvr:
                     self._deleteLogs(tid)
                 await asyncio.sleep(self.config['sync_log_interval'])
         except KeyboardInterrupt as ke:
-            print("tablelog sync stop...")
+            print_log("tablelog sync stop...")
 
     async def taskSyncUser(self):
         try:
@@ -266,10 +270,10 @@ class SyncSvr:
                     id, more = await self.getUsers(userid=int(log.primary), limit=1)
                     log.delete()
                 if id > 0:
-                    print("[{}]Sync to user id:{}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), id))
+                    print_log("Sync to user id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("users incremental sync stop...")
+            print_log("users incremental sync stop...")
 
     async def taskSyncCategory(self):
         try:
@@ -280,7 +284,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("categories incremental sync stop...")
+            print_log("categories incremental sync stop...")
 
     async def taskSyncReviewer(self):
         try:
@@ -291,7 +295,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("reviewers incremental sync stop...")
+            print_log("reviewers incremental sync stop...")
 
     async def taskSyncProduct(self):
         try:
@@ -302,7 +306,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("products incremental sync stop...")
+            print_log("products incremental sync stop...")
 
     async def taskSyncAuction(self):
         try:
@@ -313,7 +317,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("proauction incremental sync stop...")
+            print_log("proauction incremental sync stop...")
 
     async def taskSyncAudit(self):
         try:
@@ -324,7 +328,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("proaudits incremental sync stop...")
+            print_log("proaudits incremental sync stop...")
 
     async def taskSyncOrder(self):
         try:
@@ -339,10 +343,10 @@ class SyncSvr:
                         await self.getOrders(oid=oid, limit=1)
                     log.delete()
                 if oid > 0:
-                    print("[{}]Sync to order id: {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), oid))
+                    print_log("Sync to order id: {}".format(oid))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("orders incremental sync stop...")
+            print_log("orders incremental sync stop...")
 
     async def taskSyncReturn(self):
         try:
@@ -353,7 +357,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("returns incremental sync stop...")
+            print_log("returns incremental sync stop...")
 
     async def taskSyncArbitration(self):
         try:
@@ -364,7 +368,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("arbitrations incremental sync stop...")
+            print_log("arbitrations incremental sync stop...")
 
     async def taskSyncOtherAddr(self):
         try:
@@ -375,7 +379,7 @@ class SyncSvr:
                     log.delete()
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
-            print("otheraddr incremental sync stop...")
+            print_log("otheraddr incremental sync stop...")
 
     #   incremental sync task end
 
@@ -586,7 +590,7 @@ class SyncSvr:
         id = int(oid)
         if result and len(result['rows']) > 0:
             for order in result['rows']:
-                o = OrderModel(oid=int(order['id']))
+                o = OrderModel(id=int(order['id']))
                 order_id_data = decimalToBinary(16, order['oid'])
                 o.orderid = binaryToDecimal(order_id_data)
                 o.status = order['status']
@@ -620,19 +624,27 @@ class SyncSvr:
                     buyer = UserModel.objects(userid=order['buyer_uid']).first()
                 o.buyer = buyer
                 o.save()
-                id = int(o.oid)
+                id = int(o.id)
             if result['more'] and id == oid:
                 id += 1
             return id, result['more']
         return id, False
-    
+
     async def getOrder(self, oid=0):
-        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "orders", "index_position":6, "key_type":"i128", "lower_bound": oid, "limit": 1, "json": True}
+        data = {
+            "code": self.config['contract'],
+            "scope": self.config['contract'],
+            "table": "orders",
+            "index_position": 6,
+            "key_type": "i128",
+            "lower_bound": oid,
+            "limit": 1,
+            "json": True
+        }
         result = await self._post(json=data)
-        id = int(oid)
         if result and len(result['rows']) > 0:
             for order in result['rows']:
-                o = OrderModel(oid=int(order['id']))
+                o = OrderModel(id=int(order['id']))
                 order_id_data = decimalToBinary(16, order['oid'])
                 o.orderid = binaryToDecimal(order_id_data)
                 o.status = order['status']
@@ -666,11 +678,6 @@ class SyncSvr:
                     buyer = UserModel.objects(userid=order['buyer_uid']).first()
                 o.buyer = buyer
                 o.save()
-                id = int(o.oid)
-            if result['more'] and id == oid:
-                id += 1
-            return id, result['more']
-        return id, False
 
     async def getReturns(self, oid=0, limit=50):
         data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "returns", "lower_bound": oid, "limit": limit, "json": True}
@@ -678,7 +685,11 @@ class SyncSvr:
         id = oid
         if result and len(result['rows']) > 0:
             for pro in result['rows']:
-                pr = ProReturnModel(prid=pro['id'])
+                is_new = False
+                pr = ProReturnModel.objects(prid=pro['id']).first()
+                if not pr:
+                    is_new = True
+                    pr = ProReturnModel(prid=pro['id'])
                 pr.orderPrice = pro['order_price']
                 pr.status = pro['status']
                 pr.reasons = pro['reasons']
@@ -691,18 +702,22 @@ class SyncSvr:
                 pr.endTime = pro['end_time']
                 pr.delayedCount = pro['delayed_count']
                 pr.toAddr = pro['to_addr']
-                order_id_data = decimalToBinary(16, pro['order_id'])
-                orderid = binaryToDecimal(order_id_data)
-                order = OrderModel.objects(orderid=orderid).first()
-                if not order:
-                    await self.getOrder(oid=pro['order_id'], limit=1)
+                if is_new:
+                    if pro['order_id'].startswith('0x'):
+                        order_id_data = decimalToBinary(16, pro['order_id'])
+                        orderid = binaryToDecimal(order_id_data)
+                    else:
+                        orderid = pro['order_id']
                     order = OrderModel.objects(orderid=orderid).first()
-                pr.order = order
-                product = ProductModel.objects(productId=pro['pid']).first()
-                if not product:
-                    await self.getProducts(pid=pro['pid'], limit=1)
+                    if not order:
+                        await self.getOrder(oid=orderid)
+                        order = OrderModel.objects(orderid=orderid).first()
+                    pr.order = order
                     product = ProductModel.objects(productId=pro['pid']).first()
-                pr.product = product
+                    if not product:
+                        await self.getProducts(pid=pro['pid'], limit=1)
+                        product = ProductModel.objects(productId=pro['pid']).first()
+                    pr.product = product
                 pr.save()
                 id = pr.prid
             if result['more'] and id == oid:

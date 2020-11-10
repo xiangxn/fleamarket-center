@@ -286,25 +286,26 @@ message ProductAudit {
 }
 
 message Order {
-    string orderid = 1;
-    Product productInfo = 2;
-    User seller = 3;
-    User buyer = 4;
-    uint32 status = 5;
-    string price = 6;
-    string postage = 7;
-    string payAddr = 8;
-    string shipNum = 9;
-    string createTime = 10;
-    string payTime = 11;
-    string payOutTime = 12;
-    string shipTime = 13;
-    string shipOutTime = 14;
-    string receiptTime = 15;
-    string receiptOutTime = 16;
-    string endTime = 17;
-    uint32 delayedCount = 18;
-    uint32 toAddr = 19;
+    uint64 oid = 1;
+    string orderid = 2;
+    Product productInfo = 3;
+    User seller = 4;
+    User buyer = 5;
+    uint32 status = 6;
+    string price = 7;
+    string postage = 8;
+    string payAddr = 9;
+    string shipNum = 10;
+    string createTime = 11;
+    string payTime = 12;
+    string payOutTime = 13;
+    string shipTime = 14;
+    string shipOutTime = 15;
+    string receiptTime = 16;
+    string receiptOutTime = 17;
+    string endTime = 18;
+    uint32 delayedCount = 19;
+    uint32 toAddr = 20;
 }
 
 message ProReturn {
