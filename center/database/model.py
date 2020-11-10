@@ -121,7 +121,7 @@ class ProductAudit(me.Document):
 class Order(me.Document):
     meta = {"collection": "order"}
     
-    id = me.IntField(required=True, primary_key=True)
+    oid = me.IntField(required=True, primary_key=True)
     orderid = me.StringField(required=True)
     productInfo = me.ReferenceField(Product, required=True)
     seller = me.ReferenceField(User, required=True)

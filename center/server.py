@@ -451,8 +451,8 @@ class Server(BitsFleaServicer):
                 self.logger.Error("get logistics info error:", e=e, screen=True)
                 return BaseReply(code=3003, msg="get logistics info error")
         return BaseReply(code=1, msg="Invalid parameter")
-    
-    def GetPhone(self, request,context):
+
+    def GetPhone(self, request, context):
         if self._check_auth(request.fromUserId, context.invocation_metadata()) == False:
             return BaseReply(code=2, msg="Access denied")
         if request.toUserId:
@@ -502,7 +502,9 @@ def bits_flea_run(config):
     add_BitsFleaServicer_to_server(fleaSvr, server)
 
     # 这里使用的非安全接口，世界gRPC支持TLS/SSL安全连接，以及各种鉴权机制
-    server.add_insecure_port("[::]:{}".format(config['server_port']))
+    port = "[::]:{}".format(config['server_port'])
+    print("start {}".format(port))
+    server.add_insecure_port(port)
     server.start()
     try:
         while True:

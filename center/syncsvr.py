@@ -590,7 +590,7 @@ class SyncSvr:
         id = int(oid)
         if result and len(result['rows']) > 0:
             for order in result['rows']:
-                o = OrderModel(id=int(order['id']))
+                o = OrderModel(oid=int(order['id']))
                 order_id_data = decimalToBinary(16, order['oid'])
                 o.orderid = binaryToDecimal(order_id_data)
                 o.status = order['status']
@@ -624,7 +624,7 @@ class SyncSvr:
                     buyer = UserModel.objects(userid=order['buyer_uid']).first()
                 o.buyer = buyer
                 o.save()
-                id = int(o.id)
+                id = int(o.oid)
             if result['more'] and id == oid:
                 id += 1
             return id, result['more']
@@ -644,7 +644,7 @@ class SyncSvr:
         result = await self._post(json=data)
         if result and len(result['rows']) > 0:
             for order in result['rows']:
-                o = OrderModel(id=int(order['id']))
+                o = OrderModel(oid=int(order['id']))
                 order_id_data = decimalToBinary(16, order['oid'])
                 o.orderid = binaryToDecimal(order_id_data)
                 o.status = order['status']
