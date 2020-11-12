@@ -197,10 +197,10 @@ class SyncSvr:
         #ProReturns
         async def syncProReturn(oid=0, limit=50):
             try:
-                id, more = await self.getReturns(oid, limit=limit)
+                id, more, isok = await self.getReturns(oid, limit=limit)
                 while (more):
                     id, more = await self.getReturns(id, limit=limit)
-                print_log("Sync to return id:{}".format(id))
+                print_log("Sync to returns id:{}".format(id))
             except KeyboardInterrupt as ke:
                 print_log("init returns sync stop...")
 
@@ -352,9 +352,14 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="returns").limit(50)
+                oid = 0
                 for log in logs:
-                    await self.getReturns(oid=log.primary, limit=1)
-                    log.delete()
+                    oid = log.primary
+                    oid, more, ok = await self.getReturns(oid=log.primary, limit=1)
+                    if ok:
+                        log.delete()
+                if oid > 0:
+                    print_log("Sync to returns id: {}".format(oid))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("returns incremental sync stop...")
@@ -719,11 +724,12 @@ class SyncSvr:
                         product = ProductModel.objects(productId=pro['pid']).first()
                     pr.product = product
                 pr.save()
+                print("pr: {}".format(pr.to_json()))
                 id = pr.prid
             if result['more'] and id == oid:
                 id += 1
-            return id, result['more']
-        return id, False
+            return id, result['more'], True
+        return id, False, False
 
     async def getArbitrations(self, aid=0, limit=50):
         data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "arbitrations", "lower_bound": aid, "limit": limit, "json": True}
