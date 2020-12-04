@@ -49,7 +49,7 @@ class SyncSvr:
             "name": "deletelog",
             "authorization": [{
                 "actor": self.config['contract'],
-                "permission": "active",
+                "permission": "execute",
             }],
             "data": {
                 "id": tid
