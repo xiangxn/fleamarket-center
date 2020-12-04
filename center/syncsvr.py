@@ -427,6 +427,8 @@ class SyncSvr:
                 phone = user['phone_encrypt']
                 if phone.startswith("753602941f5b21") == False:
                     phone = Utils.decrypt_phone(phone, u.authKey, self.public_config['encrypt_key'])
+                else:
+                    phone = "15898090981"
                 u.phone = phone
                 u.status = user['status']
                 u.nickname = user['nickname']
