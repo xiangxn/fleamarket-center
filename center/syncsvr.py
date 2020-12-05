@@ -259,6 +259,8 @@ class SyncSvr:
                 await asyncio.sleep(self.config['sync_log_interval'])
         except KeyboardInterrupt as ke:
             print_log("tablelog sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncTableLog error", e, screen=True)
 
     async def taskSyncUser(self):
         try:
@@ -274,6 +276,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("users incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncUser error", e, screen=True)
 
     async def taskSyncCategory(self):
         try:
@@ -285,6 +289,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("categories incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncCategory error", e, screen=True)
 
     async def taskSyncReviewer(self):
         try:
@@ -296,6 +302,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("reviewers incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncReviewer error", e, screen=True)
 
     async def taskSyncProduct(self):
         try:
@@ -307,6 +315,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("products incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncProduct error", e, screen=True)
 
     async def taskSyncAuction(self):
         try:
@@ -318,6 +328,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("proauction incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncAuction error", e, screen=True)
 
     async def taskSyncAudit(self):
         try:
@@ -329,6 +341,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("proaudits incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncAudit error", e, screen=True)
 
     async def taskSyncOrder(self):
         try:
@@ -347,6 +361,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("orders incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncOrder error", e, screen=True)
 
     async def taskSyncReturn(self):
         try:
@@ -363,6 +379,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("returns incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncReturn error", e, screen=True)
 
     async def taskSyncArbitration(self):
         try:
@@ -374,6 +392,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("arbitrations incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncArbitration error", e, screen=True)
 
     async def taskSyncOtherAddr(self):
         try:
@@ -385,6 +405,8 @@ class SyncSvr:
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("otheraddr incremental sync stop...")
+        except Exception as e:
+            self.logger.Error("taskSyncOtherAddr error", e, screen=True)
 
     #   incremental sync task end
 
@@ -466,7 +488,16 @@ class SyncSvr:
         return id, False
 
     async def getReviewers(self, uid=0, limit=50):
-        data = {"code": self.config['contract'], "scope": self.config['contract'], "table": "reviewers", "lower_bound": uid, "limit": limit, "json": True}
+        data = {
+            "code": self.config['contract'],
+            "scope": self.config['contract'],
+            "table": "reviewers",
+            "index_position": 2,
+            "key_type": "i64",
+            "lower_bound": uid,
+            "limit": limit,
+            "json": True
+        }
         result = await self._post(json=data)
         id = uid
         if result and len(result['rows']) > 0:
