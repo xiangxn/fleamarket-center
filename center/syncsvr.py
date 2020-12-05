@@ -253,7 +253,7 @@ class SyncSvr:
                 tid, more = await self.getTableLogs(0)
                 while (more):
                     tid, more = await self.getTableLogs(tid)
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(1)
                 if tid > 0:
                     self._deleteLogs(tid)
                     print_log("Sync to logs id:{}".format(tid))
