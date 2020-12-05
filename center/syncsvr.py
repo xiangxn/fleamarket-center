@@ -256,6 +256,7 @@ class SyncSvr:
                     await asyncio.sleep(2)
                 if tid > 0:
                     self._deleteLogs(tid)
+                    print_log("Sync to logs id:{}".format(tid))
                 await asyncio.sleep(self.config['sync_log_interval'])
         except KeyboardInterrupt as ke:
             print_log("tablelog sync stop...")
@@ -283,9 +284,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="categories").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getCategories(cid=int(log.primary), limit=1)
+                    id, more = await self.getCategories(cid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to category id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("categories incremental sync stop...")
@@ -296,9 +300,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="reviewers").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getReviewers(uid=int(log.primary), limit=1)
+                    id, more = await self.getReviewers(uid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to reviewer id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("reviewers incremental sync stop...")
@@ -309,9 +316,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="products").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getProducts(pid=int(log.primary), limit=1)
+                    id, more = await self.getProducts(pid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to product id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("products incremental sync stop...")
@@ -322,9 +332,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="proauction").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getAuctions(pid=int(log.primary), limit=1)
+                    id, more = await self.getAuctions(pid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to auction id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("proauction incremental sync stop...")
@@ -335,9 +348,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="proaudits").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getAudits(pid=int(log.primary), limit=1)
+                    id, more = await self.getAudits(pid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to audit id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("proaudits incremental sync stop...")
@@ -386,9 +402,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="arbitrations").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getArbitrations(aid=int(log.primary), limit=1)
+                    id, more = await self.getArbitrations(aid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to arbitration id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("arbitrations incremental sync stop...")
@@ -399,9 +418,12 @@ class SyncSvr:
         try:
             while (True):
                 logs = TableLogModel.objects(table="otheraddr").limit(50)
+                id = 0
                 for log in logs:
-                    await self.getOtherAddrs(oaid=int(log.primary), limit=1)
+                    id, more = await self.getOtherAddrs(oaid=int(log.primary), limit=1)
                     log.delete()
+                if id > 0:
+                    print_log("Sync to otherAddr id:{}".format(id))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
             print_log("otheraddr incremental sync stop...")
