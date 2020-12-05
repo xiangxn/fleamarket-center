@@ -60,7 +60,7 @@ class SyncSvr:
         if result['status'] == "success":
             print_log("The chain log of [{}] has been deleted".format(tid))
         else:
-            self.logger.Error("Failed to delete logs on the chain", None, result, screen=True)
+            self.logger.Error("Failed to delete logs on the chain: {}".format(result), screen=True)
 
     async def _post(self, data=None, json=None, uri="get_table_rows"):
         result = None
