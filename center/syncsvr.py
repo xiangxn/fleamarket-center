@@ -448,7 +448,10 @@ class SyncSvr:
                     l.primary = log['primary']
                     l.save()
                 tid = log['id']
-        return tid, result['more']
+        if result:
+            return tid, result['more']
+        else:
+            return tid, False
 
     async def getUsers(self, userid=0, limit=50):
         data = {
