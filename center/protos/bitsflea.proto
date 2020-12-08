@@ -383,6 +383,7 @@ message PayInfoRequest {
     double amount = 3;
     string symbol = 4;
     bool mainPay = 5;
+    string orderid = 6;
 }
 
 message LogisticsRequest {

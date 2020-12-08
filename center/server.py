@@ -413,8 +413,11 @@ class Server(BitsFleaServicer):
         if self._check_auth(request.userId, context.invocation_metadata()) == False:
             return BaseReply(code=2, msg="Access denied")
         if request.userId and request.productId and request.amount and request.symbol:
-            # create order id
-            orderid = str(((request.userId << 64) | (request.productId << 32)) | int(time.time()))
+            if not request.orderid:
+                # create order id
+                orderid = str(((request.userId << 64) | (request.productId << 32)) | int(time.time()))
+            else:
+                orderid = request.orderid
             # get pay address
             addr = {}
             if request.mainPay:
