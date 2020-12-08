@@ -374,6 +374,7 @@ message PayInfo {
     uint64 userId = 5;
     uint32 productId = 6;
     uint32 payMode = 7;
+    double balance = 8;
 }
 
 message PayInfoRequest {
