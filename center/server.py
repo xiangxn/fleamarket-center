@@ -424,6 +424,9 @@ class Server(BitsFleaServicer):
                 addr['address'] = self.config['sync_cfg']['contract']
             else:
                 addr = self.gateway.createAddress(orderid, request.symbol)
+            if not addr['address']:
+                # bosibc支付,直接跨链向主合约发起支付
+                addr['address'] = self.config['sync_cfg']['contract']
             pay_info = PayInfo()
             pay_info.orderid = orderid
             pay_info.amount = request.amount
