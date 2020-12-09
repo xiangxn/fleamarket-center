@@ -9,6 +9,8 @@ import asyncio
 import time
 import json
 import requests
+import hashlib
+import urllib
 
 from center.rpc.bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
 from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply, PayInfo
@@ -60,16 +62,40 @@ class Server(BitsFleaServicer):
         is_phone = re.match(r"^1[3456789]\d{9}$", request.phone)
         if is_phone:
             code = "".join(random.sample('0123456789', 6))
-            sms = SmsModel.objects(phone=request.phone).first()
-            if sms:
-                sms.code = code
-                sms.time = int(time.time())
-                sms.save()
-            else:
-                SmsModel(phone=request.phone, code=code, time=int(time.time())).save()
-            # TODO: 处理发送模板类型与发送短信
-            return BaseReply(code=0, msg="success")
+            try:
+                result = self._xsendRegSMS(request.phone, code)
+                if result:
+                    sms = SmsModel.objects(phone=request.phone).first()
+                    if sms:
+                        sms.code = code
+                        sms.time = int(time.time())
+                        sms.save()
+                    else:
+                        SmsModel(phone=request.phone, code=code, time=int(time.time())).save()
+                    return BaseReply(code=0, msg="success")
+            except Exception as e:
+                self.logger.Error("SendSmsCode error: ", e)
+                return BaseReply(code=3004, msg="message failed to send")
         return BaseReply(code=3001, msg="Phone numbers not currently supported")
+
+    def _xsendRegSMS(self, phone, code):
+        project = self.config['sms']['projects']['reg']
+        api_url = self.config['sms']['svr_url']
+        app_id = self.config['sms']['appid']
+        app_key = self.config['sms']['appkey']
+        sms_vars = json.dumps({"code": code, "time": "120秒"})
+        data = {'appid': app_id, 'project': project, 'sign_type': "sha1", 'timestamp': str(int(time.time())), 'to': phone}  #'sign_version': "2",
+        query = urllib.parse.urlencode(data)
+        query = "{}{}{}&vars={}{}{}".format(app_id, app_key, query, sms_vars, app_id, app_key)
+        signature = hashlib.sha1(query.encode('utf-8')).hexdigest()
+        data['vars'] = sms_vars
+        data["signature"] = signature
+        res = requests.post(api_url, json=data, headers={'Content-Type': "application/json"})
+        if res.status_code == 200:
+            result = res.json()
+            if result['status'] == "success":
+                return True
+        return False
 
     def RefreshToken(self, request, context):
         from center.rpc.google.protobuf.any_pb2 import Any

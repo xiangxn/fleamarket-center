@@ -1,31 +1,36 @@
 import mongoengine as me
 
+
 class TableLog(me.Document):
     meta = {"collection": "tablelog"}
-    
+
     tid = me.IntField(required=True, primary_key=True)
     table = me.StringField(required=True)
     ttype = me.IntField(required=True)
     primary = me.StringField(required=True)
-    
+
+
 class Sms(me.Document):
     meta = {"collection": "sms"}
-    
+
     phone = me.StringField(required=True, primary_key=True)
     code = me.StringField(required=True)
+    status = me.IntField(required=True, default=0)
     time = me.IntField(required=True)
-    
+
+
 class Tokens(me.Document):
     meta = {"collection": "tokens"}
-    
+
     phone = me.StringField(required=True, primary_key=True)
     token = me.StringField(required=True)
     expiration = me.IntField(required=True)
     userid = me.IntField(required=True)
 
+
 class User(me.Document):
     meta = {"collection": "user"}
-    
+
     userid = me.IntField(required=True, primary_key=True)
     eosid = me.StringField(required=True)
     phone = me.StringField(required=True)
@@ -45,20 +50,22 @@ class User(me.Document):
     favoriteTotal = me.IntField(default=0)
     fansTotal = me.IntField(default=0)
     authKey = me.StringField(required=True)
-    
+
     def __str__(self):
         return self.to_json()
-    
+
+
 class Category(me.Document):
-    meta = {"collection": "category", "ordering":["cid"]}
-    
+    meta = {"collection": "category", "ordering": ["cid"]}
+
     cid = me.IntField(required=True, primary_key=True)
     view = me.StringField(required=True)
     parent = me.IntField(required=True)
-    
+
+
 class Product(me.Document):
-    meta = {"collection": "product", "ordering":["-releaseTime"]}
-    
+    meta = {"collection": "product", "ordering": ["-releaseTime"]}
+
     productId = me.IntField(required=True, primary_key=True)
     #categoryId = me.IntField(required=True)
     category = me.ReferenceField(Category, required=True)
@@ -79,10 +86,11 @@ class Product(me.Document):
     #reviewer = me.ReferenceField(User)
     stockCount = me.IntField(default=0)
     isRetail = me.BooleanField(default=False)
-    
+
+
 class Auction(me.Document):
     meta = {"collection": "auction"}
-    
+
     aid = me.IntField(required=True, primary_key=True)
     security = me.StringField(required=True)
     markup = me.StringField(required=True)
@@ -92,10 +100,11 @@ class Auction(me.Document):
     endTime = me.StringField(required=True)
     lastPriceUser = me.ReferenceField(User)
     product = me.ReferenceField(Product)
-    
+
+
 class Reviewer(me.Document):
     meta = {"collection": "reviewer"}
-    
+
     rid = me.IntField(required=True, primary_key=True)
     user = me.ReferenceField(User)
     #userid = me.IntField(required=True)
@@ -105,11 +114,11 @@ class Reviewer(me.Document):
     lastActiveTime = me.StringField()
     voterApprove = me.ListField(me.IntField())
     voterAgainst = me.ListField(me.IntField())
-    
-    
+
+
 class ProductAudit(me.Document):
     meta = {"collection": "product_audit"}
-    
+
     paid = me.IntField(required=True, primary_key=True)
     product = me.ReferenceField(Product)
     #productId = me.IntField(required=True)
@@ -117,10 +126,11 @@ class ProductAudit(me.Document):
     isDelisted = me.IntField(default=0)
     reviewDetails = me.StringField()
     reviewTime = me.StringField()
-    
+
+
 class Order(me.Document):
     meta = {"collection": "order"}
-    
+
     oid = me.IntField(required=True, primary_key=True)
     orderid = me.StringField(required=True)
     productInfo = me.ReferenceField(Product, required=True)
@@ -141,10 +151,11 @@ class Order(me.Document):
     endTime = me.StringField()
     delayedCount = me.IntField()
     toAddr = me.IntField()
-    
+
+
 class ProReturn(me.Document):
     meta = {"collection": "proreturn"}
-    
+
     prid = me.IntField(required=True, primary_key=True)
     #orderId = me.StringField(required=True)
     order = me.ReferenceField(Order)
@@ -162,10 +173,11 @@ class ProReturn(me.Document):
     endTime = me.StringField()
     delayedCount = me.IntField(default=0)
     toAddr = me.IntField()
-    
+
+
 class Arbitration(me.Document):
     meta = {"collection": "arbitrations"}
-    
+
     aid = me.IntField(required=True, primary_key=True)
     plaintiff = me.ReferenceField(User, required=True)
     product = me.ReferenceField(Product)
@@ -183,32 +195,36 @@ class Arbitration(me.Document):
     startTime = me.StringField()
     endTime = me.StringField()
     reviewers = me.ListField()
-    
+
+
 class OtherAddr(me.Document):
     meta = {"collection": "otheraddr"}
-    
+
     oaid = me.IntField(required=True, primary_key=True)
     user = me.ReferenceField(User, required=True)
     coinType = me.StringField(required=True)
     addr = me.StringField(required=True)
-    
+
+
 class Follow(me.Document):
     meta = {"collection": "follows"}
-    
+
     fid = me.SequenceField(primary_key=True)
     user = me.ReferenceField(User)
     follower = me.ReferenceField(User)
-    
+
+
 class Favorite(me.Document):
     meta = {"collection": "favorites"}
-    
+
     cid = me.SequenceField(primary_key=True)
     user = me.ReferenceField(User)
     product = me.ReferenceField(Product)
-    
+
+
 class ReceiptAddress(me.Document):
     meta = {"collection": "receiptaddrs"}
-    
+
     rid = me.SequenceField(primary_key=True)
     userid = me.IntField(required=True)
     province = me.StringField(required=True)
@@ -219,7 +235,3 @@ class ReceiptAddress(me.Document):
     address = me.StringField(required=True)
     postcode = me.StringField(required=True)
     isDefault = me.BooleanField(default=False)
-    
-    
-    
-    
