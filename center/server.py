@@ -13,7 +13,7 @@ import hashlib
 import urllib
 
 from center.rpc.bitsflea_pb2_grpc import add_BitsFleaServicer_to_server, BitsFleaServicer
-from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply, PayInfo
+from center.rpc.bitsflea_pb2 import RegisterRequest, User, BaseReply, PayInfo, Config
 from center.rpc.bitsflea_pb2 import SearchRequest
 from center.rpc.bitsflea_pb2 import FollowRequest
 from center.rpc.bitsflea_pb2 import RefreshTokenRequest
@@ -491,6 +491,21 @@ class Server(BitsFleaServicer):
                 return BaseReply(msg="{}".format(toUser.phone))
         return BaseReply(code=1, msg="Invalid parameter")
 
+    def GetConfig(self, request, context):
+        config = Config()
+        config.mainContract = self.config['sync_cfg']['contract']
+        config.eosAPI = self.config['sync_cfg']['api_url']
+        config.ipfsGateway = self.config['client']['ipfs_gateway']
+        config.mainTokenContract = self.config['client']['main_token_contract']
+        config.eosTokenContract = self.config['client']['eos_token_contract']
+        config.bosIBCContract = self.config['client']['ibc_token_contract']
+        config.mainAssetSymbol = self.config['client']['main_asset_symbol']
+        config.amapDistrictKey = self.config['client']['amap_district_key']
+        config.showCNY = self.config['client']['show_cny']
+        br = BaseReply(msg="success")
+        br.data.Pack(config)
+        return br
+
     def closeIPFS(self):
         if self.ipfs_client:
             self.ipfs_client.close()
@@ -512,7 +527,7 @@ class TokenInterceptor(grpc.ServerInterceptor):
             token = meta['token']
         flag = False
         tm = TokensModel.objects(token=token).first()
-        allows = ['RefreshToken', 'SendSmsCode', 'Register', 'Search']
+        allows = ['RefreshToken', 'SendSmsCode', 'Register', 'Search', 'GetConfig']
         if method_name[-1] in allows or (tm and (int(time.time()) - tm.expiration) <= 86400):
             flag = True
         if tm and flag == False:

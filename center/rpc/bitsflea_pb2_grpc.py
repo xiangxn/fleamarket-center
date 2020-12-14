@@ -104,6 +104,11 @@ class BitsFleaStub(object):
                 request_serializer=bitsflea__pb2.GetPhoneRequest.SerializeToString,
                 response_deserializer=bitsflea__pb2.BaseReply.FromString,
                 )
+        self.GetConfig = channel.unary_unary(
+                '/bitsflea.BitsFlea/GetConfig',
+                request_serializer=bitsflea__pb2.SearchRequest.SerializeToString,
+                response_deserializer=bitsflea__pb2.BaseReply.FromString,
+                )
 
 
 class BitsFleaServicer(object):
@@ -217,6 +222,12 @@ class BitsFleaServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetConfig(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BitsFleaServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -308,6 +319,11 @@ def add_BitsFleaServicer_to_server(servicer, server):
             'GetPhone': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPhone,
                     request_deserializer=bitsflea__pb2.GetPhoneRequest.FromString,
+                    response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
+            ),
+            'GetConfig': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetConfig,
+                    request_deserializer=bitsflea__pb2.SearchRequest.FromString,
                     response_serializer=bitsflea__pb2.BaseReply.SerializeToString,
             ),
     }
@@ -622,6 +638,23 @@ class BitsFlea(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/GetPhone',
             bitsflea__pb2.GetPhoneRequest.SerializeToString,
+            bitsflea__pb2.BaseReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetConfig(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/bitsflea.BitsFlea/GetConfig',
+            bitsflea__pb2.SearchRequest.SerializeToString,
             bitsflea__pb2.BaseReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

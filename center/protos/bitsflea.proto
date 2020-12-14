@@ -127,6 +127,13 @@ service BitsFlea {
         };
     }
 
+    rpc GetConfig (SearchRequest) returns (BaseReply) {
+        option (google.api.http) = {
+            post: "/v1/common/getconfig"
+            body: "*"
+        };
+    }
+
 }
 
 message BaseReply {
@@ -395,4 +402,16 @@ message LogisticsRequest {
 message GetPhoneRequest {
     uint32 fromUserId = 1;
     uint32 toUserId = 2;
+}
+
+message Config {
+    string mainContract = 1;
+    string eosAPI = 2;
+    string ipfsGateway = 3;
+    string mainTokenContract = 4;
+    string eosTokenContract = 5;
+    string bosIBCContract = 6;
+    string mainAssetSymbol = 7;
+    string amapDistrictKey = 8;
+    bool showCNY = 9;
 }

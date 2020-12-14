@@ -29,5 +29,14 @@
     "gateway": {
         "url": "http://23.92.210.138:9000",
         "token": "8f4c64e62064619a3ce94c93ad7fe580"
+    },
+    "client":{
+        "ipfs_gateway":"https://source.bitsflea.com:10001/ipfs/",
+        "main_token_contract":"eosio.token",
+        "eos_token_contract":"eosio.token",
+        "ibc_token_contract":"eosio.token",
+        "main_asset_symbol":"BOS",
+        "amap_district_key":"92f35a6155436fa0179a80b27adec555",
+        "show_cny":false
     }
 }
