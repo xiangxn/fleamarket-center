@@ -517,7 +517,7 @@ class SyncSvr:
             "code": self.config['contract'],
             "scope": self.config['contract'],
             "table": "reviewers",
-            "index_position": 2,
+            "index_position": 3,
             "key_type": "i64",
             "lower_bound": uid,
             "limit": limit,
