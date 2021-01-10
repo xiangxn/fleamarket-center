@@ -3,6 +3,8 @@ import aiohttp
 import mongoengine
 import json as JSON
 import time
+import datetime as dt
+import pytz
 
 from mongoengine.queryset.visitor import Q
 
@@ -62,6 +64,25 @@ class SyncSvr:
         else:
             self.logger.Error("Failed to delete logs on the chain: {}".format(result), screen=True)
 
+    def _cleanOrder(self, start_id):
+        payload = {
+            "account": self.config['contract'],
+            "name": "cleanorder",
+            "authorization": [{
+                "actor": self.config['contract'],
+                "permission": "execute",
+            }],
+            "data": {
+                "start_id": start_id
+            }
+        }
+        trx = {"transaction": {"actions": [payload]}}
+        result = self.gateway.broadcast(trx, sign=True)
+        if result['status'] == "success":
+            print_log("The order of [{}] has been clean".format(start_id))
+        else:
+            self.logger.Error("Failed to clean order on the chain: {}".format(result), screen=True)
+
     async def _post(self, data=None, json=None, uri="get_table_rows"):
         result = None
         url = self.config['api_url']
@@ -93,6 +114,7 @@ class SyncSvr:
 
     def getIncrementTasks(self, loop):
         tasks = [
+            loop.create_task(self.cleanOrderTasks()),
             loop.create_task(self.taskSyncTableLog()),
             loop.create_task(self.taskSyncUser()),
             loop.create_task(self.taskSyncOtherAddr()),
@@ -106,6 +128,26 @@ class SyncSvr:
             loop.create_task(self.taskSyncCategory())
         ]
         return tasks
+
+    async def cleanOrderTasks(self):
+        interval = self.config['clean_order_interval']
+        try:
+            while (True):
+                oid = 0
+                orders = OrderModel.objects(status=0)
+                for order in orders:
+                    t1 = dt.datetime.strptime(order.payOutTime, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=pytz.UTC)
+                    t2 = dt.datetime.utcnow().replace(tzinfo=pytz.UTC)
+                    if (t2 - t1).days >= 1:
+                        oid = order.oid
+                        break
+                if oid > 0:
+                    self._cleanOrder(oid)
+                await asyncio.sleep(interval)
+        except KeyboardInterrupt as k:
+            print_log("clean order task stop...")
+        except Exception as e:
+            self.logger.Error("cleanOrderTasks error", e, screen=True)
 
     def getInitTasks(self, loop):
         tasks = []

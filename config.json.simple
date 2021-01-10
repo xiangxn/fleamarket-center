@@ -14,6 +14,7 @@
         "contract": "bitsfleamain",
         "api_url": "https://api-bostest.blockzone.net/v1/chain/",
         "sync_log_interval": 60,
+        "clean_order_interval": 7200,
         "retry_max": 3
     },
     "sms": {
