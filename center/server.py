@@ -461,6 +461,7 @@ class Server(BitsFleaServicer):
             pay_info.userId = request.userId
             pay_info.productId = request.productId
             pay_info.payMode = 0 if request.mainPay else 1
+            pay_info.chain = addr['chain']
             br = BaseReply(msg="success")
             br.data.Pack(pay_info)
             return br
@@ -473,7 +474,12 @@ class Server(BitsFleaServicer):
             com = request.com if request.com else "AUTO"
             try:
                 headers = {'Authorization': 'APPCODE ' + self.config['logistics_api_key']}
-                html = requests.get(self.config['logistics_api'], headers=headers, data={'type': com, 'no': request.number})
+                number = request.number
+                if number[0:2] == "SF":
+                    fromUser = UserModel.objects(userid=request.userId).first()
+                    if fromUser:
+                        number = "{}:{}".format(request.number,fromUser.phone[-4:])
+                html = requests.get(self.config['logistics_api'], headers=headers, data={'type': com, 'no': number})
                 if html.status_code == 200:
                     return BaseReply(msg=html.text)
                 return BaseReply(code=3003, msg="search logistics info error")
