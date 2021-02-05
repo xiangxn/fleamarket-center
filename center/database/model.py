@@ -86,6 +86,8 @@ class Product(me.Document):
     #reviewer = me.ReferenceField(User)
     stockCount = me.IntField(default=0)
     isRetail = me.BooleanField(default=False)
+    width = me.IntField(default=0)
+    height = me.IntField(default=0)
 
 
 class Auction(me.Document):

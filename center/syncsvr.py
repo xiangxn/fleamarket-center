@@ -5,6 +5,9 @@ import json as JSON
 import time
 import datetime as dt
 import pytz
+from io import BytesIO
+from PIL import Image, UnidentifiedImageError
+import pyheif
 
 from mongoengine.queryset.visitor import Q
 
@@ -432,7 +435,7 @@ class SyncSvr:
                     oid, more, ok = await self.getReturns(oid=log.primary, limit=1)
                     if ok:
                         log.delete()
-                if oid > 0:
+                if int(oid) > 0:
                     print_log("Sync to returns id: {}".format(oid))
                 await asyncio.sleep(5)
         except KeyboardInterrupt as ke:
@@ -620,6 +623,11 @@ class SyncSvr:
                     await self.getUsers(userid=product['uid'], limit=1)
                     us = UserModel.objects(userid=product['uid']).first()
                 p.seller = us
+                # get img
+                if len(p.photos) > 0:
+                    img_size = await self._getImgSize(p.photos[0])
+                    p.width = img_size[0]
+                    p.height = img_size[1]
                 # rev = ReviewerModel.objects(rid=product['reviewer']).first()
                 # if not rev:
                 #     await self.getReviewers(rid=product['reviewer'], limit=1)
@@ -905,3 +913,20 @@ class SyncSvr:
                 id += 1
             return id, result['more']
         return id, False
+
+    async def _getImgSize(self, hash_key):
+        url = "{}{}".format(self.config['ipfs_gateway'], hash_key)
+        async with aiohttp.ClientSession() as session:
+            data = None
+            try:
+                async with session.get(url) as response:
+                    if response.status == 200 or response.status == 202:
+                        data = await response.read()
+                        img = Image.open(BytesIO(data))
+                        return img.size
+            except UnidentifiedImageError as e:
+                img = pyheif.read_heif(data)
+                return img.size
+            except Exception as e:
+                self.logger.Error("get ipfs image error: {}".format(url), e=e, screen=True)
+                return (0, 0)

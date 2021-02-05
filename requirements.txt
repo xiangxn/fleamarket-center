@@ -10,6 +10,8 @@ mongoengine==0.20.0
 graphene_mongo==0.2.13
 graphene==2.1.8
 aiohttp>=3.6.2
+pillow>=8.1.0
+pyheif>=0.5.1
 # ipfshttpclient>=0.6.1
 -e git+https://github.com/ipfs-shipyard/py-ipfs-http-client.git#egg=ipfshttpclient
 -e git+https://github.com/xiangxn/eospy.git#egg=libeospy

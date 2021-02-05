@@ -221,6 +221,8 @@ message Product {
     User seller = 16;
     uint32 stockCount = 17;
     bool isRetail = 18;
+    uint32 width = 19;
+    uint32 height = 20;
 }
 
 message Auction {
