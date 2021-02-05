@@ -448,6 +448,7 @@ class Server(BitsFleaServicer):
             addr = {}
             if request.mainPay:
                 addr['address'] = self.config['sync_cfg']['contract']
+                addr['chain'] = "bos"
             else:
                 addr = self.gateway.createAddress(orderid, request.symbol)
             if not addr['address']:
@@ -478,7 +479,7 @@ class Server(BitsFleaServicer):
                 if number[0:2] == "SF":
                     fromUser = UserModel.objects(userid=request.userId).first()
                     if fromUser:
-                        number = "{}:{}".format(request.number,fromUser.phone[-4:])
+                        number = "{}:{}".format(request.number, fromUser.phone[-4:])
                 html = requests.get(self.config['logistics_api'], headers=headers, data={'type': com, 'no': number})
                 if html.status_code == 200:
                     return BaseReply(msg=html.text)
