@@ -385,6 +385,7 @@ message PayInfo {
     uint32 payMode = 7;
     double balance = 8;
     string chain = 9;
+    string coinAddr = 10;
 }
 
 message PayInfoRequest {
