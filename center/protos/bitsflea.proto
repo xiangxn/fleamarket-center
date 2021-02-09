@@ -386,6 +386,7 @@ message PayInfo {
     double balance = 8;
     string chain = 9;
     string coinAddr = 10;
+    uint32 precision = 11;
 }
 
 message PayInfoRequest {

@@ -463,6 +463,7 @@ class Server(BitsFleaServicer):
             pay_info.productId = request.productId
             pay_info.payMode = 0 if request.mainPay else 1
             pay_info.chain = addr['chain']
+            pay_info.precision = addr['precision']
             if "coin_address" in addr:
                 pay_info.coinAddr = addr['coin_address']
             br = BaseReply(msg="success")
